@@ -67,9 +67,13 @@ server/.mvn/wrapper
 server/mvnw
 server/mvnw.cmd
 
-# spring boot configuration properties
+# spring boot resources
 server/src/main/resources/
 
 # spring boot local intellij files
 server/.idea
 server/target
+
+
+# SQL
+sql/

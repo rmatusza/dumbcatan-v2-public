@@ -10,7 +10,7 @@
     @apply text-red-500 text-lg font-bold drop-shadow-[0px_0px_10px_#000000];
   }
   .largeErrorMessage {
-    @apply text-red-500 text-3xl font-bold font-yatra;
+    @apply text-red-500 text-3xl font-bold font-yatra text-center;
   }
   .largeErrorMessageShadowed {
     @apply text-red-500 text-3xl font-bold font-yatra drop-shadow-[0px_0px_10px_#000000];
@@ -35,5 +35,8 @@
   }
   .modalTextYellow{
     @apply text-parchment text-2xl font-extrabold uppercase tracking-wide font-yatra drop-shadow-[0px_0px_10px_#000000];
+  }
+  .headingTextYellow{
+    @apply text-parchment text-2xl font-extrabold uppercase tracking-wide font-yatra;
   }
 }

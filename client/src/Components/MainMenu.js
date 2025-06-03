@@ -55,6 +55,7 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
     <>
       <div className="p-4 font-yatra text-lg">
         <ul onClick={handleMenuSelection}>
+          <li data-id="about" className="cursor-pointer hover:underline m-5">About This App</li>
           {
             location.pathname !== ENDPOINTS.home
             &&
@@ -66,7 +67,6 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
           <li data-id="yourInvites" className="cursor-pointer hover:underline m-5">Your Invites</li>
           <li data-id="rules" className="cursor-pointer hover:underline m-5"><a href="https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf" target="_blank" rel="noopener noreferrer">Official Rules</a></li>
           <li data-id="sound" className="cursor-pointer hover:underline m-5">{metaData.soundEnabled ? 'Disable' : 'Enable'} sound</li>
-          <li data-id="about" className="cursor-pointer hover:underline m-5">About This App</li>
           {
             userRole === 'admin'
             &&

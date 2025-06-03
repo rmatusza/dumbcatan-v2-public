@@ -41,6 +41,7 @@ export const CUSTOM_STYLES =
   lightRedBorder: 'lightRedBorder',
   goldYellowBorder: 'goldYellowBorder',
   modalTextYellow: 'modalTextYellow',
+  headingTextYellow: 'headingTextYellow',
   largeErrorMessage: 'largeErrorMessage',
   smallErrorMessageShadowed: 'smallErrorMessageShadowed',
   largeErrorMessageShadowed: 'largeErrorMessageShadowed',
