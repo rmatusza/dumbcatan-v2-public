@@ -9,9 +9,6 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-
-    /*below is the cryptographic signing key used to sign and verify JWTs*/
-    /*It takes the secret and coverts it into a Key object using hmacShaKeyFor(), which is specifically for HMAC algorithms like HS256 - which we use in the jtw builder*/
     private final Key key;
     private final long expiration;
 
@@ -38,7 +35,6 @@ public class JwtUtil {
         }
     }
 
-    /*Below annotations take advantage of Spring's dependency injection to fetch the values from the properties file*/
     public JwtUtil(@Value("${jwt.secret}") String secret,
                    @Value("${jwt.expiration}") long expiration) {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());

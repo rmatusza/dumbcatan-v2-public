@@ -23,14 +23,6 @@ const Form = ({
     formState: { errors },
   } = useForm();
 
-  /// what is this?
-  // const [formValues, setFormValues] = useState(
-  //   fields.reduce((acc, field) => {
-  //     acc[field.name] = initialValues[field.name] || '';
-  //     return acc;
-  //   }, {})
-  // );
-
   const onSubmit = async (data) => {
     formSubmitHandler(data);
   };

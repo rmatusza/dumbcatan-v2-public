@@ -93,3 +93,19 @@ The name takes inspiration from a TV show called "Nathan for You" in which Natha
 <br></br>
 
 Nathan for You - Dumb Starbucks Episode: https://www.youtube.com/watch?v=h0TRpGP8yH4
+
+<br></br>
+
+# App Screenshots:
+
+## Authentication Page - video background:
+![alt text](./readme-media/authentication-1.png)
+![alt text](./readme-media/authentication-2.png)
+
+## Home Page:
+![alt text](./readme-media/home-page.png)
+
+## User Profile:
+![alt text](./readme-media/user-profile-1.png)
+![alt text](./readme-media/user-profile-2.png)
+![alt text](./readme-media/user-profile-3.png)

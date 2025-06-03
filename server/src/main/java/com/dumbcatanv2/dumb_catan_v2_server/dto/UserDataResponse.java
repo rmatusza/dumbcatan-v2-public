@@ -1,9 +1,5 @@
 package com.dumbcatanv2.dumb_catan_v2_server.dto;
 
-/*DTO that contains a user's account info*/
-/*password is excluded here because that is unnecessary to ever send back to the client*/
-/*NOTE: we use this instead of AuthResponse in the Authenticate controller method because user already has
-*       a valid jwt and only need the user's info*/
 public class UserDataResponse {
     private String username;
     private int userID;
