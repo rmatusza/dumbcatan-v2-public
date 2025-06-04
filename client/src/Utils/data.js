@@ -45,6 +45,12 @@ export const CUSTOM_STYLES =
   largeErrorMessage: 'largeErrorMessage',
   smallErrorMessageShadowed: 'smallErrorMessageShadowed',
   largeErrorMessageShadowed: 'largeErrorMessageShadowed',
+  largeSuccessMessage: 'largeSuccessMessage'
+}
+
+export const APP_ALERT_TYPE = {
+  success: 'success',
+  failure: 'failure'
 }
 
 export const REQUEST_FIELDS = 
@@ -69,12 +75,13 @@ export const ENDPOINTS =
   about: '/about',
 }
 
-export const ERROR_CONTEXTS = 
+export const APP_CONTEXT = 
 {
   authenticateJwt: 'authenticateJwt',
   signin: 'signin',
   signup: 'signup',
-  profile: 'profile',
+  avatar: 'avatar',
+  credentials: 'credentials'
 }
 
 export const tileIdentities = 

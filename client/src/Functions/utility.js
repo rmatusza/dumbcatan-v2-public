@@ -47,9 +47,15 @@ export const deleteToken = () => {
 
 export const setToken = (token) => {
   Cookies.set('jwt', token, {
+    /// expires in 1 day
     expires: 1,
+    /// indicates whether you are using http (false) or https (true)
     secure: false,
+    /// front and back end are on different domains so "none" allows cookie to be used in a cross-origin manner which is what our design strategy relies on
+    /// NOTE: not allowed to use the combination of secure: false and sameSite: none - browser won't allow it
+    /// so have to use sameSite: Lax instead
     sameSite: "Lax",
+    /// cookie is available everywhere in app
     path: '/'
   })
 };
@@ -62,4 +68,15 @@ export const ensureUpdateDataNonEmpty = (dataObj) => {
     }
   });
   return isNotEmpty;
+}
+
+export const executeAfterDelay = ({delay, callback, args=[], dispatch=null}) => {
+  setTimeout(() => {
+    if(dispatch) {
+      dispatch(callback(...args));
+      return;
+    }
+    callback(...args);
+
+  }, delay)
 }

@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { AVATARS, CUSTOM_STYLES } from "../Utils/data";
 import { useSelector } from "react-redux";
-import { ERROR_CONTEXTS } from "../Utils/data";
+import { APP_CONTEXT, AVATARS, APP_ALERT_TYPE } from "../Utils/data";
 import Button from "../UI/Button";
 
 const EditAvatar = ({ S, currentAvatar, viewHandler, setProfileModalActive, updateProfileHandler }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [error, setError] = useState(null);
-  const appError = useSelector(state => state.applicationErrors);
+  const appAlert = useSelector(state => state.applicationAlert);
 
   const selectionHandler = (avatar) => {
     setSelectedAvatar(avatar);
@@ -19,20 +18,26 @@ const EditAvatar = ({ S, currentAvatar, viewHandler, setProfileModalActive, upda
       return;
     }
 
+    if(error) {
+      setError(null);
+    }
+
     updateProfileHandler(
       {
         avatarURL: selectedAvatar
       }
     );
+
+    setSelectedAvatar(null);
   }
 
   return (
     <>
       {
-        appError.context === ERROR_CONTEXTS.profile
+        appAlert.context === APP_CONTEXT.avatar
         &&
         <div className='rounded-xl bg-cream/60 mb-5'>
-          <p className={`${S.largeErrorMessage} text-center`}>{appError.message}</p>
+          <p className={`${appAlert.type === APP_ALERT_TYPE.success ? S.largeSuccessMessage : S.largeErrorMessage} text-center`}>{appAlert.message}</p>
         </div>
       }
       {

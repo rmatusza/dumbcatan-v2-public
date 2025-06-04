@@ -20,6 +20,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    /*exception that gets thrown when one or more of the DTO field validation checks fails*/
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidationErrors(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
@@ -83,10 +84,25 @@ public class GlobalExceptionHandler {
                 HttpStatus.UNAUTHORIZED);
     }
 
+    /* Catch-all fallback (optional) */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex) {
         return new ResponseEntity<>(new ApiErrorResponse(ex.getMessage(), 500),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    /*find out what the below is for*/
+    // Optional: handle other validation exceptions like @Validated on path/query params
+    //    @ExceptionHandler(ConstraintViolationException.class)
+    //    public ResponseEntity<Map<String, String>> handleConstraintViolation(ConstraintViolationException ex) {
+    //        Map<String, String> errors = new HashMap<>();
+    //
+    //        ex.getConstraintViolations().forEach(violation -> {
+    //            String fieldName = violation.getPropertyPath().toString();
+    //            errors.put(fieldName, violation.getMessage());
+    //        });
+    //
+    //        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    //    }
 }
 

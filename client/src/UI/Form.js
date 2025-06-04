@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
+import { CUSTOM_STYLES as S, APP_ALERT_TYPE } from '../Utils/data';
 import Button from './Button';
-import { CUSTOM_STYLES, ERROR_CONTEXTS } from '../Utils/data';
 
 const Form = ({
   fields = [],
@@ -14,41 +14,52 @@ const Form = ({
 }) => {
 
   const [topLevelFormError, setTopLevelFormError] = useState(null);
-  const applicationError = useSelector(state => state.applicationErrors);
+  const appAlert = useSelector(state => state.applicationAlert);
 
   const {
     register,
     getValues,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
+  /// what is this?
+  // const [formValues, setFormValues] = useState(
+  //   fields.reduce((acc, field) => {
+  //     acc[field.name] = initialValues[field.name] || '';
+  //     return acc;
+  //   }, {})
+  // );
+
   const onSubmit = async (data) => {
+    setTopLevelFormError(false);
     formSubmitHandler(data);
+    // reset();
   };
 
   return (
     <>
       {
-        applicationError.context === currentContext 
+        appAlert.context === currentContext 
         && 
-        <p className={CUSTOM_STYLES.largeErrorMessage}>
-          {applicationError.message}
+        <p className={`${appAlert.type === APP_ALERT_TYPE.success ? S.largeSuccessMessage : S.largeErrorMessage} rounded-xl bg-cream/60 mb-5`}>
+          {appAlert.message}
         </p>
       }
       {
-        (!applicationError.message || applicationError.context !== currentContext) && topLevelFormError
+        topLevelFormError
         &&
         <div className='rounded-xl bg-cream/60 mb-5'>
-          <p className={`${CUSTOM_STYLES.largeErrorMessage} text-center`}>
+          <p className={`${S.largeErrorMessage} text-center`}>
             {topLevelFormError}
           </p>
         </div>
       }
       {
-        !topLevelFormError && (!applicationError.message || applicationError.context !== currentContext) && formInstructions
+        !topLevelFormError && (!appAlert.message || appAlert.context !== currentContext) && formInstructions
         &&
-        <p className={`${CUSTOM_STYLES.modalTextYellow} text-center underline mb-5 text-3xl`}>
+        <p className={`${S.modalTextYellow} text-center underline mb-5 text-3xl`}>
           {formInstructions}
         </p>
       }

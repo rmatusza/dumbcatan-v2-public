@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { AVATARS, REQUEST_FIELDS, CUSTOM_STYLES } from "../Utils/data";
+import { AVATARS, REQUEST_FIELDS, CUSTOM_STYLES, APP_CONTEXT } from "../Utils/data";
 import { userActions } from "../Redux/Slices/UserSlice";
 import { updateUserProfile } from "../Redux/ActionCreators/UserActions";
 import Button from "../UI/Button";
@@ -19,13 +19,14 @@ const Profile = ({ setProfileModalActive }) => {
   };
 
   const updateProfileHandler = async (profileData) => {
+    const context = profileData?.avatarURL ? APP_CONTEXT.avatar : APP_CONTEXT.credentials
     const updatedProfileData = {
       userID: userData.userID,
       avatarURL: profileData?.avatarURL || REQUEST_FIELDS.none,
       username: profileData?.username || REQUEST_FIELDS.none,
       password: profileData?.password || REQUEST_FIELDS.none,
     }
-    dispatch(updateUserProfile(updatedProfileData));
+    dispatch(updateUserProfile(updatedProfileData, context));
   };
 
   return (

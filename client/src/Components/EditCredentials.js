@@ -1,5 +1,5 @@
-import { ERROR_CONTEXTS } from "../Utils/data";
 import Form from "../UI/Form";
+import { APP_CONTEXT } from "../Utils/data";
 
 const EditCredentials = ({ S, viewHandler, setProfileModalActive, updateProfileHandler }) => {
   return (
@@ -54,7 +54,7 @@ const EditCredentials = ({ S, viewHandler, setProfileModalActive, updateProfileH
             validate: (confirmPassword) => {
               const pwd = getValues("password")?.trim();
               const val = confirmPassword.trim();
-              if (pwd && pwd !== val) {
+              if (pwd !== val) {
                 return "Passwords must match";
               }
               return true;
@@ -81,7 +81,7 @@ const EditCredentials = ({ S, viewHandler, setProfileModalActive, updateProfileH
             args: ['main']
           },
           {
-            name: 'Update Credentials',
+            name: 'Change Credentials',
             type: 'submit',
             namedStyles: [S.classicCatanButtonSingle, S.lightRedBorder],
             namedStyleAsAddOn: true,
@@ -90,12 +90,11 @@ const EditCredentials = ({ S, viewHandler, setProfileModalActive, updateProfileH
       }
       formSubmitHandler={updateProfileHandler}
       formInstructions={"Update username and/or password"}
-      currentContext={ERROR_CONTEXTS.profile}
+      currentContext={APP_CONTEXT.credentials}
       styles={{
         form: "flex flex-col space-y-4 h-full",
         input: "w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400",
         fieldHeading: S.modalTextYellow,
-        appError: "text-red-500 text-center font-bold mb-10",
         validationError: S.smallErrorMessageShadowed,
         buttonContainer: 'pb-5'
       }}

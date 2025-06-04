@@ -84,7 +84,7 @@ const About = () => {
         <ul class="list-disc list-inside">
           <li>Java with Spring Boot</li>
           <li>Hibernate and Spring Data JPA for persistence</li>
-          <li>Spring Security: JWT for authentication/authorization</li>
+          <li>Spring Security and JWT for authentication</li>
         </ul>
 
         <p className="text-xl font-bold">Real-Time Communication:</p>

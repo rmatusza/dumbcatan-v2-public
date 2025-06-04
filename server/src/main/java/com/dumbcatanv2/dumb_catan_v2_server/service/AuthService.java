@@ -26,6 +26,8 @@ public class AuthService {
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
 
+    /*NOTE: JwtAuthFilter handles the event in which jwt is either invalid or expired, so we don't have to handle
+    * exceptions here */
     public UserDataResponse authenticate(Authentication authentication){
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
@@ -40,6 +42,7 @@ public class AuthService {
 
     public AuthResponse signin(AuthRequest req) {
 
+        /*Spring Security will throw a variety of potential exceptions that are caught below if authenticate() fails*/
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword())
         );

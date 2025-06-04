@@ -1,8 +1,8 @@
-import { signupUser } from '../Redux/ActionCreators/UserActions';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { ERROR_CONTEXTS, CUSTOM_STYLES } from '../Utils/data';
+import { signupUser } from '../Redux/ActionCreators/UserActions';
 import Form from '../UI/Form';
+import { APP_CONTEXT, CUSTOM_STYLES } from '../Utils/data';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -73,7 +73,6 @@ const Signup = () => {
         form: "flex flex-col space-y-4",
         input: "w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400",
         fieldHeading: 'font-yatra text-2xl text-center',
-        appError: "text-red-500 text-center font-bold mb-10",
         validationError: "text-red-500 text-center font-bold"
       }}
       buttons={
@@ -86,7 +85,7 @@ const Signup = () => {
           }
         ]
       }
-      currentContext={ERROR_CONTEXTS.signup}
+      currentContext={APP_CONTEXT.signup}
     />
   )
 }

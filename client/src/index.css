@@ -12,6 +12,9 @@
   .largeErrorMessage {
     @apply text-red-500 text-3xl font-bold font-yatra text-center;
   }
+  .largeSuccessMessage {
+    @apply text-green-800 text-3xl font-bold font-yatra text-center;
+  }
   .largeErrorMessageShadowed {
     @apply text-red-500 text-3xl font-bold font-yatra drop-shadow-[0px_0px_10px_#000000];
   }

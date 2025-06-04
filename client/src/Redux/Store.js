@@ -1,14 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import userSlice from "./Slices/UserSlice";
+import applicationAlertSlice from "./Slices/ApplicationAlertSlice";
 import metaDataSlice from "./Slices/MetaDataSlice";
-import applicationErrorsSlice from "./Slices/ApplicationErrorsSlice";
+import userSlice from "./Slices/UserSlice";
 
 const Store = configureStore(
   {
     reducer: {
       userData: userSlice.reducer,
       metaData: metaDataSlice.reducer,
-      applicationErrors: applicationErrorsSlice.reducer,
+      applicationAlert: applicationAlertSlice.reducer,
     }
   }
 );
