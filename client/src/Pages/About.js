@@ -10,7 +10,7 @@ const About = () => {
       <br></br>
       <div>
         <p>
-          This application is a work in progress and is an improved version of my <a className="cursor-pointer hover:underline text-blue-600 font-bold" href='https://github.com/rmatusza' target="_blank">completed original implementation on Github: (DumbCatanClient-Public & DumbCatanServer-Public)</a>.
+          This application is a work in progress and is an improved version of my completed original implementation on Github: <a className="cursor-pointer hover:underline text-blue-600 font-bold" href='https://github.com/rmatusza' target="_blank">{`Front End `}</a>.
           While this version is not yet fully complete, I decided to make the app available in its current state to showcase my skills in full-stack development, real-time multiplayer logic, and modern UI design. The goal is to present clean, production-style code and architecture in a more polished package that 
           can be explored to get a meaningful sense of my technical abilities. As my work on this app continues, this demo will evolve and new features will be made available, so feel free to check back at a later date to see any updates that have been made.
         </p>
