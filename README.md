@@ -3,7 +3,8 @@
 ### This application is a browser-based, real-time, multiplayer clone of the "Settlers of Catan" board game built with React.js, Spring Boot, and MySQL
 <br></br>
 
-🚧 This project is a work in progress. It is intended to be an improved version of my completed original app which can be found pinned on my [Github Profie](https://github.com/rmatusza): `DumbCatanClient-Public` & `DumbCatanServer-Public` - The features mentioned in this README therefore apply to the future completed application and may not have all been implemented at the time of reading this. A list of the currently implemented features as well as in progress features can be viewed [at the bottom of this file](#feature-progress-log)
+🚧 This project is a work in progress. It is intended to be an improved version of my completed original app which can be found on my Github page: [Front end](https://github.com/rmatusza/DumbCatanClient-Public) ----- [Back end](https://github.com/rmatusza/DumbCatanServer-Public)  
+The features mentioned in this README therefore apply to the future completed application and may not have all been implemented at the time of reading this. A list of the currently implemented features as well as in progress features can be viewed [at the bottom of this file](#feature-progress-log)
 <br></br>
 
 🚀 You can run a demo version of this project locally to see and experiment with the features that have currently been implemented by following the instructions outlined in the README file within the [Demo Application Repository](https://github.com/rmatusza/dumbcatan-v2-demo)
@@ -13,11 +14,16 @@
 
 ## 🧩 Features
 
+### User
+- Create a profile
+- Sign in / out
+- View and edit profile - player avatar and username / password
+- Create games
+- Send, receive, accept, and decline game invitations
+
 ### Gameplay
-- Real-time sync across players using WebSockets
-- Board interaction with action-first input (e.g. select "build road", then click target)
-- Turn-based flow enforced by backend
-- Full Catan game functionality 
+- Real-time multiplayer gameplay
+- Implements all the features and rules associated with the base game of Catan
 
 ### UI/UX
 - Tailwind CSS for layout and styling
@@ -35,7 +41,7 @@
 - React Router
 - React Hook Form
 - Tailwind CSS
-- WebSocket (STOMP via SockJS)
+- WebSocket (STOMP + SockJS)
 - Docker (for containerization)
 - AWS (for deployment)
 
@@ -53,18 +59,18 @@
 - Spring Data JPA with Hibernate ORM
 
 ### WebSocket Communication
-- STOMP over WebSocket (SockJS fallback)
-- Enables the real-time functionality of the gameplay
+- STOMP + SockJS
+- Enables real-time gameplay
 
 ### Security
-- Spring Security for implementing JWT-based authentication and authorization
+- Spring Security for implementing JWT-based authentication
 - Password hashing for secure storage
 
 ## 🛠️ Tech Stack
 
 - Java 17+
 - Spring Boot
-- Spring Web + WebSocket + STOMP
+- WebSocket (STOMP + SockJS)
 - Spring Security (JWT Auth)
 - Spring Data JPA + Hibernate
 - MySQL
