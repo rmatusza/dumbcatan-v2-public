@@ -87,6 +87,7 @@ The features mentioned in this README therefore apply to the future completed ap
 - User Profile - modal that allows for viewing and editing avatar, username, and password
 
 ## In Progress
+- Adding background music and ambient sounds
 - Setting up websockets
 - Create game functionality / create game modal
 - Viewing active games / your games page
