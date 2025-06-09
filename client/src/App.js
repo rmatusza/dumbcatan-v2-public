@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { configureMusicSettings, getNextTrack, getToken, handleTrackEnd } from "./Functions/utility";
 import { authenticateJwt } from "./Redux/ActionCreators/UserActions";
