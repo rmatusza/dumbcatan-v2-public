@@ -51,7 +51,7 @@ function App() {
                   src={source} 
                   autoPlay={true} 
                   controls
-                  onEnded={() => handleTrackEnd(themeName, metaData, dispatch)}
+                  onEnded={() => handleTrackEnd(themeName, metaData, metaDataActions, dispatch)}
                 />
               </div>
             )

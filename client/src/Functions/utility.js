@@ -175,7 +175,7 @@ export const getNextTrack = (themeName, currentTrack, playedTracks) => {
   return [newTrack, loopTracklist];
 }
 
-export const handleTrackEnd = (themeName, metaData, dispatch) => {
+export const handleTrackEnd = (themeName, metaData, metaDataActions, dispatch) => {
   const currTrack = metaData.musicSettings[themeName].track;
   const [nextTrack, loopTracklist] = getNextTrack(themeName, currTrack, metaData.playedTracks);
 
