@@ -87,7 +87,7 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
       {
         createGameModalActive
         &&
-        <Modal styles={"bg-parchment"} background={BACKGROUNDS.stone}>
+        <Modal background={BACKGROUNDS.stone}>
           <CreateGame setCreateGameModalActive={setCreateGameModalActive}/>
         </Modal>
       }
