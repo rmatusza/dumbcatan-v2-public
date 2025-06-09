@@ -1,7 +1,7 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { configureMusicSettings, getEnabledMusic, getNextTrack, getToken, objectHasKeys, objectKeysOf } from "./Functions/utility";
+import { configureMusicSettings, getNextTrack, getToken, handleTrackEnd } from "./Functions/utility";
 import { authenticateJwt } from "./Redux/ActionCreators/UserActions";
 import { ENDPOINTS, THEME_NAMES, MUSIC_TRACKS } from "./Utils/data";
 import { metaDataActions } from "./Redux/Slices/MetaDataSlice";
@@ -33,39 +33,13 @@ function App() {
 
   }, []);
 
-  // const handleKeyDown = (e) => {
-  //   if(e.key === '`') {
-  //     handleTrackEnd(THEME_NAMES.homeTheme);
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   window.addEventListener('keydown', handleKeyDown);
-
-  //   return () => window.removeEventListener('keydown', handleKeyDown)
-  // }, [metaData])
-
-  const handleTrackEnd = (themeName) => {
-    const currTrack = metaData.musicSettings[themeName].track;
-    const [nextTrack, loopTracklist] = getNextTrack(themeName, currTrack, metaData.playedTracks);
-
-    const reconfiguredMusicSettings = configureMusicSettings(themeName, true, nextTrack);
-
-    if(loopTracklist){
-      dispatch(metaDataActions.loopTracklist({tracklist: MUSIC_TRACKS[themeName], reconfiguredMusicSettings, nextTrack}));
-      return
-    }
-
-    dispatch(metaDataActions.updateMusicSettings(reconfiguredMusicSettings));
-  }
-
   return (
     <div className="w-screen h-screen bg-cover bg-center flex flex-col" style={{ backgroundImage: `url(${metaData.background})` }}>
 
       {
         metaData.musicEnabled
         &&
-        objectKeysOf(metaData.musicSettings).map((themeName, i) => {
+        Object.keys(metaData.musicSettings).map((themeName, i) => {
           const source = metaData.musicSettings[themeName].track;
           const themeEnabled = metaData.musicSettings[themeName].enabled;
 
@@ -77,7 +51,7 @@ function App() {
                   src={source} 
                   autoPlay={true} 
                   controls
-                  onEnded={() => handleTrackEnd(themeName)}
+                  onEnded={() => handleTrackEnd(themeName, metaData, dispatch)}
                 />
               </div>
             )

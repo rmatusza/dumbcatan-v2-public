@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { cloneDeep } from "lodash";
-import { objectKeysOf } from "src/Functions/utility";
+import { Object.keys } from "src/Functions/utility";
 
 const initialState =
 {
@@ -53,7 +53,7 @@ const metaDataSlice = createSlice(
       },
       updateMusicSettings(state, action) {
         const updatedMusicSettings = action.payload;
-        const themes = objectKeysOf(updatedMusicSettings);
+        const themes = Object.keys(updatedMusicSettings);
         let updatedTracks = cloneDeep(state.playedTracks);
 
         themes.forEach(theme => {

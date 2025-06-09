@@ -92,17 +92,9 @@ export const keyCountOf = (obj) => {
   return Object.keys(obj).length;
 }
 
-export const objectKeysOf = (obj) => {
-  return Object.keys(obj);
-}
-
-export const objectValuesOf = (obj) => {
-  return Object.values(obj);
-}
-
 /// - returns a random track
 /// - ensures that if an excludedTrack is provided, it will not be selected from the tracklist
-export const getRandomTrack = (tracksArr, excludedTrack=null) => {
+export const getRandomTrack = (tracksArr, excludedTrack = null) => {
   let tracklist;
 
   /// reminder: filter creates a copy
@@ -119,17 +111,17 @@ export const configureGroupMusicSettings = (themeNames = [], enabled = [], selec
   const settingsObject = {};
 
   themeNames.forEach((themeName, i) => {
-    if(!themeName) {
+    if (!themeName) {
       return
     }
 
     const configuration = {};
-  
+
     if (enabled[i] && !selectedTracks[i]) {
       configuration.track = getRandomTrack(MUSIC_TRACKS[themeName]);
     }
     else {
-       configuration.track = selectedTracks[i] ? selectedTracks[i] : "";
+      configuration.track = selectedTracks[i] ? selectedTracks[i] : "";
     }
     configuration.enabled = enabled[i] ? enabled[i] : false;
     settingsObject[themeName] = configuration;
@@ -141,10 +133,10 @@ export const configureGroupMusicSettings = (themeNames = [], enabled = [], selec
 /// - sets a single track of an associated theme to be played
 /// -> either a selected track can be passed in or a random one will be chosen
 /// - allows for selectively disabling a single theme
-export const configureMusicSettings = (themeName=null, enabled=false, selectedTrack=null) => {
+export const configureMusicSettings = (themeName = null, enabled = false, selectedTrack = null) => {
   const settingsObject = {};
   const configuration = {};
-  
+
   if (enabled && !selectedTrack) {
     configuration.track = getRandomTrack(MUSIC_TRACKS[themeName]);
   }
@@ -166,13 +158,13 @@ export const getNextTrack = (themeName, currentTrack, playedTracks) => {
   const tracklist = MUSIC_TRACKS[themeName];
   let loopTracklist = false;
 
-  if(tracklist.length === 1) {
+  if (tracklist.length === 1) {
     return tracklist[1];
   }
 
-  for(let i=0; i<tracklist.length; i++) {
+  for (let i = 0; i < tracklist.length; i++) {
     let track = tracklist[i];
-    if(!playedTracks.includes(track)) {
+    if (!playedTracks.includes(track)) {
       return [track, loopTracklist];
     }
   }
@@ -181,4 +173,18 @@ export const getNextTrack = (themeName, currentTrack, playedTracks) => {
   const newTrack = getRandomTrack(tracklist, currentTrack);
 
   return [newTrack, loopTracklist];
+}
+
+export const handleTrackEnd = (themeName, metaData, dispatch) => {
+  const currTrack = metaData.musicSettings[themeName].track;
+  const [nextTrack, loopTracklist] = getNextTrack(themeName, currTrack, metaData.playedTracks);
+
+  const reconfiguredMusicSettings = configureMusicSettings(themeName, true, nextTrack);
+
+  if (loopTracklist) {
+    dispatch(metaDataActions.loopTracklist({ tracklist: MUSIC_TRACKS[themeName], reconfiguredMusicSettings, nextTrack }));
+    return
+  }
+
+  dispatch(metaDataActions.updateMusicSettings(reconfiguredMusicSettings));
 }
