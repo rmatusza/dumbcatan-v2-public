@@ -151,14 +151,21 @@ const About = () => {
 
           <p className="text-xl font-bold">Implemented:</p>
           <ul class="list-disc list-inside">
-            <li>Sign in</li>
+            <li>Auto signin with valid JWT</li>
+            <li>Sign in with credentials</li>
             <li>Sign up</li>
-            <li>Home Page</li>
-            <li>Viewing and Editing User Profile</li>
+            <li>Sign out</li>
+            <li>Home Page: root of the application after authentication</li>
+            <li>Banner component: contains user's avatar, username, and signout button</li>
+            <li>Main Menu: drawer component that provides the user with a variety of options, including creating a game, checking invites, accessing the official rules, etc.</li>
+            <li>User Profile: allows user to view and edit their avatar, username, and password</li>
+            <li>Background / Ambient music</li>
           </ul>
 
           <p className="text-xl font-bold">In Progress:</p>
           <ul class="list-disc list-inside">
+            <li>Adding user interaction sound effects</li>
+            <li>Configuring Websockets</li>
             <li>Creating a Game</li>
             <li>Viewing Active Games</li>
           </ul>

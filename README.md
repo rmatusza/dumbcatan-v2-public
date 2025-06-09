@@ -82,15 +82,21 @@ The features mentioned in this README therefore apply to the future completed ap
 # FEATURE PROGRESS LOG:
 
 ## Implemented Features
-- Authentication Page - sign in / sign up
-- Home Page - root page for an authenticated user
-- User Profile - modal that allows for viewing and editing avatar, username, and password
+- Auto signin with valid JWT
+- Sign in with credentials
+- Sign up
+- Sign out
+- Home Page: root of the application after authentication
+- Banner component: contains user's avatar, username, and signout button
+- Main Menu: drawer component that provides the user with a variety of options, including creating a game, checking invites, accessing the official rules, etc.
+- User profile: allows user to view and edit their avatar, username, and password
+- Background / Ambient music
 
 ## In Progress
-- Adding background music and ambient sounds
-- Setting up websockets
-- Create game functionality / create game modal
-- Viewing active games / your games page
+- Adding user interaction sound effects
+- Configuring Websockets
+- Creating a Game
+- Viewing Active Games
 
 <br></br>
 

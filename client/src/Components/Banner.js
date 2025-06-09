@@ -22,7 +22,19 @@ const Banner = () => {
   const signoutHandler = () => {
     deleteToken();
     dispatch(userActions.clearUserData());
-    dispatch(metaDataActions.setBackground(BACKGROUNDS.authentication));
+    dispatch(metaDataActions.updateMetaData(
+      {
+        background: BACKGROUNDS.authentication,
+        musicEnabled: false,
+        musicSettings: {
+          placeHolderThemeName: {
+            url: "",
+            enabled: false,
+          }
+        },
+        playedSongs: []
+      }
+    ));
     navigate(ENDPOINTS.authentication);
   }
 
@@ -44,7 +56,7 @@ const Banner = () => {
         drawerOpen={mainMenuOpen}
         setDrawerOpen={setMainMenuOpen}
       >
-        <MainMenu userRole={userData.role} setMainMenuOpen={setMainMenuOpen}/>
+        <MainMenu userRole={userData.role} setMainMenuOpen={setMainMenuOpen} />
       </Drawer>
     </>
   )

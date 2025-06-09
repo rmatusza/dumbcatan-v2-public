@@ -1,22 +1,74 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { cloneDeep } from "lodash";
+import { objectKeysOf } from "src/Functions/utility";
+
+const initialState =
+{
+  pageLoading: false,
+  musicEnabled: false,
+  soundEffectsEnabled: false,
+  playedTracks: [],
+  musicSettings: {
+    theme: {
+      track: "",
+      enabled: false,
+    }
+  },
+  background: "",
+}
 
 const metaDataSlice = createSlice(
   {
     name: 'metaData',
-    initialState: {
-      pageLoading: false,
-      soundEnabled: true,
-      background: ""
-    },
+    initialState,
     reducers: {
       toggleLoading(state, action) {
-       state.pageLoading = action.payload.value;
+        state.pageLoading = action.payload.value;
       },
-      toggleSound(state) {
-        state.soundEnabled = !state.soundEnabled;
+      toggleMusic(state) {
+        state.musicEnabled = !state.musicEnabled;
+      },
+      toggleSoundEffects(state) {
+        state.soundEffectsEnabled = !state.soundEffectsEnabled;
       },
       setBackground(state, action) {
         state.background = action.payload.background;
+      },
+      updatePlayedTracks(state, action) {
+        action.payload.tracks.forEach(track => {
+          if(!state.playedTracks.includes(track)){
+            state.playedTracks.push(track);
+          }
+        })
+      },
+      loopTracklist(state, action) {
+        const tracklist = action.payload.tracklist;
+        const updatedMusicSettings = action.payload.updatedMusicSettings;
+        const nextTrack = action.payload.nextTrack;
+
+        const resetTracks = state.playedTracks.filter(track => !tracklist.includes(track)).push(nextTrack);
+
+        state.playedTracks = resetTracks;
+        state.musicSettings = {...state.musicSettings, ...updatedMusicSettings}
+      },
+      updateMusicSettings(state, action) {
+        const updatedMusicSettings = action.payload;
+        const themes = objectKeysOf(updatedMusicSettings);
+        let updatedTracks = cloneDeep(state.playedTracks);
+
+        themes.forEach(theme => {
+          let track = updatedMusicSettings[theme].track;
+
+          if(!updatedTracks.includes(track)){
+            updatedTracks.push(track);
+          }
+        });
+
+        state.musicSettings = {...state.musicSettings, ...updatedMusicSettings};
+        state.playedTracks = updatedTracks;
+      },
+      clearPlayedTracks(state) {
+        state.playedTracks = [];
       },
       updateMetaData(state, action) {
         return { ...state, ...action.payload };

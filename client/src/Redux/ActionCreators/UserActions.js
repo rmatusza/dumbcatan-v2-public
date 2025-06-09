@@ -1,6 +1,6 @@
 import { authenticate, signin, signup, updateProfile } from "../../Functions/user";
-import { executeAfterDelay, getToken, setToken } from "../../Functions/utility";
-import { APP_CONTEXT, BACKGROUNDS, ENDPOINTS } from "../../Utils/data";
+import { configureMusicSettings, executeAfterDelay, getRandomTrack, getToken, setToken } from "../../Functions/utility";
+import { APP_CONTEXT, BACKGROUNDS, ENDPOINTS, MUSIC_SOURCES, MUSIC_TRACKS, THEME_NAMES } from "../../Utils/data";
 import { applicationAlertActions } from "../Slices/ApplicationAlertSlice";
 import { metaDataActions } from "../Slices/MetaDataSlice";
 import { userActions } from "../Slices/UserSlice";
@@ -8,9 +8,9 @@ import { userActions } from "../Slices/UserSlice";
 /// Action Creator Thunks that work with UserSlice data
 
 export const authenticateJwt = (token, navigate) => {
-  return async(dispatch) => {
+  return async (dispatch) => {
     dispatch(
-      metaDataActions.toggleLoading({value: true})
+      metaDataActions.toggleLoading({ value: true })
     );
 
     try {
@@ -26,14 +26,20 @@ export const authenticateJwt = (token, navigate) => {
         authenticated: true,
       }));
 
+      const musicSettings = configureMusicSettings(THEME_NAMES.homeTheme, true);
+      const track = musicSettings[THEME_NAMES.homeTheme].track;
+
       dispatch(metaDataActions.updateMetaData({
         pageLoading: false,
-        background: BACKGROUNDS.home
+        background: BACKGROUNDS.home,
+        musicEnabled: true,
+        musicSettings,
+        playedTracks: [track]
       }));
 
       navigate(ENDPOINTS.home);
     }
-    catch(error) {
+    catch (error) {
 
       dispatch(applicationAlertActions.setApplicationAlert({
         message: error.message,
@@ -42,15 +48,15 @@ export const authenticateJwt = (token, navigate) => {
         context: APP_CONTEXT.signin
       }))
 
-      dispatch(metaDataActions.toggleLoading({value: false}));
+      dispatch(metaDataActions.toggleLoading({ value: false }));
     }
   }
 };
 
 export const signinUser = (credentials, navigate) => {
-  return async(dispatch) => {
+  return async (dispatch) => {
     dispatch(
-      metaDataActions.toggleLoading({value: true})
+      metaDataActions.toggleLoading({ value: true })
     );
 
     try {
@@ -71,14 +77,20 @@ export const signinUser = (credentials, navigate) => {
         authenticated: true,
       }));
 
+      const musicSettings = configureMusicSettings(THEME_NAMES.homeTheme, true);
+      const track = musicSettings[THEME_NAMES.homeTheme].track;
+
       dispatch(metaDataActions.updateMetaData({
         pageLoading: false,
-        background: BACKGROUNDS.home
+        background: BACKGROUNDS.home,
+        musicEnabled: true,
+        musicSettings,
+        playedTracks: [track]
       }));
 
       navigate(ENDPOINTS.home);
     }
-    catch(error) {
+    catch (error) {
       dispatch(applicationAlertActions.setApplicationAlert({
         message: error.message,
         type: 'failure',
@@ -86,15 +98,15 @@ export const signinUser = (credentials, navigate) => {
         context: APP_CONTEXT.signin
       }))
 
-      dispatch(metaDataActions.toggleLoading({value: false}));
+      dispatch(metaDataActions.toggleLoading({ value: false }));
     }
   }
 }
 
 export const signupUser = (credentials, navigate) => {
-  return async(dispatch) => {
+  return async (dispatch) => {
     dispatch(
-      metaDataActions.toggleLoading({value: true})
+      metaDataActions.toggleLoading({ value: true })
     );
 
     try {
@@ -115,14 +127,20 @@ export const signupUser = (credentials, navigate) => {
         authenticated: true,
       }));
 
+      const musicSettings = configureMusicSettings(THEME_NAMES.homeTheme, true);
+      const track = musicSettings[THEME_NAMES.homeTheme].track;
+
       dispatch(metaDataActions.updateMetaData({
         pageLoading: false,
-        background: BACKGROUNDS.home
+        background: BACKGROUNDS.home,
+        musicEnabled: true,
+        musicSettings,
+        playedTracks: [track]
       }));
 
       navigate(ENDPOINTS.home);
     }
-    catch(error) {
+    catch (error) {
       dispatch(applicationAlertActions.setApplicationAlert({
         message: error.message,
         type: 'failure',
@@ -130,7 +148,7 @@ export const signupUser = (credentials, navigate) => {
         context: APP_CONTEXT.signup
       }));
 
-      dispatch(metaDataActions.toggleLoading({value: false}));
+      dispatch(metaDataActions.toggleLoading({ value: false }));
     }
   }
 }
@@ -139,20 +157,20 @@ export const updateUserProfile = (profileData, context) => {
   const MILLISECOND_DELAY = 3000;
   return async (dispatch) => {
     dispatch(
-      metaDataActions.toggleLoading({value: true})
+      metaDataActions.toggleLoading({ value: true })
     );
 
     try {
       const token = getToken();
       const updatedUserProfile = await updateProfile(profileData, token);
 
-      if(updatedUserProfile.jwt) {
+      if (updatedUserProfile.jwt) {
         setToken(updatedUserProfile.jwt);
       }
 
       dispatch(userActions.updateUserProfile(updatedUserProfile));
-      dispatch(metaDataActions.toggleLoading({value: false}));
-      dispatch(applicationAlertActions.setApplicationAlert({message: "Update successful", context: context, type: 'success'}));
+      dispatch(metaDataActions.toggleLoading({ value: false }));
+      dispatch(applicationAlertActions.setApplicationAlert({ message: "Update successful", context: context, type: 'success' }));
       executeAfterDelay(
         {
           delay: MILLISECOND_DELAY,
@@ -161,8 +179,8 @@ export const updateUserProfile = (profileData, context) => {
         }
       );
     }
-    catch(error) {
-      dispatch(metaDataActions.toggleLoading({value: false}));
+    catch (error) {
+      dispatch(metaDataActions.toggleLoading({ value: false }));
       dispatch(applicationAlertActions.setApplicationAlert({
         message: error.message,
         type: 'failure',

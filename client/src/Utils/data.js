@@ -32,6 +32,41 @@ export const ELEMENTS =
   bannerLogo: elementBaseURL + 'CatanBannerLogo.png',
 }
 
+/// - object containing theme name constants
+/// - is the single source of truth for theme names which allows for easier maintainability and avoids code repetition and potential typos 
+export const THEME_NAMES = 
+{
+  homeTheme: 'homeTheme',
+}
+
+/// list of sources / URLs for all music, ambient sounds, and sound effects
+const musicAndsoundBaseURL = '/Media/Audio/'
+export const MUSIC_SOURCES = 
+{
+  homeTheme1: musicAndsoundBaseURL+'MT1.mp3',
+  homeTheme2: musicAndsoundBaseURL+'MT2.mp3',
+  homeTheme3: musicAndsoundBaseURL+'MT3.mp3',
+  homeTheme4: musicAndsoundBaseURL+'MT4.mp3',
+  homeTheme5: musicAndsoundBaseURL+'MT5.mp3',
+}
+
+/// - music is organized into themes and tracks
+/// -> each theme has one or more tracks and the below object defines the mapping between a theme and its tracks
+export const MUSIC_TRACKS = {};
+MUSIC_TRACKS[THEME_NAMES.homeTheme] = 
+[
+  MUSIC_SOURCES.homeTheme1,
+  MUSIC_SOURCES.homeTheme2,
+  MUSIC_SOURCES.homeTheme3,
+  MUSIC_SOURCES.homeTheme4,
+  MUSIC_SOURCES.homeTheme5,
+]
+
+export const SOUND_EFFECT_SOURCES = 
+{
+  menu: null,
+}
+
 export const CUSTOM_STYLES = 
 {
   classicCatanButtonSingle: 'classicCatanButtonSingle',
@@ -81,7 +116,8 @@ export const APP_CONTEXT =
   signin: 'signin',
   signup: 'signup',
   avatar: 'avatar',
-  credentials: 'credentials'
+  credentials: 'credentials',
+  home: 'home'
 }
 
 export const tileIdentities = 

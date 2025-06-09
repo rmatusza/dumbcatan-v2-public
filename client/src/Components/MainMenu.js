@@ -16,7 +16,6 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
   const [profileModalActive, setProfileModalActive] = useState(false);
   const [createGameModalActive, setCreateGameModalActive] = useState(false);
 
-
   const handleMenuSelection = (e) => {
     switch (e.target.getAttribute("data-id")) {
       case 'home':
@@ -39,8 +38,11 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
         setMainMenuOpen(false);
         navigate(ENDPOINTS.yourInvites);
         break;
-      case 'sound':
-        dispatch(metaDataActions.toggleSound())
+      case 'music':
+        dispatch(metaDataActions.toggleMusic());
+        break;
+      case 'soundEffects':
+        dispatch(metaDataActions.toggleSoundEffects());
         break;
       case 'about':
         setMainMenuOpen(false);
@@ -66,7 +68,8 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
           <li data-id="yourGames" className="cursor-pointer hover:underline m-5">Your Games</li>
           <li data-id="yourInvites" className="cursor-pointer hover:underline m-5">Your Invites</li>
           <li data-id="rules" className="cursor-pointer hover:underline m-5"><a href="https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf" target="_blank" rel="noopener noreferrer">Official Rules</a></li>
-          <li data-id="sound" className="cursor-pointer hover:underline m-5">{metaData.soundEnabled ? 'Disable' : 'Enable'} sound</li>
+          <li data-id="music" className="cursor-pointer hover:underline m-5">{metaData.musicEnabled ? 'Disable' : 'Enable'} music</li>
+          <li data-id="soundEffects" className="cursor-pointer hover:underline m-5">{metaData.soundEffectsEnabled ? 'Disable' : 'Enable'} sound effects</li>
           {
             userRole === 'admin'
             &&
