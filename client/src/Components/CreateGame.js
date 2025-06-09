@@ -1,5 +1,5 @@
 import Button from "../UI/Button";
-import { CUSTOM_STYLES } from "src/Utils/data";
+import { CUSTOM_STYLES } from "../Utils/data";
 
 const CreateGame = ({ setCreateGameModalActive }) => {
   const S = CUSTOM_STYLES;

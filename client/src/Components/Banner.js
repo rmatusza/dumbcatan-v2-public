@@ -22,19 +22,7 @@ const Banner = () => {
   const signoutHandler = () => {
     deleteToken();
     dispatch(userActions.clearUserData());
-    dispatch(metaDataActions.updateMetaData(
-      {
-        background: BACKGROUNDS.authentication,
-        musicEnabled: false,
-        musicSettings: {
-          placeHolderThemeName: {
-            url: "",
-            enabled: false,
-          }
-        },
-        playedSongs: []
-      }
-    ));
+    dispatch(metaDataActions.resetMetadata());
     navigate(ENDPOINTS.authentication);
   }
 

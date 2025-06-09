@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { cloneDeep } from "lodash";
+import { BACKGROUNDS } from "../../Utils/data";
 
 const initialState =
 {
@@ -7,13 +8,8 @@ const initialState =
   musicEnabled: false,
   soundEffectsEnabled: false,
   playedTracks: [],
-  musicSettings: {
-    theme: {
-      track: "",
-      enabled: false,
-    }
-  },
-  background: "",
+  musicSettings: {},
+  background: BACKGROUNDS.authentication,
 }
 
 const metaDataSlice = createSlice(
@@ -68,6 +64,9 @@ const metaDataSlice = createSlice(
       },
       clearPlayedTracks(state) {
         state.playedTracks = [];
+      },
+      resetMetadata(state) {
+        return initialState;
       },
       updateMetaData(state, action) {
         return { ...state, ...action.payload };
