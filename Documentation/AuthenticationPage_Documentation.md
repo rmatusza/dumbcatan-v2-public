@@ -78,8 +78,8 @@
   
 ## SERVER VALIDATIONS
 - DTO: `AuthRequest`
- - field: `username` -- validation annotations: `@NotNull`, `@Size(1, 15)`
- - field: `password` -- validation annotations: `@NotNull`, `@Size(1, 15)`
+  - field: `username` -- validation annotations: `@NotNull`, `@Size(1, 15)`
+  - field: `password` -- validation annotations: `@NotNull`, `@Size(1, 15)`
 
 ## SERVER CUSTOM ERROR HANDLING 
 - `InvalidLoginException:` - gets thrown when username and/or password provided by user are invalid
