@@ -98,8 +98,6 @@
 - `UserRepository` - this is the DAO (data access object), called by the AuthService, and performs operations on the users table in the database through spring data jpa
 
 ## SERVER DTOs
-`NOTE`: a DTO is an object that is meant to be passed to and from the server - incomming json from a client request would be mapped to a 
- DTO, and then for responses the DTO is converted to json and then sent to the client
 - `AuthRequest` - used for both signin and signup requests - contains username and password fields both decorated with the @NotNull and @Size(min=1, max=15) validation annotations
 - `UserDataResponse` - contains JWT and all user account info (userID, username, role, avatarURL, activeGames) except for the password which the client does not need
 
