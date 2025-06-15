@@ -112,13 +112,13 @@ Nathan for You - Dumb Starbucks Episode: https://www.youtube.com/watch?v=h0TRpGP
 # App Screenshots:
 
 ## Authentication Page - video background:
-![alt text](./readme-media/authentication-1.png)
-![alt text](./readme-media/authentication-2.png)
+![alt text](./readme-images/authentication-1.png)
+![alt text](./readme-images/authentication-2.png)
 
 ## Home Page:
-![alt text](./readme-media/home-page.png)
+![alt text](./readme-images/home-page.png)
 
 ## User Profile:
-![alt text](./readme-media/user-profile-1.png)
-![alt text](./readme-media/user-profile-2.png)
-![alt text](./readme-media/user-profile-3.png)
+![alt text](./readme-images/user-profile-1.png)
+![alt text](./readme-images/user-profile-2.png)
+![alt text](./readme-images/user-profile-3.png)
