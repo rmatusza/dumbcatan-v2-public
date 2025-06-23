@@ -1,6 +1,6 @@
 import { authenticate, signin, signup, updateProfile } from "../../Functions/user";
-import { configureMusicSettings, executeAfterDelay, getRandomTrack, getToken, setToken } from "../../Functions/utility";
-import { APP_CONTEXT, BACKGROUNDS, ENDPOINTS, MUSIC_SOURCES, MUSIC_TRACKS, THEME_NAMES } from "../../Utils/data";
+import { createMusicObject, executeAfterDelay, getToken, setToken } from "../../Functions/utility";
+import { APP_CONTEXT, BACKGROUND_PATHS, ENDPOINTS, THEME_NAMES } from "../../Utils/constants";
 import { applicationAlertActions } from "../Slices/ApplicationAlertSlice";
 import { metaDataActions } from "../Slices/MetaDataSlice";
 import { userActions } from "../Slices/UserSlice";
@@ -26,14 +26,14 @@ export const authenticateJwt = (token, navigate) => {
         authenticated: true,
       }));
 
-      const musicSettings = configureMusicSettings(THEME_NAMES.homeTheme, true);
-      const track = musicSettings[THEME_NAMES.homeTheme].track;
+      const music = createMusicObject(THEME_NAMES.homeTheme, true);
+      const track = music[THEME_NAMES.homeTheme].track;
 
       dispatch(metaDataActions.updateMetaData({
         pageLoading: false,
-        background: BACKGROUNDS.home,
+        background: BACKGROUND_PATHS.home,
         musicEnabled: true,
-        musicSettings,
+        music,
         playedTracks: [track]
       }));
 
@@ -61,12 +61,8 @@ export const signinUser = (credentials, navigate) => {
 
     try {
 
-      const responseData = await signin(credentials);
-
-      const userData = responseData.userData;
-      const token = responseData.token;
-
-      setToken(token);
+      const userData = await signin(credentials);
+      setToken(userData.jwt);
 
       dispatch(userActions.setUserData({
         username: userData.username,
@@ -77,14 +73,14 @@ export const signinUser = (credentials, navigate) => {
         authenticated: true,
       }));
 
-      const musicSettings = configureMusicSettings(THEME_NAMES.homeTheme, true);
-      const track = musicSettings[THEME_NAMES.homeTheme].track;
+      const music = createMusicObject(THEME_NAMES.homeTheme, true);
+      const track = music[THEME_NAMES.homeTheme].track;
 
       dispatch(metaDataActions.updateMetaData({
         pageLoading: false,
-        background: BACKGROUNDS.home,
+        background: BACKGROUND_PATHS.home,
         musicEnabled: true,
-        musicSettings,
+        music,
         playedTracks: [track]
       }));
 
@@ -111,12 +107,8 @@ export const signupUser = (credentials, navigate) => {
 
     try {
 
-      const responseData = await signup(credentials);
-
-      const userData = responseData.userData;
-      const token = responseData.token;
-
-      setToken(token);
+      const userData = await signup(credentials);
+      setToken(userData.jwt);
 
       dispatch(userActions.setUserData({
         username: userData.username,
@@ -127,14 +119,14 @@ export const signupUser = (credentials, navigate) => {
         authenticated: true,
       }));
 
-      const musicSettings = configureMusicSettings(THEME_NAMES.homeTheme, true);
-      const track = musicSettings[THEME_NAMES.homeTheme].track;
+      const music = createMusicObject(THEME_NAMES.homeTheme, true);
+      const track = music[THEME_NAMES.homeTheme].track;
 
       dispatch(metaDataActions.updateMetaData({
         pageLoading: false,
-        background: BACKGROUNDS.home,
+        background: BACKGROUND_PATHS.home,
         musicEnabled: true,
-        musicSettings,
+        music,
         playedTracks: [track]
       }));
 

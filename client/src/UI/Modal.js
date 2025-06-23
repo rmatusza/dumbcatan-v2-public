@@ -5,8 +5,6 @@ const Modal = ({ children, background, styles, dimensions }) => {
   const style = {
     backgroundImage: background ? `url(${background})` : '',
     backgroundSize: '800px 500px',
-    // backgroundSize: 'cover',
-    // backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     width: dimensions?.width || '800px',
     height: dimensions?.height || '500px',

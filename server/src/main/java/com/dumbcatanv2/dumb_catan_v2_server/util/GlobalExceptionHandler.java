@@ -2,7 +2,7 @@ package com.dumbcatanv2.dumb_catan_v2_server.util;
 
 import com.dumbcatanv2.dumb_catan_v2_server.dto.ApiErrorResponse;
 import com.dumbcatanv2.dumb_catan_v2_server.exceptions.InvalidLoginException;
-import com.dumbcatanv2.dumb_catan_v2_server.exceptions.InvalidSignupException;
+import com.dumbcatanv2.dumb_catan_v2_server.exceptions.InvalidUsernameException;
 import com.dumbcatanv2.dumb_catan_v2_server.exceptions.UserIdNotFound;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -37,8 +37,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(new ApiErrorResponse(ex.getMessage(), 401), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(InvalidSignupException.class)
-    public ResponseEntity<ApiErrorResponse> handleInvalidSignup(InvalidSignupException ex) {
+    @ExceptionHandler(InvalidUsernameException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidSignup(InvalidUsernameException ex) {
         return new ResponseEntity<>(new ApiErrorResponse(ex.getMessage(), 400), HttpStatus.BAD_REQUEST);
     }
 

@@ -1,8 +1,8 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { signinUser } from '../Redux/ActionCreators/UserActions';
+import { APP_CONTEXT, CUSTOM_STYLES } from '../Utils/constants';
 import Form from '../UI/Form';
-import { APP_CONTEXT, CUSTOM_STYLES } from '../Utils/data';
 
 const Signin = () => {
   const dispatch = useDispatch();
@@ -37,19 +37,21 @@ const Signin = () => {
           validation: { required: "Password is required" }
         },
       ]}
-      styles={{
-        form: "flex flex-col space-y-4",
-        input: "w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400",
-        fieldHeading: 'font-yatra text-2xl text-center',
-        validationError: "text-red-500 text-center font-bold"
-      }}
+      styles={
+        {
+          form: "flex flex-col space-y-4",
+          input: "w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400",
+          fieldHeading: 'font-yatra text-2xl text-center',
+          validationError: "text-red-500 text-center font-bold"
+        }
+      }
       formSubmitHandler={onSubmit}
       buttons={
         [
           {
             type: 'submit', 
             name: 'Sign In', 
-            namedStyles: [CUSTOM_STYLES.classicCatanButtonSingle],
+            namedStyles: [CUSTOM_STYLES.button.classicCatanButtonSingle],
             namedStyleAsAddOn: true,
           }
         ]

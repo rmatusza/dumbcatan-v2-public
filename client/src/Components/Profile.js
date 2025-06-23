@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { AVATARS, REQUEST_FIELDS, CUSTOM_STYLES, APP_CONTEXT } from "../Utils/data";
+import { AVATAR_PATHS, REQUEST_FIELDS, CUSTOM_STYLES, APP_CONTEXT } from "../Utils/constants";
 import { userActions } from "../Redux/Slices/UserSlice";
 import { updateUserProfile } from "../Redux/ActionCreators/UserActions";
 import Button from "../UI/Button";
@@ -36,24 +36,24 @@ const Profile = ({ setProfileModalActive }) => {
         &&
         <>
           <div className="flex flex-row justify-around items-center w-full m-5">
-            <p className={`${S.modalTextYellow} underline`}>Avatar:</p>
-            <img className="w-[150px] h-[150px]" src={AVATARS[userData.avatarURL]} />
+            <p className={`${S.text.modalTextYellow} underline`}>Avatar:</p>
+            <img className="w-[150px] h-[150px]" src={AVATAR_PATHS[userData.avatarURL]} />
           </div>
           <div className="flex flex-row justify-around items-center w-full m-5">
-            <p className={`${S.modalTextYellow} underline`}>Username:</p>
+            <p className={`${S.text.modalTextYellow} underline`}>Username:</p>
             <div className="w-[150px] flex justify-center">
-              <p className={S.modalTextYellow}>{userData.username}</p>
+              <p className={S.text.modalTextYellow}>{userData.username}</p>
             </div>
           </div>
           <div className={`flex flex-row justify-between gap-4 mt-auto pb-5`}>
             <div className="flex-1">
-              <Button name={"Close"} callBack={setProfileModalActive} args={[false]} namedStyles={[S.redAndYellowButtonSingle, S.goldYellowBorder]} namedStyleAsAddOn={true} />
+              <Button name={"Close"} callBack={setProfileModalActive} args={[false]} namedStyles={[S.button.redAndYellowButtonSingle, S.border.goldYellowBorder]} namedStyleAsAddOn={true} />
             </div>
             <div className="flex-1">
-              <Button name={"Change Avatar"} callBack={viewHandler} args={['avatar']} namedStyles={[S.classicCatanButtonSingle, S.lightRedBorder]} namedStyleAsAddOn={true}/>
+              <Button name={"Change Avatar"} callBack={viewHandler} args={['avatar']} namedStyles={[S.button.classicCatanButtonSingle, S.border.lightRedBorder]} namedStyleAsAddOn={true}/>
             </div>
             <div className="flex-1">
-              <Button name={"Change Credentials"} callBack={viewHandler} args={['credentials']} namedStyles={[S.classicCatanButtonSingle, S.lightRedBorder]} namedStyleAsAddOn={true}/>
+              <Button name={"Change Credentials"} callBack={viewHandler} args={['credentials']} namedStyles={[S.button.classicCatanButtonSingle, S.border.lightRedBorder]} namedStyleAsAddOn={true}/>
             </div>
           </div>
         </>

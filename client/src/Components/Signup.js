@@ -1,8 +1,8 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { signupUser } from '../Redux/ActionCreators/UserActions';
+import { APP_CONTEXT, CUSTOM_STYLES } from '../Utils/constants';
 import Form from '../UI/Form';
-import { APP_CONTEXT, CUSTOM_STYLES } from '../Utils/data';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -80,7 +80,7 @@ const Signup = () => {
           {
             type: 'submit',
             name: 'Sign Up',
-            namedStyles: [CUSTOM_STYLES.classicCatanButtonSingle],
+            namedStyles: [CUSTOM_STYLES.button.classicCatanButtonSingle],
             namedStyleAsAddOn: true,
           }
         ]

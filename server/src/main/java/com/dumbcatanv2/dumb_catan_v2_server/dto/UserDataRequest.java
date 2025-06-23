@@ -13,14 +13,8 @@ public class UserDataRequest {
     @Size(min=1, max=15)
     private String password = "NONE";
     @NotNull
+    @Size(min=3, max=15)
     private String avatarURL = "NONE";
-
-    public UserDataRequest(int userID, String username, String password, String avatarURL) {
-        this.userID = userID;
-        this.username = username;
-        this.password = password;
-        this.avatarURL = avatarURL;
-    }
 
     public UserDataRequest(){}
 
@@ -56,4 +50,10 @@ public class UserDataRequest {
         return "";
     }
 
+    public UserDataRequest(int userID, String username, String password, String avatarURL) {
+        this.userID = userID;
+        this.username = username;
+        this.password = password;
+        this.avatarURL = avatarURL;
+    }
 }

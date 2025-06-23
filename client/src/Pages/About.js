@@ -1,5 +1,3 @@
-import { CUSTOM_STYLES } from "../Utils/data";
-
 const About = () => {
   return (
     <div className="flex flex-col bg-cream/60 backdrop-blur-md shadow-lg p-5 w-screen h-screen text-lg overflow-y-auto overflow-x-hidden">
@@ -37,18 +35,13 @@ const About = () => {
         <p className="text-xl font-bold">Full Game Logic Implementation:</p>
         <ul class="list-disc list-inside">
           <li>Follows official Settlers of Catan rules</li>
-          <li>Dice rolling, resource distribution, building (roads, settlements, cities)</li>
-          <li>Longest road, largest army, and victory point tracking</li>
-          <li>Full support for development cards and robber mechanics</li>
-        </ul>
-
-        <p className="text-xl font-bold">Board Interaction Design:</p>
-        <ul class="list-disc list-inside">
-          <li>Action-first input model: players choose an action (e.g., build road) from a menu, then click on the board to execute</li>
-          <li>Turn-based flow enforced by the server</li>
-          <li>Trade system: player-to-player trades with UI prompts and validation</li>
+          <li>Role dice, collect resources, and build settlements, cities, and roads</li>
+          <li>Trade with other players or at ports</li>
+          <li>Receive game awards: Longest road, largest army</li>
+          <li>Play development cards and steal resources from other players with the robber</li>
         </ul>
         <br></br>
+
         <p className={`text-catanRed font-yatra text-4xl underline`}>User Features</p>
         <br></br>
         <p className="text-xl font-bold">Authentication & Security:</p>
@@ -60,7 +53,7 @@ const About = () => {
         <p className="text-xl font-bold">Game Navigation:</p>
         <ul class="list-disc list-inside">
           <li>React Router for routing between the various pages of the application</li>
-          <li>UI state managed with Redux for consistency across components</li>
+          <li>UI state managed with Redux</li>
         </ul>
 
         <p className="text-xl font-bold">UI/UX:</p>
@@ -77,7 +70,7 @@ const About = () => {
           <li>React (functional components + hooks)</li>
           <li>Redux for global state management</li>
           <li>React Hook Form for input validation</li>
-          <li>React Portals for modal layers</li>
+          <li>React Portals for modal rendering</li>
         </ul>
 
         <p className="text-xl font-bold">Back-End Stack:</p>
@@ -90,12 +83,12 @@ const About = () => {
         <p className="text-xl font-bold">Real-Time Communication:</p>
         <ul class="list-disc list-inside">
           <li>Websockets (STOMP + SockJS)</li>
-          <li>Efficient event broadcasting for turn changes, trades, actions</li>
+          <li>Event broadcasting for turn changes, trades, actions</li>
         </ul>
 
         <p className="text-xl font-bold">Database:</p>
         <ul class="list-disc list-inside">
-          <li>MySQL in order to support relationships between tables</li>
+          <li>MySQL for data storage and defining relationships between tables</li>
           <li>Hibernate and Spring Data JPA as ORM</li>
         </ul>
 
@@ -160,14 +153,14 @@ const About = () => {
             <li>Main Menu: drawer component that provides the user with a variety of options, including creating a game, checking invites, accessing the official rules, etc.</li>
             <li>User Profile: allows user to view and edit their avatar, username, and password</li>
             <li>Background / Ambient music</li>
+            <li>Creating a Game</li>
           </ul>
 
           <p className="text-xl font-bold">In Progress:</p>
           <ul class="list-disc list-inside">
             <li>Adding user interaction sound effects</li>
-            <li>Configuring Websockets</li>
-            <li>Creating a Game</li>
             <li>Viewing Active Games</li>
+            <li>Configuring Websockets</li>
           </ul>
         </section>
       </div>

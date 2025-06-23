@@ -1,6 +1,23 @@
-import { REQUEST_FIELDS, MUSIC_SOURCES, MUSIC_TRACKS } from '../Utils/data';
 import Cookies from 'js-cookie';
-import cloneDeep from 'lodash/cloneDeep';
+import { metaDataActions } from '../Redux/Slices/MetaDataSlice';
+import { REQUEST_FIELDS, STRUCTURE_TYPES } from '../Utils/constants';
+import { MUSIC_TRACKS, nodeToRoadMap, nodeToTileMap } from '../Utils/mappings';
+import {
+  BOARD_WIDTH,
+  BOARD_HEIGHT,
+  TILE_WIDTH,
+  TILE_HEIGHT,
+  BOARD_ASPECT_RATIO,
+  TILE_ASPECT_RATIO,
+  WIDTH_PROPORTION_TILE_TO_BOARD,
+  HEIGHT_PROPORTION_TILE_TO_BOARD,
+  X_FRACTION_OF_BOARD_WIDTH,
+  Y_FRACTION_OF_BOARD_HEIGHT,
+  X_PADDING,
+  y_PADDING,
+  FINE_TUNE_X,
+  FINE_TUNE_Y
+} from '../Utils/settings';
 
 export const generateRandomNumber = (max = 1, offset = 0) => {
   return (Math.round(Math.random() * max)) + offset;
@@ -107,48 +124,48 @@ export const getRandomTrack = (tracksArr, excludedTrack = null) => {
 /// - sets one or more tracks of an associated theme to be played
 /// -> either a selected track can be passed in or a random one will be chosen
 /// allows for selectively disabling one or more themes
-export const configureGroupMusicSettings = (themeNames = [], enabled = [], selectedTracks = []) => {
-  const settingsObject = {};
+export const createMultipleMusicObjects = (themeNames = [], enabled = [], selectedTracks = []) => {
+  const themes = {};
 
   themeNames.forEach((themeName, i) => {
     if (!themeName) {
       return
     }
 
-    const configuration = {};
+    const themeData = {};
 
     if (enabled[i] && !selectedTracks[i]) {
-      configuration.track = getRandomTrack(MUSIC_TRACKS[themeName]);
+      themeData.track = getRandomTrack(MUSIC_TRACKS[themeName]);
     }
     else {
-      configuration.track = selectedTracks[i] ? selectedTracks[i] : "";
+      themeData.track = selectedTracks[i] ? selectedTracks[i] : "";
     }
-    configuration.enabled = enabled[i] ? enabled[i] : false;
-    settingsObject[themeName] = configuration;
+    themeData.enabled = enabled[i] ? enabled[i] : false;
+    themes[themeName] = themeData;
   })
 
-  return settingsObject;
+  return themes;
 }
 
 /// - sets a single track of an associated theme to be played
 /// -> either a selected track can be passed in or a random one will be chosen
 /// - allows for selectively disabling a single theme
-export const configureMusicSettings = (themeName = null, enabled = false, selectedTrack = null) => {
-  const settingsObject = {};
-  const configuration = {};
+export const createMusicObject = (themeName = null, enabled = false, selectedTrack = null) => {
+  const themes = {};
+  const themeData = {};
 
   if (enabled && !selectedTrack) {
-    configuration.track = getRandomTrack(MUSIC_TRACKS[themeName]);
+    themeData.track = getRandomTrack(MUSIC_TRACKS[themeName]);
   }
   else {
-    configuration.track = selectedTrack;
+    themeData.track = selectedTrack;
   }
 
-  configuration.enabled = enabled;
+  themeData.enabled = enabled;
 
-  settingsObject[themeName] = configuration;
+  themes[themeName] = themeData;
 
-  return settingsObject;
+  return themes;
 }
 
 /// - selects a new track when the previous one has ended, and also returns a notification stating whether or not the tracklist 
@@ -164,6 +181,7 @@ export const getNextTrack = (themeName, currentTrack, playedTracks) => {
 
   for (let i = 0; i < tracklist.length; i++) {
     let track = tracklist[i];
+
     if (!playedTracks.includes(track)) {
       return [track, loopTracklist];
     }
@@ -175,16 +193,294 @@ export const getNextTrack = (themeName, currentTrack, playedTracks) => {
   return [newTrack, loopTracklist];
 }
 
-export const handleTrackEnd = (themeName, metaData, metaDataActions, dispatch) => {
-  const currTrack = metaData.musicSettings[themeName].track;
+export const handleTrackEnd = (themeName, metaData, dispatch) => {
+  const currTrack = metaData.music[themeName].track;
   const [nextTrack, loopTracklist] = getNextTrack(themeName, currTrack, metaData.playedTracks);
 
-  const reconfiguredMusicSettings = configureMusicSettings(themeName, true, nextTrack);
+  const musicObject = createMusicObject(themeName, true, nextTrack);
 
   if (loopTracklist) {
-    dispatch(metaDataActions.loopTracklist({ tracklist: MUSIC_TRACKS[themeName], reconfiguredMusicSettings, nextTrack }));
+    dispatch(metaDataActions.loopTracklist({ tracklist: MUSIC_TRACKS[themeName], musicObject, nextTrack }));
     return
   }
 
-  dispatch(metaDataActions.updateMusicSettings(reconfiguredMusicSettings));
+  dispatch(metaDataActions.updateMusic(musicObject));
+}
+
+const calculateFirstTilePosition = (boardStartX, boardStartY) => {
+  const HALF_TILE_WIDTH = TILE_WIDTH * 0.5;
+
+  const xCoord = ((BOARD_WIDTH * X_FRACTION_OF_BOARD_WIDTH) - HALF_TILE_WIDTH) + boardStartX + FINE_TUNE_X;
+  const yCoord = (BOARD_HEIGHT * Y_FRACTION_OF_BOARD_HEIGHT) + boardStartY + FINE_TUNE_Y;
+
+  return [xCoord, yCoord];
+}
+
+const calculateNexTilePosition_SameRow = (firstTileCoords, columnNum) => {
+  const firstXCoord = firstTileCoords[0];
+  const firstYCoord = firstTileCoords[1];
+
+  const newXCoord = firstXCoord + ((TILE_WIDTH + X_PADDING) * columnNum);
+
+  return [newXCoord, firstYCoord];
+}
+
+const calculateNexTilePosition_NewRowFirstHalf = (firstTilePrevRowCoords) => {
+  const HALF_TILE_WIDTH = TILE_WIDTH * 0.5;
+  const THREE_QUARTERS_TILE_HEIGHT = TILE_HEIGHT * 0.75;
+
+  const firstXPrevRowCoord = firstTilePrevRowCoords[0];
+  const firstYPrevRowCoord = firstTilePrevRowCoords[1];
+
+  const newXCoord = firstXPrevRowCoord - HALF_TILE_WIDTH;
+  const newYCoord = firstYPrevRowCoord + y_PADDING + THREE_QUARTERS_TILE_HEIGHT;
+
+  return [newXCoord, newYCoord];
+}
+
+const calculateNexTilePosition_NewRowSecondHalf = (firstTilePrevRowCoords) => {
+  const HALF_TILE_WIDTH = TILE_WIDTH * 0.5;
+  const THREE_QUARTERS_TILE_HEIGHT = TILE_HEIGHT * 0.75;
+
+  const firstXPrevRowCoord = firstTilePrevRowCoords[0];
+  const firstYPrevRowCoord = firstTilePrevRowCoords[1];
+
+  const newXCoord = firstXPrevRowCoord + HALF_TILE_WIDTH;
+  const newYCoord = firstYPrevRowCoord + y_PADDING + THREE_QUARTERS_TILE_HEIGHT;
+
+  return [newXCoord, newYCoord];
+}
+
+const getCoords_FirstTilePrevRow = (tileGrid, currRow) => {
+  const prevRowTiles = tileGrid[currRow - 1];
+  const firstTilePrevRow = prevRowTiles[0];
+  return [firstTilePrevRow.x, firstTilePrevRow.y];
+}
+
+const addTile = (tileName, coords, tileRow) => {
+  tileRow.push({
+    tileName,
+    x: coords[0],
+    y: coords[1],
+  })
+
+  return tileRow;
+}
+
+export const calculateTilePositions = (tileGrid, boardStartX, boardStartY) => {
+  const secondHalfRowNumberStart = 3;
+
+  const tilesWithPositionData = [];
+
+  tileGrid.forEach((row, rowNum) => {
+    let tileRowWithPositionData = [];
+    row.forEach((tileName, columnNum) => {
+      let coords;
+      if (rowNum === 0 && columnNum === 0) {
+        coords = calculateFirstTilePosition(boardStartX, boardStartY);
+      }
+      else if ((rowNum > 0 && rowNum < secondHalfRowNumberStart) && columnNum === 0) {
+        const coordsFirstTilePrevRow = getCoords_FirstTilePrevRow(tilesWithPositionData, rowNum);
+        coords = calculateNexTilePosition_NewRowFirstHalf(coordsFirstTilePrevRow);
+      }
+      else if ((rowNum > 0 && rowNum >= secondHalfRowNumberStart) && columnNum === 0) {
+        const coordsFirstTilePrevRow = getCoords_FirstTilePrevRow(tilesWithPositionData, rowNum, true);
+        coords = calculateNexTilePosition_NewRowSecondHalf(coordsFirstTilePrevRow);
+      }
+      else {
+        const firstTile = tileRowWithPositionData[0];
+        coords = calculateNexTilePosition_SameRow([firstTile?.x, firstTile?.y], columnNum);
+      }
+      tileRowWithPositionData = addTile(tileName, coords, tileRowWithPositionData);
+    });
+    tilesWithPositionData.push(tileRowWithPositionData);
+  });
+
+  return tilesWithPositionData;
+};
+
+export const calculateNodePositions = (tileGrid) => {
+  const xRadius = TILE_WIDTH / 2;
+  const yRadius = TILE_HEIGHT / 2;
+  const angleIncrement = Math.PI / 3;
+
+  const nodeCoords = {};
+
+  const flattenedTileGrid = tileGrid.flat();
+
+  nodeToTileMap.forEach((nodeGroup, groupIdx) => {
+    let tile = flattenedTileGrid[groupIdx];
+    if(!tile) return;
+    let xCenter = tile.x + (xRadius);
+    let yCenter = tile.y + (yRadius);
+
+
+    for (let i = 0; i < nodeGroup.length; i++) {
+      let fineTuneX = 0;
+      if (i === 1 || i === 2) {
+        fineTuneX = 10
+      }
+      if (i === 4 || i === 5) {
+        fineTuneX = -10
+      }
+      const node = nodeGroup[i];
+      const angle = -Math.PI / 2 + i * angleIncrement;
+      let x = (xCenter + xRadius * Math.cos(angle)) + fineTuneX;
+      let y = yCenter + yRadius * Math.sin(angle);
+
+      if (nodeCoords[node]) {
+        const existingNode = nodeCoords[node];
+
+        const avgX = (existingNode.x + x) / 2;
+        const avgY = (existingNode.y + y) / 2;
+
+        x = avgX;
+        y = avgY
+      }
+      nodeCoords[node] = {
+        x,
+        y
+      }
+    }
+  });
+
+  return nodeCoords;
+};
+
+export const calculateRoadPositions = (nodePositions) => {
+  const positionedRoads = {};
+
+  for (const [startNode, endNodeMap] of Object.entries(nodeToRoadMap)) {
+    if(!nodePositions[startNode]) return;
+    for (const [endNode, roadNumber] of Object.entries(endNodeMap)) {
+      positionedRoads[roadNumber] =
+      {
+        'startNode': startNode,
+        'endNode': endNode,
+        'x1': nodePositions[startNode].x,
+        'y1': nodePositions[startNode].y,
+        'x2': nodePositions[endNode].x,
+        'y2': nodePositions[endNode].y,
+      }
+    }
+  }
+  return positionedRoads;
+};
+
+export const drawNode = (node, nodeData, positionedNodes) => {
+  let nodeStyle;
+
+  if (nodeData[node]?.color) {
+    if (nodeData[node].structure === STRUCTURE_TYPES.settlement) {
+      nodeStyle =
+        <g key={node} className="group hover:stroke-black">
+          <circle
+            cx={positionedNodes[node].x}
+            cy={positionedNodes[node].y}
+            r={18}
+            fill="none"
+            strokeWidth={4}
+            style={{ pointerEvents: 'all', cursor: 'pointer' }}
+            className="opacity-0 group-hover:opacity-100 transition-opacity"
+          />
+          <circle
+            id={`NODE-${node}`}
+            cx={positionedNodes[node].x}
+            cy={positionedNodes[node].y}
+            r={17}
+            fill={nodeData[node].color}
+            stroke='black'
+            strokeWidth={1}
+            style={{ pointerEvents: 'all', cursor: 'pointer' }}
+          />
+        </g>
+    }
+    else {
+      nodeStyle =
+        <g key={node} className="group hover:stroke-black">
+          <rect
+            x={positionedNodes[node].x - 10}
+            y={positionedNodes[node].y - 10}
+            width="30"
+            height="30"
+            fill="none"
+            strokeWidth={4}
+            style={{ pointerEvents: 'all', cursor: 'pointer' }}
+            className="opacity-0 group-hover:opacity-100 transition-opacity"
+          />
+          <rect
+            x={positionedNodes[node].x - 10}
+            y={positionedNodes[node].y - 10}
+            width="30"
+            height="30"
+            fill={nodeData[node].color}
+            stroke="black"
+            strokeWidth={1}
+            strokeWidth="2"
+          />
+        </g>
+    }
+  }
+  else {
+    nodeStyle =
+      <g key={node} className="group hover:stroke-black">
+        <circle
+          cx={positionedNodes[node].x}
+          cy={positionedNodes[node].y}
+          r={16}
+          fill="none"
+          strokeWidth={4}
+          style={{ pointerEvents: 'all', cursor: 'pointer' }}
+          className="opacity-0 group-hover:opacity-100 transition-opacity"
+        />
+      </g>
+  }
+
+  return (
+    nodeStyle
+  )
+}
+
+export const drawRoad = (road, roadPlacements, positionedRoads) => {
+  let roadData = positionedRoads[road];
+  if (roadPlacements[road]) {
+    return (
+      <g key={road} className="group hover:stroke-black">
+        <line
+          id={`ROAD-${road}-${roadData.startNode}-${roadData.endNode}`}
+          x1={roadData.x1}
+          y1={roadData.y1}
+          x2={roadData.x2}
+          y2={roadData.y2}
+          strokeWidth={12}
+          style={{ pointerEvents: 'all', cursor: 'pointer' }}
+          className="opacity-0 group-hover:opacity-100 transition-opacity"
+        />
+        <line
+          x1={roadData.x1}
+          y1={roadData.y1}
+          x2={roadData.x2}
+          y2={roadData.y2}
+          strokeWidth={10}
+          stroke={roadPlacements[road]}
+          style={{ pointerEvents: 'all', cursor: 'pointer' }}
+        />
+      </g>
+    )
+  }
+  return (
+    <g key={road} className="group hover:stroke-black">
+      <line
+        id={`ROAD-${road}-${roadData.startNode}-${roadData.endNode}`}
+        x1={roadData.x1}
+        y1={roadData.y1}
+        x2={roadData.x2}
+        y2={roadData.y2}
+        fill="none"
+        strokeWidth={12}
+        style={{ pointerEvents: 'all', cursor: 'pointer' }}
+        className="opacity-0 group-hover:opacity-100 transition-opacity"
+      />
+    </g>
+  )
 }

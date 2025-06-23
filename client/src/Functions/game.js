@@ -8,16 +8,21 @@ import
 import 
 { 
   tileIdentities,
-  tileCounts,
   devCardIdentities,
+  ports,
+} from "../Utils/constants";
+import 
+{ 
+  tileCounts, 
   devCardCounts,
   rowTileCount,
   diceIdCount,
   portToNodeMap,
-  ports,
   portCount,
-  nodeToPortMap,
-} from "../Utils/data";
+  nodeToRoadMap,
+} from "../Utils/mappings";
+import { nodeData, roadData } from "../Utils/templates";
+
 
 export const shuffleTiles = () => {
   const DESERT_TILE_ODDS = 1 / 12;
@@ -254,15 +259,43 @@ export const shufflePorts = () => {
   return shuffledPorts;
 };
 
-export const initializeNodeToPortMap = (initializedPorts) => {
+export const constructRoad = (nodes) => {
+  console.log('NODES: ' + nodes);
+  const start = nodes[0];
+  const end = nodes[1];
 
-  for (let i = 1; i < 10; i++) {
-    let linkedNodesArr = portToNodeMap[i];
-    let port = initializedPorts[i-1];
-    
-    nodeToPortMap[linkedNodesArr[0]] = port;
-    nodeToPortMap[linkedNodesArr[1]] = port;
+  console.log('PLACED ROAD #: ')
+  console.log(nodeToRoadMap[start][end]);
+}
 
-  }
-  return nodeToPortMap;
+export const constructBuilding = (node) => {
+  console.log('CONSTRUCTING A BUILDING AT NODE: ' + node);
+}
+
+export const createNewGameData = () => {
+  const [tileOrder, desertTileCoordinates] = shuffleTiles();
+  const diceIdOrder = shuffleDiceIds(desertTileCoordinates);
+  const devCards = shuffleDevCards();
+  const tileData = createTileData(tileOrder, diceIdOrder);
+  return {
+    tileOrder,
+    diceIdOrder,
+    tileData,
+    devCards,
+    nodeData,
+    roadData
+  };
 };
+
+// export const initializeNodeToPortMap = (initializedPorts) => {
+
+//   for (let i = 1; i < 10; i++) {
+//     let linkedNodesArr = portToNodeMap[i];
+//     let port = initializedPorts[i-1];
+    
+//     nodeToPortMap[linkedNodesArr[0]] = port;
+//     nodeToPortMap[linkedNodesArr[1]] = port;
+
+//   }
+//   return nodeToPortMap;
+// };

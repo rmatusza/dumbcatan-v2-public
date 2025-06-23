@@ -1,6 +1,5 @@
 package com.dumbcatanv2.dumb_catan_v2_server.controller;
 
-import com.dumbcatanv2.dumb_catan_v2_server.dto.AuthResponse;
 import com.dumbcatanv2.dumb_catan_v2_server.dto.AuthRequest;
 import com.dumbcatanv2.dumb_catan_v2_server.dto.UserDataResponse;
 import com.dumbcatanv2.dumb_catan_v2_server.service.AuthService;
@@ -31,14 +30,14 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<AuthResponse> signin(@Valid @RequestBody AuthRequest req) {
-        AuthResponse authResponse = authService.signin(req);
+    public ResponseEntity<UserDataResponse> signin(@Valid @RequestBody AuthRequest req) {
+        UserDataResponse authResponse = authService.signin(req);
         return ResponseEntity.ok(authResponse);
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<AuthResponse> signup(@Valid @RequestBody AuthRequest req) {
-        AuthResponse authResponse = authService.signup(req);
+    public ResponseEntity<UserDataResponse> signup(@Valid @RequestBody AuthRequest req) {
+        UserDataResponse authResponse = authService.signup(req);
         return ResponseEntity.ok(authResponse);
     }
 }

@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { BACKGROUNDS, ENDPOINTS } from '../Utils/data';
+import { BACKGROUND_PATHS, ENDPOINTS } from '../Utils/constants';
 import { metaDataActions } from '../Redux/Slices/MetaDataSlice';
 import { useLocation } from 'react-router-dom';
+import { USE_TEST_DATA } from '../Utils/settings';
 import Modal from "../UI/Modal";
 import Profile from "./Profile";
 import CreateGame from "./CreateGame";
@@ -20,6 +21,7 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
     switch (e.target.getAttribute("data-id")) {
       case 'home':
         setMainMenuOpen(false);
+        dispatch(metaDataActions.setBackground({background: BACKGROUND_PATHS.home}));
         navigate(ENDPOINTS.home);
         break;
       case 'profile':
@@ -32,7 +34,12 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
         break;
       case 'yourGames':
         setMainMenuOpen(false);
-        navigate(ENDPOINTS.yourGames);
+        if(USE_TEST_DATA) {
+          navigate("/game/1")
+        }
+        else {
+          navigate(ENDPOINTS.yourGames);
+        }
         break;
       case 'yourInvites':
         setMainMenuOpen(false);
@@ -65,8 +72,16 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
           }
           <li data-id="profile" className="cursor-pointer hover:underline m-5">Profile</li>
           <li data-id="createGame" className="cursor-pointer hover:underline m-5">Create Game</li>
-          <li data-id="yourGames" className="cursor-pointer hover:underline m-5">Your Games</li>
-          <li data-id="yourInvites" className="cursor-pointer hover:underline m-5">Your Invites</li>
+          {
+            location.pathname !== ENDPOINTS.yourGames
+            &&
+            <li data-id="yourGames" className="cursor-pointer hover:underline m-5">Your Games</li>
+          }
+          {
+            location.pathname !== ENDPOINTS.yourInvites
+            &&
+            <li data-id="yourInvites" className="cursor-pointer hover:underline m-5">Your Invites</li>
+          }
           <li data-id="rules" className="cursor-pointer hover:underline m-5"><a href="https://www.catan.com/sites/default/files/2021-06/catan_base_rules_2020_200707.pdf" target="_blank" rel="noopener noreferrer">Official Rules</a></li>
           <li data-id="music" className="cursor-pointer hover:underline m-5">{metaData.musicEnabled ? 'Disable' : 'Enable'} music</li>
           <li data-id="soundEffects" className="cursor-pointer hover:underline m-5">{metaData.soundEffectsEnabled ? 'Disable' : 'Enable'} sound effects</li>
@@ -80,14 +95,14 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
       {
         profileModalActive
         &&
-        <Modal background={BACKGROUNDS.stone}>
+        <Modal background={BACKGROUND_PATHS.stone}>
           <Profile setProfileModalActive={setProfileModalActive}/>
         </Modal>
       }
       {
         createGameModalActive
         &&
-        <Modal background={BACKGROUNDS.stone}>
+        <Modal background={BACKGROUND_PATHS.stone}>
           <CreateGame setCreateGameModalActive={setCreateGameModalActive}/>
         </Modal>
       }

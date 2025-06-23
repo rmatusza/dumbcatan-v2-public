@@ -1,18 +1,18 @@
 import { useEffect } from "react";
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
-import { useDispatch, useSelector } from 'react-redux';
-import { configureMusicSettings, getNextTrack, getToken, handleTrackEnd } from "./Functions/utility";
-import { authenticateJwt } from "./Redux/ActionCreators/UserActions";
-import { ENDPOINTS, THEME_NAMES, MUSIC_TRACKS } from "./Utils/data";
-import { metaDataActions } from "./Redux/Slices/MetaDataSlice";
 import ReactAudioPlayer from 'react-audio-player';
-import Authentication from "./Pages/Authentication";
-import Home from "./Pages/Home";
-import Games from "./Pages/Games";
-import Invites from "./Pages/Invites";
-import About from "./Pages/About";
-import Banner from "./Components/Banner";
+import { useDispatch, useSelector } from 'react-redux';
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import './App.css';
+import Banner from "./Components/Banner";
+import { getToken, handleTrackEnd } from "./Functions/utility";
+import About from "./Pages/About";
+import Authentication from "./Pages/Authentication";
+import GameInstance from "./Pages/GameInstance";
+import Games from "./Pages/Games";
+import Home from "./Pages/Home";
+import Invites from "./Pages/Invites";
+import { authenticateJwt } from "./Redux/ActionCreators/UserActions";
+import { ENDPOINTS } from "./Utils/constants";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ function App() {
 
     const token = getToken();
 
-    if (token) {
+    if (token && token !== 'undefined') {
       dispatch(authenticateJwt(token, navigate));
     }
     else {
@@ -33,25 +33,37 @@ function App() {
 
   }, []);
 
+  // const handleKeyDown = (e) => {
+  //   if(e.key === '`') {
+  //     handleTrackEnd(THEME_NAMES.homeTheme);
+  //   }
+  // }
+
+  // useEffect(() => {
+  //   window.addEventListener('keydown', handleKeyDown);
+
+  //   return () => window.removeEventListener('keydown', handleKeyDown)
+  // }, [metaData])
+
   return (
     <div className="w-screen h-screen bg-cover bg-center flex flex-col" style={{ backgroundImage: `url(${metaData.background})` }}>
 
       {
         metaData.musicEnabled
         &&
-        Object.keys(metaData.musicSettings).map((themeName, i) => {
-          const source = metaData.musicSettings[themeName].track;
-          const themeEnabled = metaData.musicSettings[themeName].enabled;
+        Object.keys(metaData.music).map((themeName, i) => {
+          const track = metaData.music[themeName].track;
+          const themeEnabled = metaData.music[themeName].enabled;
 
-          if(source && themeEnabled) {
+          if(track && themeEnabled) {
             return (
               <div style={{ visibility: 'hidden', height: 0 }}>
                 <ReactAudioPlayer 
                   key={themeName} 
-                  src={source} 
+                  src={track} 
                   autoPlay={true} 
                   controls
-                  onEnded={() => handleTrackEnd(themeName, metaData, metaDataActions, dispatch)}
+                  onEnded={() => handleTrackEnd(themeName, metaData, dispatch)}
                 />
               </div>
             )
@@ -85,6 +97,13 @@ function App() {
           element=
           {
             <Games />
+          }
+        />
+
+        <Route path={`${ENDPOINTS.gameInstance}/:id`}
+          element=
+          {
+            <GameInstance />
           }
         />
 

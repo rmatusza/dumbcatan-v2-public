@@ -1,5 +1,5 @@
 import Form from "../UI/Form";
-import { APP_CONTEXT } from "../Utils/data";
+import { APP_CONTEXT } from "../Utils/constants";
 
 const EditCredentials = ({ S, viewHandler, setProfileModalActive, updateProfileHandler }) => {
   return (
@@ -67,7 +67,7 @@ const EditCredentials = ({ S, viewHandler, setProfileModalActive, updateProfileH
           {
             name: 'Close',
             type: 'button',
-            namedStyles: [S.redAndYellowButtonSingle, S.goldYellowBorder],
+            namedStyles: [S.button.redAndYellowButtonSingle, S.border.goldYellowBorder],
             namedStyleAsAddOn: true,
             callBack: setProfileModalActive,
             args: [false]
@@ -75,7 +75,7 @@ const EditCredentials = ({ S, viewHandler, setProfileModalActive, updateProfileH
           {
             name: 'Back',
             type: 'button',
-            namedStyles: [S.classicCatanButtonSingle, S.lightRedBorder],
+            namedStyles: [S.button.classicCatanButtonSingle, S.border.lightRedBorder],
             namedStyleAsAddOn: true,
             callBack: viewHandler,
             args: ['main']
@@ -83,7 +83,7 @@ const EditCredentials = ({ S, viewHandler, setProfileModalActive, updateProfileH
           {
             name: 'Change Credentials',
             type: 'submit',
-            namedStyles: [S.classicCatanButtonSingle, S.lightRedBorder],
+            namedStyles: [S.button.classicCatanButtonSingle, S.border.lightRedBorder],
             namedStyleAsAddOn: true,
           },
         ]
@@ -94,8 +94,8 @@ const EditCredentials = ({ S, viewHandler, setProfileModalActive, updateProfileH
       styles={{
         form: "flex flex-col space-y-4 h-full",
         input: "w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400",
-        fieldHeading: S.modalTextYellow,
-        validationError: S.smallErrorMessageShadowed,
+        fieldHeading: S.text.modalTextYellow,
+        validationError: S.text.smallErrorMessageShadowed,
         buttonContainer: 'pb-5'
       }}
     />

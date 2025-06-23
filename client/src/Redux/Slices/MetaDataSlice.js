@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { cloneDeep } from "lodash";
-import { BACKGROUNDS } from "../../Utils/data";
+import { BACKGROUND_PATHS } from "../../Utils/constants";
 
 const initialState =
 {
@@ -8,8 +7,9 @@ const initialState =
   musicEnabled: false,
   soundEffectsEnabled: false,
   playedTracks: [],
-  musicSettings: {},
-  background: BACKGROUNDS.authentication,
+  music: {},
+  background: BACKGROUND_PATHS.authentication,
+  gameInstancePageMessageAlreadyDisplayed: false
 }
 
 const metaDataSlice = createSlice(
@@ -27,6 +27,7 @@ const metaDataSlice = createSlice(
         state.soundEffectsEnabled = !state.soundEffectsEnabled;
       },
       setBackground(state, action) {
+        // console.log(action.payload.background)
         state.background = action.payload.background;
       },
       updatePlayedTracks(state, action) {
@@ -37,29 +38,28 @@ const metaDataSlice = createSlice(
         })
       },
       loopTracklist(state, action) {
-        const tracklist = action.payload.tracklist;
-        const updatedMusicSettings = action.payload.updatedMusicSettings;
-        const nextTrack = action.payload.nextTrack;
+        const {tracklist, musicObject, nextTrack} = action.payload;
 
+        // removing every track from the tracklist that is being looped from playedTracks array, and then adding the new current track to playedTracks
         const resetTracks = state.playedTracks.filter(track => !tracklist.includes(track)).push(nextTrack);
 
         state.playedTracks = resetTracks;
-        state.musicSettings = {...state.musicSettings, ...updatedMusicSettings}
+        state.music = {...state.music, ...musicObject}
       },
-      updateMusicSettings(state, action) {
-        const updatedMusicSettings = action.payload;
-        const themes = Object.keys(updatedMusicSettings);
-        let updatedTracks = cloneDeep(state.playedTracks);
+      updateMusic(state, action) {
+        const musicObject = action.payload;
+        const themes = Object.keys(musicObject);
+        let updatedTracks = [...state.playedTracks];
 
         themes.forEach(theme => {
-          let track = updatedMusicSettings[theme].track;
+          let track = musicObject[theme].track;
 
           if(!updatedTracks.includes(track)){
             updatedTracks.push(track);
           }
         });
 
-        state.musicSettings = {...state.musicSettings, ...updatedMusicSettings};
+        state.music = {...state.music, ...musicObject};
         state.playedTracks = updatedTracks;
       },
       clearPlayedTracks(state) {
@@ -71,6 +71,9 @@ const metaDataSlice = createSlice(
       updateMetaData(state, action) {
         return { ...state, ...action.payload };
       },
+      setGameInstancePageMessageAlreadyDisplayed(state, action) {
+        state.gameInstancePageMessageAlreadyDisplayed = true;
+      }
     }
   }
 );

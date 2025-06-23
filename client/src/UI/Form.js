@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { CUSTOM_STYLES as S, APP_ALERT_TYPE } from '../Utils/data';
+import { CUSTOM_STYLES as S, APP_ALERT_TYPE } from '../Utils/constants';
 import Button from './Button';
 
 const Form = ({
@@ -24,6 +24,14 @@ const Form = ({
     formState: { errors },
   } = useForm();
 
+  /// what is this?
+  // const [formValues, setFormValues] = useState(
+  //   fields.reduce((acc, field) => {
+  //     acc[field.name] = initialValues[field.name] || '';
+  //     return acc;
+  //   }, {})
+  // );
+
   const onSubmit = async (data) => {
     setTopLevelFormError(false);
     formSubmitHandler(data);
@@ -35,7 +43,7 @@ const Form = ({
       {
         appAlert.context === currentContext 
         && 
-        <p className={`${appAlert.type === APP_ALERT_TYPE.success ? S.largeSuccessMessage : S.largeErrorMessage} rounded-xl bg-cream/60 mb-5`}>
+        <p className={`${appAlert.type === APP_ALERT_TYPE.success ? S.text.largeSuccessMessage : S.text.largeErrorMessage} rounded-xl bg-cream/60 mb-5`}>
           {appAlert.message}
         </p>
       }
@@ -43,7 +51,7 @@ const Form = ({
         topLevelFormError
         &&
         <div className='rounded-xl bg-cream/60 mb-5'>
-          <p className={`${S.largeErrorMessage} text-center`}>
+          <p className={`${S.text.largeErrorMessage} text-center`}>
             {topLevelFormError}
           </p>
         </div>
@@ -51,7 +59,7 @@ const Form = ({
       {
         !topLevelFormError && (!appAlert.message || appAlert.context !== currentContext) && formInstructions
         &&
-        <p className={`${S.modalTextYellow} text-center underline mb-5 text-3xl`}>
+        <p className={`${S.text.modalTextYellow} text-center underline mb-5 text-3xl`}>
           {formInstructions}
         </p>
       }
@@ -78,7 +86,7 @@ const Form = ({
         <div className="flex-1 flex flex-col justify-end">
           <div className={`flex flex-row justify-between gap-4 ${styles.buttonContainer}`}>
             {
-              buttons.map((button) => {
+              buttons.map(button => {
                 return (
                   <Button
                     type={button.type}

@@ -11,7 +11,7 @@ const Button = ({ type, replacementStyle = "", styleAddOns = "", customCSS = nul
   const buildStyles = () => {
     let customStyle = styleAddOns;
 
-    if (replacementStyle) {
+    if (replacementStyle.trim().length > 0) {
       return replacementStyle;
     }
 
@@ -25,11 +25,15 @@ const Button = ({ type, replacementStyle = "", styleAddOns = "", customCSS = nul
       customStyle += " " + baseStyle;
     }
 
+    if(customStyle.trim().length === 0) {
+      return baseStyle;
+    }
+
     return customStyle;
   }
 
   return (
-    <button onClick={handleClick} type={type} className={buildStyles()} style={customCSS}>
+    <button key={name} type={type} onClick={handleClick} className={buildStyles()} style={customCSS}>
       {name}
     </button>
   )
