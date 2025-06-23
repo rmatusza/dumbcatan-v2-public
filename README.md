@@ -91,11 +91,11 @@ The features mentioned in this README therefore apply to the future completed ap
 - Main Menu: drawer component that provides the user with a variety of options, including creating a game, checking invites, accessing the official rules, etc.
 - User profile: allows user to view and edit their avatar, username, and password
 - Background / Ambient music
+- Creating a Game
 
 ## In Progress
 - Adding user interaction sound effects
 - Configuring Websockets
-- Creating a Game
 - Viewing Active Games
 
 <br></br>
