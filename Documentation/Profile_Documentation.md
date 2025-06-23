@@ -39,7 +39,7 @@
   - ensure that confirmation password matches password 
   - limit username length - 1-15
   - limit password length - 1-15
-- applicable to the EditAvatr component
+- applicable to the EditAvatar component
   - ensure that user selects an avatar before change avatar request is sent
 
 ## CLIENT ERROR HANDLING
