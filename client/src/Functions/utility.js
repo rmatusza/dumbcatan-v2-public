@@ -1,22 +1,22 @@
 import Cookies from 'js-cookie';
 import { metaDataActions } from '../Redux/Slices/MetaDataSlice';
-import { REQUEST_FIELDS, STRUCTURE_TYPES } from '../Utils/constants';
-import { MUSIC_TRACKS, nodeToRoadMap, nodeToTileMap } from '../Utils/mappings';
+import { REQUEST_FIELDS, STRUCTURE_TYPES, APP_ALERT_TYPE, APP_CONTEXT } from '../Utils/constants';
+import { MUSIC_TRACKS, nodeToRoadMap, nodeToTileMap, rowTileCount } from '../Utils/mappings';
+import { AppError } from '../Utils/AppError';
+import { applicationAlertActions } from '../Redux/Slices/ApplicationAlertSlice';
 import {
-  BOARD_WIDTH,
   BOARD_HEIGHT,
-  TILE_WIDTH,
-  TILE_HEIGHT,
-  BOARD_ASPECT_RATIO,
-  TILE_ASPECT_RATIO,
-  WIDTH_PROPORTION_TILE_TO_BOARD,
-  HEIGHT_PROPORTION_TILE_TO_BOARD,
-  X_FRACTION_OF_BOARD_WIDTH,
-  Y_FRACTION_OF_BOARD_HEIGHT,
-  X_PADDING,
-  y_PADDING,
+  BOARD_WIDTH,
+  DICE_ID_HEIGHT,
+  DICE_ID_WIDTH,
   FINE_TUNE_X,
-  FINE_TUNE_Y
+  FINE_TUNE_Y,
+  TILE_HEIGHT,
+  TILE_WIDTH,
+  X_FRACTION_OF_BOARD_WIDTH,
+  X_PADDING,
+  Y_FRACTION_OF_BOARD_HEIGHT,
+  y_PADDING
 } from '../Utils/settings';
 
 export const generateRandomNumber = (max = 1, offset = 0) => {
@@ -81,7 +81,7 @@ export const setToken = (token) => {
 export const ensureUpdateDataNonEmpty = (dataObj) => {
   let isNotEmpty = false;
   Object.keys(dataObj).forEach(key => {
-    if (key !== 'userID' && dataObj[key] !== REQUEST_FIELDS.none) {
+    if (key !== 'userId' && dataObj[key] !== REQUEST_FIELDS.none) {
       isNotEmpty = true;
     }
   });
@@ -90,7 +90,7 @@ export const ensureUpdateDataNonEmpty = (dataObj) => {
 
 /// - executes a callback after a specified delay
 /// - useful for implementing temporary notifications - notification is shown and then cleared after a delay
-export const executeAfterDelay = ({ delay, callback, args = [], dispatch = null }) => {
+export const executeAfterDelay = (delay, callback, args = [], dispatch = null) => {
   setTimeout(() => {
     if (dispatch) {
       dispatch(callback(...args));
@@ -99,15 +99,19 @@ export const executeAfterDelay = ({ delay, callback, args = [], dispatch = null 
     callback(...args);
 
   }, delay)
-}
+};
 
 export const objectHasKeys = (obj) => {
   return Object.keys(obj).length > 0;
-}
+};
 
 export const keyCountOf = (obj) => {
   return Object.keys(obj).length;
-}
+};
+
+export const getFlattenedDesertIndex = (tiles) => {
+  return tiles.flat().indexOf('desert');
+};
 
 /// - returns a random track
 /// - ensures that if an excludedTrack is provided, it will not be selected from the tracklist
@@ -119,7 +123,7 @@ export const getRandomTrack = (tracksArr, excludedTrack = null) => {
   const randomTrackIdx = generateRandomNumber(tracklist.length);
 
   return tracklist[randomTrackIdx];
-}
+};
 
 /// - sets one or more tracks of an associated theme to be played
 /// -> either a selected track can be passed in or a random one will be chosen
@@ -145,12 +149,12 @@ export const createMultipleMusicObjects = (themeNames = [], enabled = [], select
   })
 
   return themes;
-}
+};
 
 /// - sets a single track of an associated theme to be played
 /// -> either a selected track can be passed in or a random one will be chosen
 /// - allows for selectively disabling a single theme
-export const createMusicObject = (themeName = null, enabled = false, selectedTrack = null) => {
+export const createMusicObject = (themeName = null, enabled = true, selectedTrack = null) => {
   const themes = {};
   const themeData = {};
 
@@ -166,7 +170,7 @@ export const createMusicObject = (themeName = null, enabled = false, selectedTra
   themes[themeName] = themeData;
 
   return themes;
-}
+};
 
 /// - selects a new track when the previous one has ended, and also returns a notification stating whether or not the tracklist 
 ///   needs to be looped - this is true when all tracks in a tracklist have been played
@@ -191,7 +195,7 @@ export const getNextTrack = (themeName, currentTrack, playedTracks) => {
   const newTrack = getRandomTrack(tracklist, currentTrack);
 
   return [newTrack, loopTracklist];
-}
+};
 
 export const handleTrackEnd = (themeName, metaData, dispatch) => {
   const currTrack = metaData.music[themeName].track;
@@ -205,7 +209,7 @@ export const handleTrackEnd = (themeName, metaData, dispatch) => {
   }
 
   dispatch(metaDataActions.updateMusic(musicObject));
-}
+};
 
 const calculateFirstTilePosition = (boardStartX, boardStartY) => {
   const HALF_TILE_WIDTH = TILE_WIDTH * 0.5;
@@ -214,7 +218,7 @@ const calculateFirstTilePosition = (boardStartX, boardStartY) => {
   const yCoord = (BOARD_HEIGHT * Y_FRACTION_OF_BOARD_HEIGHT) + boardStartY + FINE_TUNE_Y;
 
   return [xCoord, yCoord];
-}
+};
 
 const calculateNexTilePosition_SameRow = (firstTileCoords, columnNum) => {
   const firstXCoord = firstTileCoords[0];
@@ -223,7 +227,7 @@ const calculateNexTilePosition_SameRow = (firstTileCoords, columnNum) => {
   const newXCoord = firstXCoord + ((TILE_WIDTH + X_PADDING) * columnNum);
 
   return [newXCoord, firstYCoord];
-}
+};
 
 const calculateNexTilePosition_NewRowFirstHalf = (firstTilePrevRowCoords) => {
   const HALF_TILE_WIDTH = TILE_WIDTH * 0.5;
@@ -236,7 +240,7 @@ const calculateNexTilePosition_NewRowFirstHalf = (firstTilePrevRowCoords) => {
   const newYCoord = firstYPrevRowCoord + y_PADDING + THREE_QUARTERS_TILE_HEIGHT;
 
   return [newXCoord, newYCoord];
-}
+};
 
 const calculateNexTilePosition_NewRowSecondHalf = (firstTilePrevRowCoords) => {
   const HALF_TILE_WIDTH = TILE_WIDTH * 0.5;
@@ -249,13 +253,13 @@ const calculateNexTilePosition_NewRowSecondHalf = (firstTilePrevRowCoords) => {
   const newYCoord = firstYPrevRowCoord + y_PADDING + THREE_QUARTERS_TILE_HEIGHT;
 
   return [newXCoord, newYCoord];
-}
+};
 
 const getCoords_FirstTilePrevRow = (tileGrid, currRow) => {
   const prevRowTiles = tileGrid[currRow - 1];
   const firstTilePrevRow = prevRowTiles[0];
   return [firstTilePrevRow.x, firstTilePrevRow.y];
-}
+};
 
 const addTile = (tileName, coords, tileRow) => {
   tileRow.push({
@@ -265,7 +269,7 @@ const addTile = (tileName, coords, tileRow) => {
   })
 
   return tileRow;
-}
+};
 
 export const calculateTilePositions = (tileGrid, boardStartX, boardStartY) => {
   const secondHalfRowNumberStart = 3;
@@ -310,7 +314,7 @@ export const calculateNodePositions = (tileGrid) => {
 
   nodeToTileMap.forEach((nodeGroup, groupIdx) => {
     let tile = flattenedTileGrid[groupIdx];
-    if(!tile) return;
+    if (!tile) return; /// added this line to avoid crash when refreshing on game instance page
     let xCenter = tile.x + (xRadius);
     let yCenter = tile.y + (yRadius);
 
@@ -351,7 +355,7 @@ export const calculateRoadPositions = (nodePositions) => {
   const positionedRoads = {};
 
   for (const [startNode, endNodeMap] of Object.entries(nodeToRoadMap)) {
-    if(!nodePositions[startNode]) return;
+    if (!nodePositions[startNode]) return; /// added this line to avoid crash when refreshing on game instance page
     for (const [endNode, roadNumber] of Object.entries(endNodeMap)) {
       positionedRoads[roadNumber] =
       {
@@ -365,6 +369,47 @@ export const calculateRoadPositions = (nodePositions) => {
     }
   }
   return positionedRoads;
+};
+
+export const calculateDiceIdPositions = (positionedTiles, diceIds) => {
+  const positionedDiceIds = [];
+  let diceIdRow = [];
+  const diceIdSet = new Set();
+
+  for (let row = 0; row < positionedTiles.length; row++) {
+    let tileRow = positionedTiles[row];
+    diceIdRow = [];
+
+    for (let column = 0; column < tileRow.length; column++) {
+      let tile = tileRow[column];
+      let x = tile.x + (TILE_WIDTH / 2) - (DICE_ID_WIDTH / 2);
+      let y = tile.y + (TILE_HEIGHT / 2) - (DICE_ID_HEIGHT / 2);
+
+      let isVariantA;
+      if(diceIdSet.has(diceIds[row][column])) {
+        isVariantA = false;
+      }
+      else {
+        isVariantA = true;
+        diceIdSet.add(diceIds[row][column]);
+      }
+
+      diceIdRow.push({
+        id: diceIds[row][column],
+        idVariant: diceIds[row][column] + `${isVariantA ? '-a' : '-b'}`,
+        x,
+        y,
+      });
+
+    }
+    positionedDiceIds.push(diceIdRow);
+  }
+  return positionedDiceIds;
+};
+
+export const calculatePortPositions = (boardX, boardY) => {
+  // TODO: create this function
+  return null;
 };
 
 export const drawNode = (node, nodeData, positionedNodes) => {
@@ -439,43 +484,43 @@ export const drawNode = (node, nodeData, positionedNodes) => {
   return (
     nodeStyle
   )
-}
+};
 
-export const drawRoad = (road, roadPlacements, positionedRoads) => {
-  let roadData = positionedRoads[road];
-  if (roadPlacements[road]) {
+export const drawRoad = (roadNumber, roadData, positionedRoads) => {
+  let roadPositionInfo = positionedRoads[roadNumber];
+  if (roadData[roadNumber]) {
     return (
-      <g key={road} className="group hover:stroke-black">
+      <g key={roadNumber} className="group hover:stroke-black">
         <line
-          id={`ROAD-${road}-${roadData.startNode}-${roadData.endNode}`}
-          x1={roadData.x1}
-          y1={roadData.y1}
-          x2={roadData.x2}
-          y2={roadData.y2}
+          id={`ROAD-${roadNumber}-${roadPositionInfo.startNode}-${roadPositionInfo.endNode}`}
+          x1={roadPositionInfo.x1}
+          y1={roadPositionInfo.y1}
+          x2={roadPositionInfo.x2}
+          y2={roadPositionInfo.y2}
           strokeWidth={12}
           style={{ pointerEvents: 'all', cursor: 'pointer' }}
           className="opacity-0 group-hover:opacity-100 transition-opacity"
         />
         <line
-          x1={roadData.x1}
-          y1={roadData.y1}
-          x2={roadData.x2}
-          y2={roadData.y2}
+          x1={roadPositionInfo.x1}
+          y1={roadPositionInfo.y1}
+          x2={roadPositionInfo.x2}
+          y2={roadPositionInfo.y2}
           strokeWidth={10}
-          stroke={roadPlacements[road]}
+          stroke={roadData[roadNumber]}
           style={{ pointerEvents: 'all', cursor: 'pointer' }}
         />
       </g>
     )
   }
   return (
-    <g key={road} className="group hover:stroke-black">
+    <g key={roadNumber} className="group hover:stroke-black">
       <line
-        id={`ROAD-${road}-${roadData.startNode}-${roadData.endNode}`}
-        x1={roadData.x1}
-        y1={roadData.y1}
-        x2={roadData.x2}
-        y2={roadData.y2}
+        id={`ROAD-${roadNumber}-${roadPositionInfo.startNode}-${roadPositionInfo.endNode}`}
+        x1={roadPositionInfo.x1}
+        y1={roadPositionInfo.y1}
+        x2={roadPositionInfo.x2}
+        y2={roadPositionInfo.y2}
         fill="none"
         strokeWidth={12}
         style={{ pointerEvents: 'all', cursor: 'pointer' }}
@@ -483,4 +528,66 @@ export const drawRoad = (road, roadPlacements, positionedRoads) => {
       />
     </g>
   )
+};
+
+const appendStyle = (customStyle, style) => {
+  customStyle += customStyle.trim().length > 0 ? " " + style : style
+  return customStyle;
+};
+
+export const buildClassName = (baseStyle, customStyle, namedStyles, overwriteBaseStyle) => {
+
+  if (namedStyles.length > 0) {
+    namedStyles.forEach(style => {
+      customStyle = appendStyle(customStyle, style);
+    })
+  }
+
+  if (!overwriteBaseStyle) {
+    customStyle = appendStyle(customStyle, baseStyle);
+  }
+
+  return customStyle;
+};
+
+export const sendHttpRequest = async (requestType, endpoint, token, requestData = null) => {
+  let res;
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token && { 'Authorization': `Bearer ${token}` })
+  };
+  try {
+    res = await fetch(`http://localhost:8080/api${endpoint}`, {
+      method: requestType,
+      headers,
+      body: requestData ? JSON.stringify(requestData) : null
+    });
+  }
+  catch (e) {
+    throw new AppError('Unexpected server error occurred', 500);
+  }
+
+  let responseData;
+  try {
+    responseData = await res.json();
+  } catch (e) {
+    // Handle case where response is not JSON (e.g., server crash, 500)
+    throw new AppError('Unexpected error occurred', 500);
+  }
+
+  if (!res.ok) {
+    throw new AppError(responseData?.message || 'Unexpected error occurred', responseData?.status || 500);
+  }
+
+  return responseData;
+};
+
+export const dispatchErrorAppAlert = (dispatch, error, context, alertAsPopup) => {
+  dispatch(applicationAlertActions.setApplicationAlert({
+    type: APP_ALERT_TYPE.failure,
+    message: error.message,
+    status: error.status,
+    context,
+    alertAsPopup
+  }));
 }

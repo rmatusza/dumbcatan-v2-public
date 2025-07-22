@@ -153,14 +153,16 @@ const About = () => {
             <li>Main Menu: drawer component that provides the user with a variety of options, including creating a game, checking invites, accessing the official rules, etc.</li>
             <li>User Profile: allows user to view and edit their avatar, username, and password</li>
             <li>Background / Ambient music</li>
-            <li>Creating a Game</li>
+            <li>Creating a game</li>
+            <li>Viewing all active games</li>
+            <li>Deleting a game</li>
+            <li>Resuming a game</li>
           </ul>
 
           <p className="text-xl font-bold">In Progress:</p>
           <ul class="list-disc list-inside">
-            <li>Adding user interaction sound effects</li>
-            <li>Viewing Active Games</li>
             <li>Configuring Websockets</li>
+            <li>Adding user interaction sound effects</li>
           </ul>
         </section>
       </div>

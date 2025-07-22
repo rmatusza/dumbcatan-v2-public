@@ -2,13 +2,16 @@ package com.dumbcatanv2.dumb_catan_v2_server.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name="users")
 public class User {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private int userID;
+    private int userId;
 
     @Column(name="username")
     private String username;
@@ -25,11 +28,14 @@ public class User {
     @Column(name="activeGames")
     private int activeGames = 0;
 
-    public int getUserID() {
-        return userID;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Player> players;
+
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUserId(int userID) {this.userID = userID;}
+    public void setUserId(int userId) {this.userId = userId;}
 
     public String getUsername() {
         return username;
@@ -67,13 +73,28 @@ public class User {
 
     public void setRole(String role) {this.role = role;}
 
-    public User(int userID, String username, String password, String avatarURL, int activeGames, String role) {
-        this.userID = userID;
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void setPlayers(List<Player> playerData) {
+        this.players = players;
+    }
+
+    public void addPlayer(Player player) {
+        player.setUser(this);
+        if (this.players == null) this.players = new ArrayList<>();
+        this.players.add(player);
+    }
+
+    public User(int userId, String username, String password, String avatarURL, int activeGames, String role, List<Player> players) {
+        this.userId = userId;
         this.username = username;
         this.password = password;
         this.avatarURL = avatarURL;
         this.activeGames = activeGames;
         this.role = role;
+        this.players = players;
     }
 
     public User(String username, String password, String avatarURL, int activeGames, String role) {

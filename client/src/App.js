@@ -1,24 +1,27 @@
 import { useEffect } from "react";
-import ReactAudioPlayer from 'react-audio-player';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import './App.css';
-import Banner from "./Components/Banner";
 import { getToken, handleTrackEnd } from "./Functions/utility";
+import { authenticateJwt } from "./Redux/ActionCreators/UserActions";
+import { ENDPOINTS, BACKGROUND_PATHS } from "./Utils/constants";
+import { applicationAlertActions } from "./Redux/Slices/ApplicationAlertSlice";
+import Banner from "./Components/Banner";
 import About from "./Pages/About";
 import Authentication from "./Pages/Authentication";
 import GameInstance from "./Pages/GameInstance";
 import Games from "./Pages/Games";
 import Home from "./Pages/Home";
 import Invites from "./Pages/Invites";
-import { authenticateJwt } from "./Redux/ActionCreators/UserActions";
-import { ENDPOINTS } from "./Utils/constants";
+import ReactAudioPlayer from 'react-audio-player';
+import PopupMessage from "./UI/PopupMessage";
+import './App.css';
 
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userData = useSelector(state => state.userData);
   const metaData = useSelector(state => state.metaData);
+  const appAlert = useSelector(state => state.applicationAlert);
 
   useEffect(() => {
 
@@ -57,7 +60,7 @@ function App() {
 
           if(track && themeEnabled) {
             return (
-              <div style={{ visibility: 'hidden', height: 0 }}>
+              <div key={i} style={{ visibility: 'hidden', height: 0 }}>
                 <ReactAudioPlayer 
                   key={themeName} 
                   src={track} 
@@ -69,6 +72,12 @@ function App() {
             )
           }
         })
+      }
+
+      {
+        appAlert.message && appAlert.alertAsPopup
+        &&
+        <PopupMessage background={BACKGROUND_PATHS.stone} lines={typeof appAlert.message === 'string' ? [appAlert.message] : appAlert.message} closePopup={() => dispatch(applicationAlertActions.clearApplicationAlert())}/>
       }
 
       {

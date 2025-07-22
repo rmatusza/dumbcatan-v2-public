@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { APP_CONTEXT, AVATAR_PATHS, APP_ALERT_TYPE } from "../Utils/constants";
 import Button from "../UI/Button";
+import { APP_ALERT_TYPE, APP_CONTEXT, AVATAR_PATHS } from "../Utils/constants";
 
 const EditAvatar = ({ S, currentAvatar, viewHandler, setProfileModalActive, updateProfileHandler }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(null);
@@ -34,7 +34,7 @@ const EditAvatar = ({ S, currentAvatar, viewHandler, setProfileModalActive, upda
   return (
     <>
       {
-        appAlert.context === APP_CONTEXT.avatar
+        appAlert.context === APP_CONTEXT.editAvatar
         &&
         <div className='rounded-xl bg-cream/60 mb-5'>
           <p className={`${appAlert.type === APP_ALERT_TYPE.success ? S.text.largeSuccessMessage : S.text.largeErrorMessage} text-center`}>{appAlert.message}</p>
@@ -61,9 +61,9 @@ const EditAvatar = ({ S, currentAvatar, viewHandler, setProfileModalActive, upda
         }
       </div>
       <div className="flex flex-row justify-between gap-4 mt-auto pb-5">
-        <Button name={"Close"} callBack={setProfileModalActive} args={[false]} namedStyles={[S.button.redAndYellowButtonSingle, S.border.goldYellowBorder]} namedStyleAsAddOn={true} />
-        <Button name={"Back"} callBack={viewHandler} args={['main']} namedStyles={[S.button.classicCatanButtonSingle, S.border.lightRedBorder]} namedStyleAsAddOn={true} />
-        <Button name={"Change Avatar"} callBack={updateAvatarHandler} namedStyles={[S.button.classicCatanButtonSingle, S.border.lightRedBorder]} namedStyleAsAddOn={true} />
+        <Button name={"Close"} callBack={setProfileModalActive} args={[false]} namedStyles={[S.button.redAndYellowButtonSingle, S.border.goldYellowBorder]} />
+        <Button name={"Back"} callBack={viewHandler} args={['main']} namedStyles={[S.button.classicCatanButtonSingle, S.border.lightRedBorder]} />
+        <Button name={"Change Avatar"} callBack={updateAvatarHandler} namedStyles={[S.button.classicCatanButtonSingle, S.border.lightRedBorder]} />
       </div>
     </>
   )

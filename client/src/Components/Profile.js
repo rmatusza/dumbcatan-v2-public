@@ -1,32 +1,28 @@
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { AVATAR_PATHS, REQUEST_FIELDS, CUSTOM_STYLES, APP_CONTEXT } from "../Utils/constants";
-import { userActions } from "../Redux/Slices/UserSlice";
+import { useDispatch, useSelector } from "react-redux";
 import { updateUserProfile } from "../Redux/ActionCreators/UserActions";
+import { APP_CONTEXT, AVATAR_PATHS, REQUEST_FIELDS, CUSTOM_STYLES as S } from "../Utils/constants";
 import Button from "../UI/Button";
 import EditAvatar from "./EditAvatar";
 import EditCredentials from "./EditCredentials";
-import Cookies from "js-cookie";
 
 const Profile = ({ setProfileModalActive }) => {
   const userData = useSelector(state => state.userData);
   const [view, setView] = useState('main');
   const dispatch = useDispatch();
-  const S = CUSTOM_STYLES;
 
   const viewHandler = (selectedView) => {
     setView(selectedView);
   };
 
   const updateProfileHandler = async (profileData) => {
-    const context = profileData?.avatarURL ? APP_CONTEXT.avatar : APP_CONTEXT.credentials
+    const context = profileData?.avatarURL ? APP_CONTEXT.editAvatar : APP_CONTEXT.credentials
     const updatedProfileData = {
-      userID: userData.userID,
       avatarURL: profileData?.avatarURL || REQUEST_FIELDS.none,
       username: profileData?.username || REQUEST_FIELDS.none,
       password: profileData?.password || REQUEST_FIELDS.none,
     }
-    dispatch(updateUserProfile(updatedProfileData, context));
+    dispatch(updateUserProfile(userData.userId, updatedProfileData, context));
   };
 
   return (
@@ -47,13 +43,13 @@ const Profile = ({ setProfileModalActive }) => {
           </div>
           <div className={`flex flex-row justify-between gap-4 mt-auto pb-5`}>
             <div className="flex-1">
-              <Button name={"Close"} callBack={setProfileModalActive} args={[false]} namedStyles={[S.button.redAndYellowButtonSingle, S.border.goldYellowBorder]} namedStyleAsAddOn={true} />
+              <Button name={"Close"} callBack={setProfileModalActive} args={[false]} namedStyles={[S.button.redAndYellowButtonSingle, S.border.goldYellowBorder]} />
             </div>
             <div className="flex-1">
-              <Button name={"Change Avatar"} callBack={viewHandler} args={['avatar']} namedStyles={[S.button.classicCatanButtonSingle, S.border.lightRedBorder]} namedStyleAsAddOn={true}/>
+              <Button name={"Change Avatar"} callBack={viewHandler} args={['avatar']} namedStyles={[S.button.classicCatanButtonSingle, S.border.lightRedBorder]} />
             </div>
             <div className="flex-1">
-              <Button name={"Change Credentials"} callBack={viewHandler} args={['credentials']} namedStyles={[S.button.classicCatanButtonSingle, S.border.lightRedBorder]} namedStyleAsAddOn={true}/>
+              <Button name={"Change Credentials"} callBack={viewHandler} args={['credentials']} namedStyles={[S.button.classicCatanButtonSingle, S.border.lightRedBorder]} />
             </div>
           </div>
         </>

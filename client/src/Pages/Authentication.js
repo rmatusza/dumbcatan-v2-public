@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { ELEMENT_PATHS, BACKGROUND_PATHS } from "../Utils/constants";
 import Signin from "../Components/Signin";
 import Signup from "../Components/Signup";
 import GlassCard from "../UI/GlassCard";
@@ -8,7 +9,6 @@ const Authentication = () => {
   const [displaySignin, setDisplaySignin] = useState(true);
   const [displaySignup, setDisplaySignup] = useState(false);
   const metaData = useSelector(state => state.metaData);
-  const axeSpinner = require.context("../../public/Media/Images/Other");
 
   const switchFormDisplay = (form) => {
     if (form === 'signup') {
@@ -26,7 +26,7 @@ const Authentication = () => {
       <div className="fixed top-0 left-0 w-full h-full z-[-1] overflow-hidden">
         <video
           className="w-full h-full object-cover"
-          src="/Media/Video/catan.mp4"
+          src={BACKGROUND_PATHS.authentication}
           autoPlay
           muted
           loop
@@ -36,7 +36,7 @@ const Authentication = () => {
       </div>
 
       <div className="w-screen h-screen flex flex-col items-center justify-center">
-        <GlassCard styles={"w-[800px] min-h-[400px] flex flex-col bg-cream/60 backdrop-blur-md rounded-lg shadow-lg p-8"}>
+        <GlassCard>
           {
             displaySignin
             &&
@@ -62,7 +62,7 @@ const Authentication = () => {
           metaData.pageLoading
           &&
           <div className="animate-spin w-20 h-25">
-            <img className="w-full h-full" src={axeSpinner('./axe_spinner.png')} />
+            <img className="w-full h-full" src={ELEMENT_PATHS.axeSpinner} />
           </div>
         }
       </div>

@@ -19,7 +19,7 @@ export const authenticateJwt = (token, navigate) => {
 
       dispatch(userActions.setUserData({
         username: userData.username,
-        userID: userData.userID,
+        userId: userData.userId,
         role: userData.role,
         avatarURL: userData.avatarURL,
         activeGames: userData.activeGames,
@@ -60,20 +60,20 @@ export const signinUser = (credentials, navigate) => {
     );
 
     try {
-
-      const userData = await signin(credentials);
-      setToken(userData.jwt);
+      const {username, userId, role, avatarURL, activeGames, jwt} = await signin(credentials);
+      
+      setToken(jwt);
 
       dispatch(userActions.setUserData({
-        username: userData.username,
-        userID: userData.userID,
-        role: userData.role,
-        avatarURL: userData.avatarURL,
-        activeGames: userData.activeGames,
+        username,
+        userId,
+        role,
+        avatarURL,
+        activeGames,
         authenticated: true,
       }));
 
-      const music = createMusicObject(THEME_NAMES.homeTheme, true);
+      const music = createMusicObject(THEME_NAMES.homeTheme);
       const track = music[THEME_NAMES.homeTheme].track;
 
       dispatch(metaDataActions.updateMetaData({
@@ -88,11 +88,11 @@ export const signinUser = (credentials, navigate) => {
     }
     catch (error) {
       dispatch(applicationAlertActions.setApplicationAlert({
-        message: error.message,
         type: 'failure',
+        message: error.message,
         status: error.status,
         context: APP_CONTEXT.signin
-      }))
+      }));
 
       dispatch(metaDataActions.toggleLoading({ value: false }));
     }
@@ -107,15 +107,15 @@ export const signupUser = (credentials, navigate) => {
 
     try {
 
-      const userData = await signup(credentials);
-      setToken(userData.jwt);
+      const {username, userId, role, avatarURL, activeGames, jwt} = await signup(credentials);
+      setToken(jwt);
 
       dispatch(userActions.setUserData({
-        username: userData.username,
-        userID: userData.userID,
-        role: userData.role,
-        avatarURL: userData.avatarURL,
-        activeGames: userData.activeGames,
+        username,
+        userId,
+        role,
+        avatarURL,
+        activeGames,
         authenticated: true,
       }));
 
@@ -134,8 +134,8 @@ export const signupUser = (credentials, navigate) => {
     }
     catch (error) {
       dispatch(applicationAlertActions.setApplicationAlert({
-        message: error.message,
         type: 'failure',
+        message: error.message,
         status: error.status,
         context: APP_CONTEXT.signup
       }));
@@ -145,7 +145,7 @@ export const signupUser = (credentials, navigate) => {
   }
 }
 
-export const updateUserProfile = (profileData, context) => {
+export const updateUserProfile = (userId, profileData, context) => {
   const MILLISECOND_DELAY = 3000;
   return async (dispatch) => {
     dispatch(
@@ -154,7 +154,7 @@ export const updateUserProfile = (profileData, context) => {
 
     try {
       const token = getToken();
-      const updatedUserProfile = await updateProfile(profileData, token);
+      const updatedUserProfile = await updateProfile(userId, profileData, token);
 
       if (updatedUserProfile.jwt) {
         setToken(updatedUserProfile.jwt);
@@ -163,13 +163,7 @@ export const updateUserProfile = (profileData, context) => {
       dispatch(userActions.updateUserProfile(updatedUserProfile));
       dispatch(metaDataActions.toggleLoading({ value: false }));
       dispatch(applicationAlertActions.setApplicationAlert({ message: "Update successful", context: context, type: 'success' }));
-      executeAfterDelay(
-        {
-          delay: MILLISECOND_DELAY,
-          callback: applicationAlertActions.clearApplicationAlert,
-          dispatch
-        }
-      );
+      executeAfterDelay(MILLISECOND_DELAY, applicationAlertActions.clearApplicationAlert, [], dispatch);
     }
     catch (error) {
       dispatch(metaDataActions.toggleLoading({ value: false }));
@@ -179,14 +173,7 @@ export const updateUserProfile = (profileData, context) => {
         status: error.status,
         context: context
       }));
-      executeAfterDelay(
-        {
-          delay: MILLISECOND_DELAY,
-          callback: applicationAlertActions.clearApplicationAlert,
-          dispatch
-        }
-      )
-
+     executeAfterDelay(MILLISECOND_DELAY, applicationAlertActions.clearApplicationAlert, [], dispatch);
     }
   }
 }

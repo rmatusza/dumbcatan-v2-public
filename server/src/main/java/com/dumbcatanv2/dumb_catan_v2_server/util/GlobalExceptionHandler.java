@@ -1,9 +1,7 @@
 package com.dumbcatanv2.dumb_catan_v2_server.util;
 
-import com.dumbcatanv2.dumb_catan_v2_server.dto.ApiErrorResponse;
-import com.dumbcatanv2.dumb_catan_v2_server.exceptions.InvalidLoginException;
-import com.dumbcatanv2.dumb_catan_v2_server.exceptions.InvalidUsernameException;
-import com.dumbcatanv2.dumb_catan_v2_server.exceptions.UserIdNotFound;
+import com.dumbcatanv2.dumb_catan_v2_server.dto.response.ApiResponse;
+import com.dumbcatanv2.dumb_catan_v2_server.exceptions.*;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,61 +31,67 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidLoginException.class)
-    public ResponseEntity<ApiErrorResponse> handleInvalidLogin(InvalidLoginException ex) {
-        return new ResponseEntity<>(new ApiErrorResponse(ex.getMessage(), 401), HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<ApiResponse> handleInvalidLoginError(InvalidLoginException ex) {
+        return new ResponseEntity<>(new ApiResponse(ex.getMessage(), 401), HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(InvalidUsernameException.class)
-    public ResponseEntity<ApiErrorResponse> handleInvalidSignup(InvalidUsernameException ex) {
-        return new ResponseEntity<>(new ApiErrorResponse(ex.getMessage(), 400), HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(NonUniqueUsernameException.class)
+    public ResponseEntity<ApiResponse> handleNonUniqueUsernameError(NonUniqueUsernameException ex) {
+        return new ResponseEntity<>(new ApiResponse(ex.getMessage(), 409), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(DataAccessException.class)
-    public ResponseEntity<ApiErrorResponse> handleDatabaseError(DataAccessException ex) {
-        return new ResponseEntity<>(new ApiErrorResponse(ex.getMessage(), 503),
+    public ResponseEntity<ApiResponse> handleDatabaseError(DataAccessException ex) {
+        return new ResponseEntity<>(new ApiResponse(ex.getMessage(), 503),
                 HttpStatus.SERVICE_UNAVAILABLE);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiErrorResponse> handleBadCredentialsError(BadCredentialsException ex) {
-        return new ResponseEntity<>(new ApiErrorResponse("Invalid username and/or password", 401),
+    public ResponseEntity<ApiResponse> handleBadCredentialsError(BadCredentialsException ex) {
+        return new ResponseEntity<>(new ApiResponse("Invalid username and/or password", 401),
                 HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleUsernameNotFoundError(UsernameNotFoundException ex) {
-        return new ResponseEntity<>(new ApiErrorResponse("Invalid username and/or password", 401),
+    public ResponseEntity<ApiResponse> handleUsernameNotFoundError(UsernameNotFoundException ex) {
+        return new ResponseEntity<>(new ApiResponse("Invalid username and/or password", 404),
                 HttpStatus.UNAUTHORIZED);
     }
 
-    @ExceptionHandler(UserIdNotFound.class)
-    public ResponseEntity<ApiErrorResponse> handleUserNotFoundError(UserIdNotFound ex) {
-        return new ResponseEntity<>(new ApiErrorResponse("No user was found with the provided user ID", 401),
+    @ExceptionHandler(RecordNotFoundException.class)
+    public ResponseEntity<ApiResponse> handleRecordNotFoundError(RecordNotFoundException ex) {
+        return new ResponseEntity<>(new ApiResponse(ex.getMessage(), 404),
                 HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(DisabledException.class)
-    public ResponseEntity<ApiErrorResponse> handleAccountDisabledError(DisabledException ex) {
-        return new ResponseEntity<>(new ApiErrorResponse("Account is locked", 401),
+    public ResponseEntity<ApiResponse> handleAccountDisabledError(DisabledException ex) {
+        return new ResponseEntity<>(new ApiResponse("Account is locked", 401),
                 HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(io.jsonwebtoken.ExpiredJwtException.class)
-    public ResponseEntity<ApiErrorResponse> handleExpiredJwtError(io.jsonwebtoken.ExpiredJwtException ex) {
-        return new ResponseEntity<>(new ApiErrorResponse("JWT is expired", 401),
+    public ResponseEntity<ApiResponse> handleExpiredJwtError(io.jsonwebtoken.ExpiredJwtException ex) {
+        return new ResponseEntity<>(new ApiResponse("JWT is expired", 401),
                 HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(io.jsonwebtoken.JwtException.class)
-    public ResponseEntity<ApiErrorResponse> handleInvalidJwtError(io.jsonwebtoken.JwtException ex) {
-        return new ResponseEntity<>(new ApiErrorResponse("JWT is invalid", 401),
+    public ResponseEntity<ApiResponse> handleInvalidJwtError(io.jsonwebtoken.JwtException ex) {
+        return new ResponseEntity<>(new ApiResponse("JWT is invalid", 401),
+                HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(MaxActiveGamesExceededException.class)
+    public ResponseEntity<ApiResponse> handleExceededMaxActiveGamesError(MaxActiveGamesExceededException ex) {
+        return new ResponseEntity<>(new ApiResponse(ex.getMessage(), 403),
                 HttpStatus.UNAUTHORIZED);
     }
 
     /* Catch-all fallback (optional) */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex) {
-        return new ResponseEntity<>(new ApiErrorResponse(ex.getMessage(), 500),
+    public ResponseEntity<ApiResponse> handleGenericException(Exception ex) {
+        return new ResponseEntity<>(new ApiResponse(ex.getMessage(), 500),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

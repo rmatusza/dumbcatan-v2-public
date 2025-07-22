@@ -35,7 +35,7 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
       case 'yourGames':
         setMainMenuOpen(false);
         if(USE_TEST_DATA) {
-          navigate("/game/1")
+          navigate("/game/1");
         }
         else {
           navigate(ENDPOINTS.yourGames);

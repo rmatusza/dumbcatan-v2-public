@@ -7,15 +7,15 @@ import java.util.Collection;
 
 public class CustomUserDetails implements UserDetails {
 
-    private final int userID;
+    private final int userId;
     private final String username;
     private String role;
     private final String password;
     private final int activeGames;
     private final String avatarURL;
 
-    public CustomUserDetails(int userID, String username, String role, String password, int activeGames, String avatarURL) {
-        this.userID = userID;
+    public CustomUserDetails(int userId, String username, String role, String password, int activeGames, String avatarURL) {
+        this.userId = userId;
         this.username = username;
         this.role = role;
         this.password = password;
@@ -25,8 +25,8 @@ public class CustomUserDetails implements UserDetails {
 
     public String getRole() { return role; }
 
-    public int getUserID() {
-        return userID;
+    public int getUserId() {
+        return userId;
     }
 
     public int getActiveGames(){

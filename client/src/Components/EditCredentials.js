@@ -68,7 +68,6 @@ const EditCredentials = ({ S, viewHandler, setProfileModalActive, updateProfileH
             name: 'Close',
             type: 'button',
             namedStyles: [S.button.redAndYellowButtonSingle, S.border.goldYellowBorder],
-            namedStyleAsAddOn: true,
             callBack: setProfileModalActive,
             args: [false]
           },
@@ -76,7 +75,6 @@ const EditCredentials = ({ S, viewHandler, setProfileModalActive, updateProfileH
             name: 'Back',
             type: 'button',
             namedStyles: [S.button.classicCatanButtonSingle, S.border.lightRedBorder],
-            namedStyleAsAddOn: true,
             callBack: viewHandler,
             args: ['main']
           },
@@ -84,7 +82,6 @@ const EditCredentials = ({ S, viewHandler, setProfileModalActive, updateProfileH
             name: 'Change Credentials',
             type: 'submit',
             namedStyles: [S.button.classicCatanButtonSingle, S.border.lightRedBorder],
-            namedStyleAsAddOn: true,
           },
         ]
       }

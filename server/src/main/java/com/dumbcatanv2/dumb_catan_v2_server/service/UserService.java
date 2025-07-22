@@ -1,10 +1,10 @@
 package com.dumbcatanv2.dumb_catan_v2_server.service;
 
-import com.dumbcatanv2.dumb_catan_v2_server.dto.UserDataRequest;
-import com.dumbcatanv2.dumb_catan_v2_server.dto.UserDataResponse;
+import com.dumbcatanv2.dumb_catan_v2_server.dto.request.UserDataRequest;
+import com.dumbcatanv2.dumb_catan_v2_server.dto.response.UserResponse;
 import com.dumbcatanv2.dumb_catan_v2_server.entity.User;
-import com.dumbcatanv2.dumb_catan_v2_server.exceptions.InvalidUsernameException;
-import com.dumbcatanv2.dumb_catan_v2_server.exceptions.UserIdNotFound;
+import com.dumbcatanv2.dumb_catan_v2_server.exceptions.NonUniqueUsernameException;
+import com.dumbcatanv2.dumb_catan_v2_server.exceptions.RecordNotFoundException;
 import com.dumbcatanv2.dumb_catan_v2_server.repo.UserRepository;
 import com.dumbcatanv2.dumb_catan_v2_server.security.JwtUtil;
 import jakarta.transaction.Transactional;
@@ -22,15 +22,15 @@ public class UserService {
     JwtUtil jwtUtil;
 
     @Transactional
-    public UserDataResponse updateProfile(UserDataRequest req) {
-        User user = userRepo.findById(req.getUserID())
-                .orElseThrow(() -> new UserIdNotFound("User with ID: " + req.getUserID() + " was not found"));
+    public UserResponse updateProfile(UserDataRequest req, int userId) {
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new RecordNotFoundException("User with ID: " + userId + " was not found"));
 
-        UserDataResponse updatedUserData = new UserDataResponse();
+        UserResponse updatedUserData = new UserResponse();
 
         if (!req.getUsername().equals("NONE")) {
             if(userRepo.existsByUsername(req.getUsername())) {
-                throw new InvalidUsernameException("Username already exists");
+                throw new NonUniqueUsernameException("Username already exists");
             }
             user.setUsername(req.getUsername());
             String jwt = jwtUtil.generateToken(user.getUsername());

@@ -1,7 +1,7 @@
 package com.dumbcatanv2.dumb_catan_v2_server.controller;
 
-import com.dumbcatanv2.dumb_catan_v2_server.dto.AuthRequest;
-import com.dumbcatanv2.dumb_catan_v2_server.dto.UserDataResponse;
+import com.dumbcatanv2.dumb_catan_v2_server.dto.request.AuthRequest;
+import com.dumbcatanv2.dumb_catan_v2_server.dto.response.UserResponse;
 import com.dumbcatanv2.dumb_catan_v2_server.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,20 +24,20 @@ public class AuthController {
     /*NOTE: if an exception occurs in the filter, this method is never called, hence there's no need to handle exceptions here
     * as they are handled in the filter*/
     @GetMapping("/authenticate")
-    public ResponseEntity<UserDataResponse> authenticate(Authentication authentication) {
-        UserDataResponse userInfo = authService.authenticate(authentication);
+    public ResponseEntity<UserResponse> authenticate(Authentication authentication) {
+        UserResponse userInfo = authService.authenticate(authentication);
         return ResponseEntity.ok(userInfo);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<UserDataResponse> signin(@Valid @RequestBody AuthRequest req) {
-        UserDataResponse authResponse = authService.signin(req);
+    public ResponseEntity<UserResponse> signin(@Valid @RequestBody AuthRequest req) {
+        UserResponse authResponse = authService.signin(req);
         return ResponseEntity.ok(authResponse);
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDataResponse> signup(@Valid @RequestBody AuthRequest req) {
-        UserDataResponse authResponse = authService.signup(req);
+    public ResponseEntity<UserResponse> signup(@Valid @RequestBody AuthRequest req) {
+        UserResponse authResponse = authService.signup(req);
         return ResponseEntity.ok(authResponse);
     }
 }
