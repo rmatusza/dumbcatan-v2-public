@@ -71,7 +71,7 @@ A list of the currently implemented features as well as in progress features can
 
 - Java 17
 - Spring Boot
-- WebSocket (STOMP + SockJS)
+- WebSockets (STOMP + SockJS)
 - Spring Security (JWT Auth)
 - Spring Data JPA + Hibernate
 - MySQL
