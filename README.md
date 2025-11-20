@@ -74,6 +74,13 @@ A list of the currently implemented features as well as in progress features can
 - WebSockets (STOMP + SockJS)
 - Spring Security (JWT Auth)
 - Spring Data JPA + Hibernate
+
+<br></br>
+
+# PERSISTENCE AND DEPLOYMENT: 
+
+## 🛠️ Tech Stack
+
 - MySQL
 - Docker (for containerization)
 - AWS (for deployment)
