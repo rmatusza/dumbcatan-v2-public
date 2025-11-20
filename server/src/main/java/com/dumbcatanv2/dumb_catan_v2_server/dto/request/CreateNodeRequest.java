@@ -1,47 +1,25 @@
 package com.dumbcatanv2.dumb_catan_v2_server.dto.request;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /* DTO for adding a node */
 // gameId provided as a path variable
 // nodeId is auto generated
+@Data
+@NoArgsConstructor
 public class CreateNodeRequest {
     @NotNull
-    private int nodeNumber;
+    private Integer nodeNumber;
 
-    @NotNull
+    @NotBlank
+    @Size(max=10)
     private String structure;
 
-    @NotNull
+    @NotBlank
+    @Size(max=6)
     private String color;
-
-    public int getNodeNumber() {
-        return nodeNumber;
-    }
-
-    public void setNodeNumber(int nodeNumber) {
-        this.nodeNumber = nodeNumber;
-    }
-
-    public String getStructure() {
-        return structure;
-    }
-
-    public void setStructure(String structure) {
-        this.structure = structure;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public CreateNodeRequest(int nodeNumber, String structure, String color) {
-        this.nodeNumber = nodeNumber;
-        this.structure = structure;
-        this.color = color;
-    }
 }

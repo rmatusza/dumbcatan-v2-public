@@ -83,7 +83,7 @@ const Form = ({
             }
           </label>
         ))}
-        <div className="flex-1 flex flex-col justify-end">
+        <div className={`flex-1 flex flex-col justify-end`}>
           <div className={`flex flex-row justify-between gap-4 ${styles.buttonContainer}`}>
             {
               buttons.map(button => {

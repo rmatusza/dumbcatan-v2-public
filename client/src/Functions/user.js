@@ -1,6 +1,7 @@
-import { REQUEST_TYPES } from "src/Utils/constants";
+import { REQUEST_TYPES } from "../Utils/constants";
 import { AppError } from "../Utils/AppError";
 import { sendHttpRequest } from "./utility";
+import { APP_CONTEXT } from "../Utils/constants";
 
 /// Functions that operate on user data 
 

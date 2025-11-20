@@ -1,36 +1,31 @@
+import { cloneDeep } from "lodash";
 import {
-  spliceArray,
-  getElementIdx,
-  generateBoolean,
-  generateRandomNumber,
-  getRequest,
-  postRequest,
-  sendHttpRequest
-} from "./utility";
-import {
-  tileIdentities,
   devCardIdentities,
   ports,
   REQUEST_TYPES,
+  TILE_IDENTITIES,
 } from "../Utils/constants";
 import {
-  tileCounts,
   devCardCounts,
-  rowTileCount,
   diceIdCount,
-  portToNodeMap,
   // portCount,
   nodeToRoadMap,
+  rowTileCount,
+  tileCounts
 } from "../Utils/mappings";
-import { applicationAlertActions } from "../Redux/Slices/ApplicationAlertSlice";
-import { APP_CONTEXT } from "../Utils/constants";
-import { cloneDeep } from "lodash";
+import {
+  generateBoolean,
+  generateRandomNumber,
+  getElementIdx,
+  sendHttpRequest,
+  spliceArray
+} from "./utility";
 
 export const shuffleTiles = () => {
   const DESERT_TILE_ODDS = 1 / 12;
 
   let tileCountsCpy = { ...tileCounts };
-  let tileTypesCpy = [...tileIdentities];
+  let tileTypesCpy = [...TILE_IDENTITIES];
 
   let shuffledTiles = [];
   let rowArr = [];
@@ -102,7 +97,7 @@ export const shuffleDiceIds = (desertTileCoordinates) => {
   while (diceRollIdentities.length > 0 || !desertTileHandled) {
 
     if (!desertTileHandled && ((currRow - 1) === desertTileCoordinates[0] && (rowArr.length) === desertTileCoordinates[1])) {
-      rowArr.push(null);
+      rowArr.push(-1);
       if (rowArr.length === rowTileCount[currRow]) {
         shuffledDiceIds.push(rowArr);
         rowArr = [];
@@ -309,17 +304,25 @@ export const prepareGameInstance = (dispatch, initializeGameData, initializePlay
 
   dispatch(initializeGameData(gameDataCpy));
   dispatch(initializePlayerData(playerData));
-}
+};
 
-export const createGameRequest = async (gameData, token) => {
+export const createGame = async (gameData, token) => {
   return await sendHttpRequest(REQUEST_TYPES.post, '/game', token, gameData);
 };
 
-export const fetchActiveGames = async (userId, token) => {
-  if(!userId) return; /// prevents error on refresh on games page
-  return await sendHttpRequest(REQUEST_TYPES.get, `/game?userId=${userId}`, token);
+export const fetchActiveGames = async (token) => {
+  // if(!userId) return; /// prevents error on refresh on games page
+  return await sendHttpRequest(REQUEST_TYPES.get, `/game`, token);
 };
 
-export const deleteGame = async (gameId, userId, token) => {
-  return await sendHttpRequest(REQUEST_TYPES.delete, `/game/${gameId}?userId=${userId}`, token);
+export const deleteGame = async (gameId, token) => {
+  return await sendHttpRequest(REQUEST_TYPES.delete, `/game/${gameId}`, token);
 };
+
+export const createGameInvite = async(recipientUsername, gameId, token) => {
+  const inviteData = {
+    gameId,
+    recipientUsername
+  };
+  return await sendHttpRequest(REQUEST_TYPES.post, `/invite`, token, inviteData);
+}

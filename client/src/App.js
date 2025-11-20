@@ -1,10 +1,11 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import { connect, useDispatch, useSelector } from 'react-redux';
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
-import { getToken, handleTrackEnd } from "./Functions/utility";
+import { dispatchErrorAppAlert, getToken, handleTrackEnd } from "./Functions/utility";
 import { authenticateJwt } from "./Redux/ActionCreators/UserActions";
 import { ENDPOINTS, BACKGROUND_PATHS } from "./Utils/constants";
 import { applicationAlertActions } from "./Redux/Slices/ApplicationAlertSlice";
+import { WebsocketProvider } from "./Context/WebsocketProvider";
 import Banner from "./Components/Banner";
 import About from "./Pages/About";
 import Authentication from "./Pages/Authentication";
@@ -24,7 +25,6 @@ function App() {
   const appAlert = useSelector(state => state.applicationAlert);
 
   useEffect(() => {
-
     const token = getToken();
 
     if (token && token !== 'undefined') {
@@ -48,9 +48,23 @@ function App() {
   //   return () => window.removeEventListener('keydown', handleKeyDown)
   // }, [metaData])
 
+  // NOTE: backgroundSize and position in style object are redundant i believe - already handled in class name
   return (
-    <div className="w-screen h-screen bg-cover bg-center flex flex-col" style={{ backgroundImage: `url(${metaData.background})` }}>
-
+    <div
+      className={`relative w-screen overflow-auto flex flex-col ${
+        metaData.background === BACKGROUND_PATHS.medTable ? 'bg-no-repeat min-h-screen' : 'bg-cover bg-center h-screen'
+      }`}
+      style={{
+        backgroundImage: `url(${metaData.background})`,
+        ...(metaData.background === BACKGROUND_PATHS.medTable
+          ? {
+              backgroundSize: 'cover',      // single image, no tiling
+              backgroundPosition: 'center', // or 'top center'
+              // backgroundAttachment: 'scroll', // default; keep it scrolling with content
+            }
+          : {}),
+      }}
+    >
       {
         metaData.musicEnabled
         &&
@@ -86,58 +100,62 @@ function App() {
         <Banner />
       }
 
-      <Routes>
+      <WebsocketProvider token={getToken()} username={userData.username}>
 
-        <Route path={ENDPOINTS.authentication}
-          element=
-          {
-            <Authentication />
-          }
-        />
+        <Routes>
 
-        <Route path={ENDPOINTS.home}
-          element=
-          {
-            <Home />
-          }
-        />
+          <Route path={ENDPOINTS.authentication}
+            element=
+            {
+              <Authentication />
+            }
+          />
 
-        <Route path={ENDPOINTS.yourGames}
-          element=
-          {
-            <Games />
-          }
-        />
+          <Route path={ENDPOINTS.home}
+            element=
+            {
+              <Home />
+            }
+          />
 
-        <Route path={`${ENDPOINTS.gameInstance}/:id`}
-          element=
-          {
-            <GameInstance />
-          }
-        />
+          <Route path={ENDPOINTS.yourGames}
+            element=
+            {
+              <Games />
+            }
+          />
 
-        <Route path={ENDPOINTS.yourInvites}
-          element=
-          {
-            <Invites />
-          }
-        />
+          <Route path={`${ENDPOINTS.gameInstance}/:id`}
+            element=
+            {
+              <GameInstance />
+            }
+          />
 
-        <Route path={ENDPOINTS.about}
-          element=
-          {
-            <About />
-          }
-        />
+          <Route path={ENDPOINTS.yourInvites}
+            element=
+            {
+              <Invites />
+            }
+          />
 
-        <Route path="/*"
-          element=
-          {
-            <Navigate to={ENDPOINTS.authentication} />
-          }
-        />
+          <Route path={ENDPOINTS.about}
+            element=
+            {
+              <About />
+            }
+          />
 
-      </Routes>
+          <Route path="/*"
+            element=
+            {
+              <Navigate to={ENDPOINTS.authentication} />
+            }
+          />
+
+        </Routes>
+
+      </WebsocketProvider>
     </div>
   );
 }

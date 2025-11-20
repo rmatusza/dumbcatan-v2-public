@@ -5,11 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { executeAfterDelay, getCurrentContext, getToken } from "../Functions/utility";
 import { createNewGame } from "../Redux/ActionCreators/GameActions";
-import { applicationAlertActions } from "../Redux/Slices/ApplicationAlertSlice";
 import { useLocation } from "react-router-dom";
 import ColorPicker from "../UI/ColorPicker";
 import Button from "../UI/Button";
-import PopupMessage from "src/UI/PopupMessage";
+import PopupMessage from "../UI/PopupMessage";
 
 const CreateGame = ({ setCreateGameModalActive }) => {
   const navigate = useNavigate();
@@ -26,7 +25,7 @@ const CreateGame = ({ setCreateGameModalActive }) => {
       executeAfterDelay(2000, setNoColorSelected, [false]);
       return;
     }
-    dispatch(createNewGame(dispatch, navigate, createNewGameData(), getToken(), userData.username, userData.userId, selectedColor));
+    dispatch(createNewGame(navigate, createNewGameData(), getToken(), userData.username, userData.userId, selectedColor));
     setCreateGameModalActive(false);
   }
 

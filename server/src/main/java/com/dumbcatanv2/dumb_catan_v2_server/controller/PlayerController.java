@@ -1,24 +1,23 @@
 package com.dumbcatanv2.dumb_catan_v2_server.controller;
 
 import com.dumbcatanv2.dumb_catan_v2_server.dto.response.PlayerResponse;
+import com.dumbcatanv2.dumb_catan_v2_server.security.CustomUserDetails;
 import com.dumbcatanv2.dumb_catan_v2_server.service.PlayerService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/player")
+@RequestMapping("/player")
+@RequiredArgsConstructor
 public class PlayerController {
 
-    @Autowired
-    PlayerService playerService;
+    private final PlayerService playerService;
 
-    @GetMapping
-    public ResponseEntity<PlayerResponse> fetchPlayerData(@RequestParam int userId, @RequestParam int gameId) {
-        PlayerResponse res = playerService.fetchPlayer(userId, gameId);
+    @GetMapping("/data-for-game/{gameId}")
+    public ResponseEntity<PlayerResponse> fetchPlayerData(@PathVariable int gameId, @AuthenticationPrincipal CustomUserDetails principal) {
+        PlayerResponse res = playerService.fetchPlayer(principal.getUserId(), gameId);
         return ResponseEntity.ok(res);
     }
 }

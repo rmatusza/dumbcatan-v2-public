@@ -1,8 +1,8 @@
 package com.dumbcatanv2.dumb_catan_v2_server.entity;
 
 import com.dumbcatanv2.dumb_catan_v2_server.dto.request.CreateGameRequest;
-import com.dumbcatanv2.dumb_catan_v2_server.util.ListOfStringListConverter;
-import com.dumbcatanv2.dumb_catan_v2_server.util.StringListConverter;
+import com.dumbcatanv2.dumb_catan_v2_server.mapper.ListOfStringListConverter;
+import com.dumbcatanv2.dumb_catan_v2_server.mapper.StringListConverter;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -60,6 +60,9 @@ public class Game {
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<Player> players;
+
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    private List<Invite> invites;
 
     public int getGameId() {
         return gameId;
@@ -183,6 +186,12 @@ public class Game {
         this.players.add(player);
     }
 
+    public void addInvite(Invite invite) {
+        invite.setGame(this);
+        if(this.invites == null) this.invites = new ArrayList<>();
+        this.invites.add(invite);
+    }
+
     public Game(int gameId, String owner, List<List<String>> tileOrder, List<List<String>> diceIdOrder, List<String> devCards, String robberLocation, int longestRoad, int largestArmy, String longestRoadHolder, String largestArmyHolder, List<Node> nodes, List<Road> roads, List<Player> players) {
         this.gameId = gameId;
         this.owner = owner;
@@ -206,12 +215,12 @@ public class Game {
         this.devCards = devCards;
     }
 
-    public Game(CreateGameRequest newGameData) {
-        this.owner = newGameData.getOwner();
+    public Game(CreateGameRequest newGameData, String owner) {
+        this.owner = owner;
         this.tileOrder = newGameData.getTileOrder();
         this.diceIdOrder = newGameData.getDiceIdOrder();
         this.devCards = newGameData.getDevCards();
-        this.playerList = new ArrayList<>(List.of(newGameData.getOwner()));
+        this.playerList = new ArrayList<>(List.of(owner));
     }
 
     public Game(){}

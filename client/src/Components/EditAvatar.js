@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import Button from "../UI/Button";
 import { APP_ALERT_TYPE, APP_CONTEXT, AVATAR_PATHS } from "../Utils/constants";
+import Button from "../UI/Button";
 
 const EditAvatar = ({ S, currentAvatar, viewHandler, setProfileModalActive, updateProfileHandler }) => {
   const [selectedAvatar, setSelectedAvatar] = useState(null);

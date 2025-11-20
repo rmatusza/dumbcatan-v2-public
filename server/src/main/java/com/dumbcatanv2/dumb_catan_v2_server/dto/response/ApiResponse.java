@@ -1,5 +1,7 @@
 package com.dumbcatanv2.dumb_catan_v2_server.dto.response;
 
+import org.springframework.http.HttpStatus;
+
 import java.time.LocalDateTime;
 
 /* DTO for sending API success / error info */
@@ -56,6 +58,10 @@ public class ApiResponse {
 
     public ApiResponse(boolean success, String message) {
         this.success = success;
+        this.message = message;
+    }
+
+    public ApiResponse(String message){
         this.message = message;
     }
 

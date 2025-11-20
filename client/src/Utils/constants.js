@@ -62,7 +62,7 @@ export const BOARD_BORDER_PATH = '/Media/Images/BoardAssets/Border/border.png'
 const elementBasePath = '/Media/Images/Elements/'
 export const ELEMENT_PATHS =
 {
-  bannerLogo: elementBasePath + 'CatanBannerLogo.png',
+  bannerLogo: elementBasePath + 'catanBannerLogo.png',
   axeSpinner: elementBasePath + 'axe_spinner.png',
 };
 
@@ -178,10 +178,11 @@ export const APP_CONTEXT =
   credentials: 'credentials',
   createGame: 'createGame',
   games: 'games',
+  sendInvite: 'sendInvite'
 };
 
 /// RESOURCE TILE NAMES
-export const tileIdentities = 
+export const TILE_IDENTITIES = 
 [
   'hay', 
   'wood', 

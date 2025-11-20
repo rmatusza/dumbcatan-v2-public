@@ -10,6 +10,7 @@ import com.dumbcatanv2.dumb_catan_v2_server.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +28,19 @@ public class AuthService {
 
     /*NOTE: JwtAuthFilter handles the event in which jwt is either invalid or expired, so we don't have to handle
     * exceptions here */
-    public UserResponse authenticate(Authentication authentication){
+    public UserResponse authenticate(){
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
         return new UserResponse(
-                userDetails.getUserId(),
-                userDetails.getUsername(),
-                userDetails.getRole(),
-                userDetails.getAvatarURL(),
-                userDetails.getActiveGames()
+                    userDetails.getUserId(),
+                    userDetails.getUsername(),
+                    userDetails.getRole(),
+                    userDetails.getAvatarURL(),
+                    userDetails.getActiveGames()
         );
     }
 

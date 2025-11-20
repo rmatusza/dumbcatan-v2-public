@@ -1,40 +1,60 @@
-import { createGameRequest } from "../../Functions/game";
-import { ENDPOINTS, APP_CONTEXT } from "../../Utils/constants";
+import { createGame, prepareGameInstance } from "../../Functions/game";
+import { fetchPlayerData } from "../../Functions/player";
+import { dispatchErrorAppAlert } from "../../Functions/utility";
+import { APP_CONTEXT, BACKGROUND_PATHS, ENDPOINTS } from "../../Utils/constants";
+import { gameActions } from "../Slices/GameSlice";
 import { metaDataActions } from "../Slices/MetaDataSlice";
 import { playerActions } from "../Slices/PlayerSlice";
-import { gameActions } from "../Slices/GameSlice";
-import { applicationAlertActions } from "../Slices/ApplicationAlertSlice";
 
-export const createNewGame = (dispatch, navigate, newGameData, token, owner, ownerId, color) => {
+export const createNewGame = (navigate, newGameData, token, owner, ownerId, color) => {
   return async (dispatch) => {
     dispatch(
       metaDataActions.toggleLoading({ value: true })
     );
 
     try {
-      const requestData = {...newGameData, owner, ownerId, color};
-      
-      const createGameResponse = await createGameRequest(requestData, token);
-      
-      const initialGameSliceData = {...newGameData, gameId: createGameResponse.gameId};
+      const requestData = { ...newGameData, owner, ownerId, color };
+
+      const createGameResponse = await createGame(requestData, token);
+
+      const initialGameSliceData = { ...newGameData, gameId: createGameResponse.gameId };
       const initialPlayerSliceData = createGameResponse.newPlayerData;
 
       dispatch(gameActions.initializeGameData(initialGameSliceData));
       dispatch(playerActions.initializePlayerData(initialPlayerSliceData));
+      dispatch(metaDataActions.setBackground({background: BACKGROUND_PATHS.medTable}));
 
       navigate(`${ENDPOINTS.gameInstance}/${createGameResponse.gameId}`);
     }
     catch (error) {
-      dispatch(applicationAlertActions.setApplicationAlert({
-        message: error.message,
-        type: 'failure',
-        status: error.status,
-        context: APP_CONTEXT.createGame,
-        alertAsPopup: true
-      }))
+      dispatchErrorAppAlert(dispatch, error, APP_CONTEXT.createGame, true);
     }
     finally {
       dispatch(metaDataActions.toggleLoading({ value: false }));
     }
   }
-}
+};
+
+export const selectGame = (userId, gameId, gameData, token, navigate) => {
+  return async (dispatch) => {
+    dispatch(
+      metaDataActions.toggleLoading({ value: true })
+    );
+
+    try {
+      const playerData = await fetchPlayerData(gameId, token);
+
+      prepareGameInstance(dispatch, gameActions.initializeGameData, playerActions.initializePlayerData, gameData, playerData);
+
+      dispatch(metaDataActions.setBackground({background: BACKGROUND_PATHS.medTable}));
+
+      navigate(`${ENDPOINTS.gameInstance}/${gameData.gameId}`);
+    }
+    catch (error) {
+      dispatchErrorAppAlert(dispatch, error, APP_CONTEXT.games, true);
+    }
+    finally {
+      dispatch(metaDataActions.toggleLoading({ value: false }));
+    }
+  }
+};
