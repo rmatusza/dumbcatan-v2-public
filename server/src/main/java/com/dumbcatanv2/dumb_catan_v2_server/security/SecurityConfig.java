@@ -50,8 +50,7 @@ public class SecurityConfig {
                 /* -> All other requests require authentication — including /api/game, /api/user, etc. - controlled by the .anyRequest().authenticated() line*/
                 /*NOTE: this means that all other requests from the frontend must include the jwt in the header*/
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/dumb-catan-ws/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 /*tells spring security not to use sessions - instead client includes jwt in every request - no session data is stored by spring therefore*/
@@ -74,6 +73,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true); // lets you send cookies or Authorization headers
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+
         /*Applies the CORS settings in config to all incoming HTTP requests, regardless of their path*/
         source.registerCorsConfiguration("/**", config);
 

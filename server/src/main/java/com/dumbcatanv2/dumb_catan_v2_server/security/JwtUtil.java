@@ -9,6 +9,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
+
     /*below is the cryptographic signing key used to sign and verify JWTs*/
     /*It takes the secret and coverts it into a Key object using hmacShaKeyFor(), which is specifically for HMAC algorithms like HS256 - which we use in the jtw builder*/
     private final Key key;
@@ -43,4 +44,5 @@ public class JwtUtil {
         this.key = Keys.hmacShaKeyFor(secret.getBytes());
         this.expiration = expiration;
     }
+
 }

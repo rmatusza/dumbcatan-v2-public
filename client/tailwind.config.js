@@ -24,9 +24,14 @@ module.exports = {
           '60%': { transform: 'translateX(-5px)' },
           '80%': { transform: 'translateX(5px)' },
         },
+        floatScale: {
+          '0%, 100%': { transform: 'translateY(0) scale(1.1)' },
+          '50%': { transform: 'translateY(-3%) scale(1.1)' },
+        },
       },
       animation: {
         shake: 'shake 0.4s ease-in-out',
+        'float-scale': 'floatScale 2s ease-in-out infinite',
       },
     },
   },

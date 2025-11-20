@@ -4,17 +4,16 @@ import com.dumbcatanv2.dumb_catan_v2_server.dto.request.AuthRequest;
 import com.dumbcatanv2.dumb_catan_v2_server.dto.response.UserResponse;
 import com.dumbcatanv2.dumb_catan_v2_server.service.AuthService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
-@RequiredArgsConstructor
+@RequestMapping("/api/auth")
 public class AuthController {
-
-    private final AuthService authService;
+    @Autowired
+    private AuthService authService;
 
     /*Authentication is automatically supplied as an argument by Spring Security if the JWT was valid*/
     /* -> Authentication can be added as a parameter to any method that you want this object to be supplied to*/
@@ -25,8 +24,8 @@ public class AuthController {
     /*NOTE: if an exception occurs in the filter, this method is never called, hence there's no need to handle exceptions here
     * as they are handled in the filter*/
     @GetMapping("/authenticate")
-    public ResponseEntity<UserResponse> authenticate() {
-        UserResponse userInfo = authService.authenticate();
+    public ResponseEntity<UserResponse> authenticate(Authentication authentication) {
+        UserResponse userInfo = authService.authenticate(authentication);
         return ResponseEntity.ok(userInfo);
     }
 
@@ -39,6 +38,6 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<UserResponse> signup(@Valid @RequestBody AuthRequest req) {
         UserResponse authResponse = authService.signup(req);
-        return ResponseEntity.status(HttpStatus.CREATED).body(authResponse);
+        return ResponseEntity.ok(authResponse);
     }
 }

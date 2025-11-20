@@ -2,9 +2,6 @@ import Modal from "./Modal";
 import Button from "./Button";
 import { CUSTOM_STYLES as S } from "../Utils/constants";
 
-// popup message is a special type of modal - can see that its content is inside of the modal component
-// only purpose is to display an informative message to the user
-// only button is a close button to remove the message
 const PopupMessage = ({ background, lines, closePopup }) => {
   return (
     <Modal background={background}>

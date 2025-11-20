@@ -13,11 +13,8 @@ import com.dumbcatanv2.dumb_catan_v2_server.exceptions.RecordNotFoundException;
 import com.dumbcatanv2.dumb_catan_v2_server.repo.GameRepository;
 import com.dumbcatanv2.dumb_catan_v2_server.repo.PlayerRepository;
 import com.dumbcatanv2.dumb_catan_v2_server.repo.UserRepository;
-import com.dumbcatanv2.dumb_catan_v2_server.security.CustomUserDetails;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +31,8 @@ public class GameService {
     PlayerRepository playerRepo;
 
     @Transactional
-    public NewGameResponse saveNewGame(CreateGameRequest newGameData, int userId, String username) {
-        Optional<User> optionalUser = userRepo.findById(userId);
+    public NewGameResponse saveNewGame(CreateGameRequest newGameData) {
+        Optional<User> optionalUser = userRepo.findById(newGameData.getOwnerId());
         User user;
         if(optionalUser.isPresent()){
             user = optionalUser.get();
@@ -45,12 +42,12 @@ public class GameService {
             }
         }
         else {
-            throw new RecordNotFoundException("user with id " + userId + " was not found");
+            throw new RecordNotFoundException("user with id " + newGameData.getOwnerId() + " was not found");
         }
 
         Player newPlayer = Player.createInitial();
         newPlayer.setColor(newGameData.getColor());
-        Game newGame = new Game(newGameData, username);
+        Game newGame = new Game(newGameData);
 
         user.addPlayer(newPlayer);
         user.setActiveGames(user.getActiveGames() + 1);
@@ -62,7 +59,6 @@ public class GameService {
     }
 
     public List<GameResponse> fetchActiveGames(int userId) {
-
         List<Player> players = playerRepo.findByUser_UserId(userId);
         ArrayList<Integer> gameIds = new ArrayList<>();
 
@@ -76,7 +72,7 @@ public class GameService {
     }
 
     @Transactional
-    public void deleteGame(int gameId, int userId) {
+    public ApiResponse deleteGame(int gameId, int userId) {
         Optional<User> optionalUser = userRepo.findById(userId);
         if(optionalUser.isEmpty()) {
             throw new RecordNotFoundException("User with id " + userId + " not found");
@@ -84,5 +80,7 @@ public class GameService {
         User user = optionalUser.get();
         user.setActiveGames(user.getActiveGames() - 1 );
         gameRepo.deleteById(gameId);
+
+        return new ApiResponse(true, "Game " + gameId + " deleted", 200, null);
     }
 }

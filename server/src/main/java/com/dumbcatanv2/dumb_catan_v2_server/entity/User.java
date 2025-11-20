@@ -31,9 +31,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Player> players;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Invite> invites;
-
     public int getUserId() {
         return userId;
     }
@@ -88,12 +85,6 @@ public class User {
         player.setUser(this);
         if (this.players == null) this.players = new ArrayList<>();
         this.players.add(player);
-    }
-
-    public void addInvite(Invite invite) {
-        invite.setUser(this);
-        if (this.invites == null) this.invites = new ArrayList<>();
-        this.invites.add(invite);
     }
 
     public User(int userId, String username, String password, String avatarURL, int activeGames, String role, List<Player> players) {

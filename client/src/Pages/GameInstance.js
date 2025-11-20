@@ -22,8 +22,21 @@ const GameInstance = () => {
   };
 
   return (
-    <div className="relative mx-auto w-full py-5">
-      <GameBoard />
+    <div className="overflow-auto w-full h-screen">
+      <div
+        className="relative mx-auto w-full"
+        style={{
+          backgroundImage: `url('${BACKGROUND_PATHS.medTable}')`,
+          backgroundRepeat: 'repeat',
+          backgroundSize: '1000px 1000px',
+          backgroundPosition: 'top left',
+          paddingTop: '20px',
+          paddingBottom: '20px'
+        }}
+      >
+        <GameBoard />
+      </div>
+
       {
         !metaData.gameInstancePageMessageAlreadyDisplayed
         &&

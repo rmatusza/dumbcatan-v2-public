@@ -1,109 +1,96 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { createGameIcons, dispatchErrorAppAlert, generateRandomNumber, getToken, spliceArray } from "../Functions/utility";
-import { deleteGame, prepareGameInstance, fetchActiveGames } from "../Functions/game";
-import { TILE_PATHS, TILE_IDENTITIES, CUSTOM_STYLES as S, APP_CONTEXT, BACKGROUND_PATHS, APP_ALERT_TYPE, ENDPOINTS } from "../Utils/constants";
+import { dispatchErrorAppAlert, generateRandomNumber, getToken, spliceArray } from "../Functions/utility";
+import { deleteGame, prepareGameInstance } from "../Functions/game";
+import { TILE_PATHS, tileIdentities, CUSTOM_STYLES as S, APP_CONTEXT, BACKGROUND_PATHS, APP_ALERT_TYPE, ENDPOINTS } from "../Utils/constants";
+import { fetchActiveGames } from "../Functions/game";
+import { applicationAlertActions } from "../Redux/Slices/ApplicationAlertSlice";
 import { gameActions } from "../Redux/Slices/GameSlice";
 import { playerActions } from "../Redux/Slices/PlayerSlice";
-import { selectGame } from "../Redux/ActionCreators/GameActions";
-import { metaDataActions } from "../Redux/Slices/MetaDataSlice";
-import { useWebsocket } from "../Context/WebsocketProvider";
-import { SendInvite } from "../Components/SendInvite";
-import { applicationAlertActions } from "../Redux/Slices/ApplicationAlertSlice";
+import { fetchPlayerData } from "../Functions/player";
+import { useNavigate } from "react-router-dom";
 import Button from "../UI/Button";
 import Confirmation from "../UI/Confirmation";
-import Modal from "../UI/Modal";
 
 const Games = () => {
   const [gameData, setGameData] = useState(null);
   const [gameTiles, setGameTiles] = useState(null);
   const [confirmationModalActive, setConfirmationModalActive] = useState(false);
-  const [inviteModalActive, setInviteModalActive] = useState(false);
+  const [selectedGameId, setSelectedGameId] = useState(null);
+  const [selectedGameTileIdx, setSelectedGameTileIdx] = useState(null);
   const [focusedTileIdx, setFocusedTileIdx] = useState(0);
-  const [animationPaused, setAnimationPaused] = useState(false);
-  const { connected, send, subscribe, client } = useWebsocket();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userData = useSelector(state => state.userData);
-  
+
   useEffect(() => {
     const fetchData = async () => {
-      dispatch(
-        metaDataActions.toggleLoading({ value: true })
-      );
       try {
-        const activeGamesData = await fetchActiveGames(getToken());
+        const activeGamesData = await fetchActiveGames(userData.userId, getToken());
 
-        const gameIcons = createGameIcons(activeGamesData, TILE_PATHS, TILE_IDENTITIES);
+        let initialGameTiles = [];
+        for (let i = 0; i < activeGamesData?.length; i++) {
+          initialGameTiles.push(TILE_PATHS[tileIdentities[generateRandomNumber(tileIdentities.length - 1)]]);
+        }
 
-        setGameTiles(gameIcons);
+        setGameTiles(initialGameTiles);
         setGameData(activeGamesData);
       }
       catch (error) {
         dispatchErrorAppAlert(dispatch, error, APP_CONTEXT.games, true);
       }
-      finally {
-        dispatch(
-          metaDataActions.toggleLoading({ value: false })
-        );
-      }
     }
     fetchData();
   }, []);
 
-  const deleteButtonHandler = () => {
+  const deleteButtonHandler = (gameId, idx) => {
+    setSelectedGameId(gameId);
+    setSelectedGameTileIdx(idx);
     setConfirmationModalActive(true);
   };
 
   const deleteGameHandler = async () => {
-    const gameIdToDelete = gameData[focusedTileIdx].gameId;
     setConfirmationModalActive(false);
-    dispatch(
-      metaDataActions.toggleLoading({ value: true })
-    );
-    
     try {
-      await deleteGame(gameIdToDelete, getToken());
+      await deleteGame(selectedGameId, userData.userId, getToken());
 
       const updatedGameTiles = [...gameTiles];
-      spliceArray('delete', updatedGameTiles, focusedTileIdx);
+      spliceArray('delete', updatedGameTiles, selectedGameTileIdx);
 
       setGameTiles(updatedGameTiles);
-      setGameData(gameData => gameData.filter(game => game.gameId !== gameIdToDelete));
-      setFocusedTileIdx(0);
+      setGameData(gameData => gameData.filter(game => game.gameId !== selectedGameId));
     }
     catch (error) {
       dispatchErrorAppAlert(dispatch, error, APP_CONTEXT.games, true);
     }
-    finally {
-      dispatch(
-        metaDataActions.toggleLoading({ value: true })
-      );
-    }
   };
 
-  const selectGameHandler = async () => {
-    const selectedGameData = gameData[focusedTileIdx];
-    await dispatch(selectGame(userData.userId, selectedGameData.gameId, selectedGameData, getToken(), navigate));
+  const selectGameHandler = async (gameId) => {
+    try {
+      const playerData = await fetchPlayerData(userData.userId, gameId, getToken());
+      const selectedGameData = gameData[focusedTileIdx];
+
+      prepareGameInstance(dispatch, gameActions.initializeGameData, playerActions.initializePlayerData, selectedGameData, playerData);
+      
+      navigate(`${ENDPOINTS.gameInstance}/${selectedGameData.gameId}`);
+    }
+    catch (error) {
+      dispatchErrorAppAlert(dispatch, error, APP_CONTEXT.games, true);
+    }
   }
 
   const hoverHandler = (idx) => {
     setFocusedTileIdx(idx);
   };
 
-  const clickHandler = (event, action) => {
+  const clickHandler = (event, action, args) => {
     event.stopPropagation();
-
-    if (action === 'delete') {
-      deleteButtonHandler();
+    
+    if(action === 'delete') {
+      deleteButtonHandler(...args);
     }
-    else if (action === 'select') {
-      selectGameHandler();
-    }
-    else if (action === 'invite') {
-      setAnimationPaused(true);
-      setInviteModalActive(true);
+    if(action === 'select') {
+      selectGameHandler(...args);
     }
   };
 
@@ -115,7 +102,7 @@ const Games = () => {
         gameData.map((game, i) => {
           let isOwner = game.owner === userData.username;
           return (
-            <div key={game.gameId} className={`flex flex-col relative w-[400px] h-[400px] m-4 items-center justify-center cursor-pointer ${focusedTileIdx === i && !animationPaused ? 'animate-float-scale' : ''}`} onMouseEnter={() => hoverHandler(i)} onClick={event => clickHandler(event, 'select')}>
+            <div key={game.gameId} className={`flex flex-col relative w-[400px] h-[400px] m-4 items-center justify-center cursor-pointer ${focusedTileIdx === i ? 'animate-float-scale' : ''}`} onMouseEnter={() => hoverHandler(i)} onClick={(event) => clickHandler(event, 'select', [game.gameId])}>
               <img
                 src={gameTiles[i]}
                 alt="tile"
@@ -140,9 +127,8 @@ const Games = () => {
               {
                 isOwner
                 &&
-                <div className="w-full flex flex-col items-center z-10 pt-10">
-                  <Button type={'button'} name={'Invite Player'} callBack={clickHandler} args={['invite']} namedStyles={[S.button.classicCatanButtonSingle, S.border.lightRedBorder]} tailwindStyles="px-4 py-2 rounded w-40 mb-[5px]" overwriteBaseStyle={true} passEventObject={true} />
-                  <Button type={'button'} name={'Delete'} callBack={clickHandler} args={['delete']} namedStyles={[S.button.redAndYellowButtonSingle, S.border.goldYellowBorder]} tailwindStyles="px-4 py-2 rounded w-40" overwriteBaseStyle={true} passEventObject={true} />
+                <div className="w-full flex justify-center z-10 pt-10">
+                  <Button type={'button'} name={'Delete'} callBack={clickHandler} args={['delete', [game.gameId, i]]} namedStyles={[S.button.redAndYellowButtonSingle, S.border.goldYellowBorder]} tailwindStyles="px-4 py-2 rounded w-40" overwriteBaseStyle={true} passEventObject={true}/>
                 </div>
               }
             </div>
@@ -162,15 +148,8 @@ const Games = () => {
           confirmationButtonName={"Delete Game"}
           confirmationCallback={deleteGameHandler}
           cancelCallback={() => setConfirmationModalActive(false)}
-          confirmationText={[`Are you sure you want to delete game ${gameData[focusedTileIdx].gameId}?`]}
+          confirmationText={[`Are you sure you want to delete game ${selectedGameId}?`]}
         />
-      }
-      {
-        inviteModalActive
-        &&
-        <Modal background={BACKGROUND_PATHS.stone}>
-          <SendInvite closeModal={() => {setInviteModalActive(false); setAnimationPaused(false); dispatch(applicationAlertActions.clearApplicationAlert())}} gameId={gameData[focusedTileIdx].gameId}/>
-        </Modal>
       }
     </div>
   )

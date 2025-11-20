@@ -1,7 +1,7 @@
 package com.dumbcatanv2.dumb_catan_v2_server.entity;
 
-import com.dumbcatanv2.dumb_catan_v2_server.mapper.IntArrayConverter;
-import com.dumbcatanv2.dumb_catan_v2_server.mapper.StringListConverter;
+import com.dumbcatanv2.dumb_catan_v2_server.util.IntArrayConverter;
+import com.dumbcatanv2.dumb_catan_v2_server.util.StringListConverter;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

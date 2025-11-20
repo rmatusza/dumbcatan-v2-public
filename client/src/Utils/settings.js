@@ -17,11 +17,11 @@ export const BOARD_HEIGHT = 869;
 export const TILE_WIDTH = 145.6;
 export const TILE_HEIGHT = 169.3681;
 
-export const BOARD_ASPECT_RATIO = 1.1513; // width : height
-export const TILE_ASPECT_RATIO = 0.8640; // width : height
+export const BOARD_ASPECT_RATIO = 1.1513;
+export const TILE_ASPECT_RATIO = 0.8640;
 
-export const WIDTH_PROPORTION_TILE_TO_BOARD = 0.1456; // tileWidth : boardWidth
-export const HEIGHT_PROPORTION_TILE_TO_BOARD = 0.1949; // tileHeight : boardHeight
+export const WIDTH_PROPORTION_TILE_TO_BOARD = 0.1456;
+export const HEIGHT_PROPORTION_TILE_TO_BOARD = 0.1949;
 
 export const X_FRACTION_OF_BOARD_WIDTH = 0.35;
 export const Y_FRACTION_OF_BOARD_HEIGHT = 0.10;

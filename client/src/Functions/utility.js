@@ -386,7 +386,7 @@ export const calculateDiceIdPositions = (positionedTiles, diceIds) => {
       let y = tile.y + (TILE_HEIGHT / 2) - (DICE_ID_HEIGHT / 2);
 
       let isVariantA;
-      if (diceIdSet.has(diceIds[row][column])) {
+      if(diceIdSet.has(diceIds[row][column])) {
         isVariantA = false;
       }
       else {
@@ -557,7 +557,7 @@ export const sendHttpRequest = async (requestType, endpoint, token, requestData 
     ...(token && { 'Authorization': `Bearer ${token}` })
   };
   try {
-    res = await fetch(`http://localhost:8080${endpoint}`, {
+    res = await fetch(`http://localhost:8080/api${endpoint}`, {
       method: requestType,
       headers,
       body: requestData ? JSON.stringify(requestData) : null
@@ -566,8 +566,6 @@ export const sendHttpRequest = async (requestType, endpoint, token, requestData 
   catch (e) {
     throw new AppError('Unexpected server error occurred', 500);
   }
-
-  if(res.status == 204) return;
 
   let responseData;
   try {
@@ -584,7 +582,7 @@ export const sendHttpRequest = async (requestType, endpoint, token, requestData 
   return responseData;
 };
 
-export const dispatchErrorAppAlert = (dispatch, error, context, alertAsPopup = false) => {
+export const dispatchErrorAppAlert = (dispatch, error, context, alertAsPopup) => {
   dispatch(applicationAlertActions.setApplicationAlert({
     type: APP_ALERT_TYPE.failure,
     message: error.message,
@@ -592,28 +590,4 @@ export const dispatchErrorAppAlert = (dispatch, error, context, alertAsPopup = f
     context,
     alertAsPopup
   }));
-};
-
-export const dispatchSuccessAppAlert = (dispatch, message, context, alertAsPopup = false) => {
-  dispatch(applicationAlertActions.setApplicationAlert({
-    type: APP_ALERT_TYPE.success,
-    message,
-    status: 200,
-    context,
-    alertAsPopup
-  }));
-};
-
-export const createGameIcons = (games, tilePaths, tileIdentities) => {
-  const tileIdentitiesCpy = [...tileIdentities];
-  const gameIcons = [];
-
-  games.forEach(game => {
-    const randomIdx = generateRandomNumber(tileIdentitiesCpy.length - 1);
-    const tilePath = tilePaths[tileIdentitiesCpy[randomIdx]];
-    gameIcons.push(tilePath);
-    spliceArray('delete', tileIdentitiesCpy, randomIdx);
-  })
-
-  return gameIcons;
-};
+}

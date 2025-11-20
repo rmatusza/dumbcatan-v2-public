@@ -1,5 +1,5 @@
 import { authenticate, signin, signup, updateProfile } from "../../Functions/user";
-import { createMusicObject, dispatchErrorAppAlert, dispatchSuccessAppAlert, executeAfterDelay, getToken, setToken } from "../../Functions/utility";
+import { createMusicObject, executeAfterDelay, getToken, setToken } from "../../Functions/utility";
 import { APP_CONTEXT, BACKGROUND_PATHS, ENDPOINTS, THEME_NAMES } from "../../Utils/constants";
 import { applicationAlertActions } from "../Slices/ApplicationAlertSlice";
 import { metaDataActions } from "../Slices/MetaDataSlice";
@@ -16,7 +16,7 @@ export const authenticateJwt = (token, navigate) => {
     try {
 
       const userData = await authenticate(token);
-    
+
       dispatch(userActions.setUserData({
         username: userData.username,
         userId: userData.userId,
@@ -40,9 +40,15 @@ export const authenticateJwt = (token, navigate) => {
       navigate(ENDPOINTS.home);
     }
     catch (error) {
-      dispatchErrorAppAlert(dispatch, error, APP_CONTEXT.signin);
+
+      dispatch(applicationAlertActions.setApplicationAlert({
+        message: error.message,
+        type: 'failure',
+        status: error.status,
+        context: APP_CONTEXT.signin
+      }))
+
       dispatch(metaDataActions.toggleLoading({ value: false }));
-      navigate(ENDPOINTS.authentication);
     }
   }
 };
@@ -78,11 +84,16 @@ export const signinUser = (credentials, navigate) => {
         playedTracks: [track]
       }));
 
-      dispatch(applicationAlertActions.clearApplicationAlert());
       navigate(ENDPOINTS.home);
     }
     catch (error) {
-      dispatchErrorAppAlert(dispatch, error, APP_CONTEXT.signin);
+      dispatch(applicationAlertActions.setApplicationAlert({
+        type: 'failure',
+        message: error.message,
+        status: error.status,
+        context: APP_CONTEXT.signin
+      }));
+
       dispatch(metaDataActions.toggleLoading({ value: false }));
     }
   }
@@ -119,11 +130,16 @@ export const signupUser = (credentials, navigate) => {
         playedTracks: [track]
       }));
 
-      dispatch(applicationAlertActions.clearApplicationAlert());
       navigate(ENDPOINTS.home);
     }
     catch (error) {
-      dispatchErrorAppAlert(dispatch, error, APP_CONTEXT.signup);
+      dispatch(applicationAlertActions.setApplicationAlert({
+        type: 'failure',
+        message: error.message,
+        status: error.status,
+        context: APP_CONTEXT.signup
+      }));
+
       dispatch(metaDataActions.toggleLoading({ value: false }));
     }
   }
@@ -146,13 +162,18 @@ export const updateUserProfile = (userId, profileData, context) => {
 
       dispatch(userActions.updateUserProfile(updatedUserProfile));
       dispatch(metaDataActions.toggleLoading({ value: false }));
-      dispatchSuccessAppAlert(dispatch, 'Update successful', context);
+      dispatch(applicationAlertActions.setApplicationAlert({ message: "Update successful", context: context, type: 'success' }));
       executeAfterDelay(MILLISECOND_DELAY, applicationAlertActions.clearApplicationAlert, [], dispatch);
     }
     catch (error) {
       dispatch(metaDataActions.toggleLoading({ value: false }));
-      dispatchErrorAppAlert(dispatch, error, context);
-      executeAfterDelay(MILLISECOND_DELAY, applicationAlertActions.clearApplicationAlert, [], dispatch);
+      dispatch(applicationAlertActions.setApplicationAlert({
+        message: error.message,
+        type: 'failure',
+        status: error.status,
+        context: context
+      }));
+     executeAfterDelay(MILLISECOND_DELAY, applicationAlertActions.clearApplicationAlert, [], dispatch);
     }
   }
 }

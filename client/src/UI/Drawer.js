@@ -9,8 +9,8 @@ const Drawer = ({ children, drawerOpen, setDrawerOpen, tailwindStyles = "", CssS
   const oldStyle2 = '${drawerOpen ? "translate-x-0" : "-translate-x-full"}';
 
   const handleClickOutside = (e) => {
-    if (!drawerRef.current?.contains(e.target)) {
-      setDrawerOpen(false);
+    if (drawerRef.current && !drawerRef.current.contains(e.target)) {
+      setDrawerOpen(false)
       document.removeEventListener("mousedown", handleClickOutside);
     }
   }

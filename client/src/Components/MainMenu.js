@@ -35,17 +35,14 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
       case 'yourGames':
         setMainMenuOpen(false);
         if(USE_TEST_DATA) {
-          dispatch(metaDataActions.setBackground({background: BACKGROUND_PATHS.medTable}));
           navigate("/game/1");
         }
         else {
-          dispatch(metaDataActions.setBackground({background: BACKGROUND_PATHS.home}));
           navigate(ENDPOINTS.yourGames);
         }
         break;
       case 'yourInvites':
         setMainMenuOpen(false);
-        dispatch(metaDataActions.setBackground({background: BACKGROUND_PATHS.home}));
         navigate(ENDPOINTS.yourInvites);
         break;
       case 'music':
@@ -56,7 +53,6 @@ const MainMenu = ({ userRole, setMainMenuOpen }) => {
         break;
       case 'about':
         setMainMenuOpen(false);
-        dispatch(metaDataActions.setBackground({background: BACKGROUND_PATHS.home}));
         navigate(ENDPOINTS.about);
         break;
       default:
