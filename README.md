@@ -8,7 +8,7 @@
 A list of the currently implemented features as well as in progress features can be viewed [at the bottom of this file](#feature-progress-log)
 <br></br>
 
-🚀 You can run a demo version of this project locally to see and experiment with the features that have currently been implemented by following the instructions outlined in the README file within the [Demo Application Repository](https://github.com/rmatusza/dumbcatan-v2-demo)
+🚀 You can run a demo version of this project locally by following the instructions outlined in the README file within the [Demo Application Repository](https://github.com/rmatusza/dumbcatan-v2-demo)
 <br></br>
 
 # CLIENT APPLICATION:
