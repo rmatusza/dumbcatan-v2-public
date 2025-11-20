@@ -25,7 +25,7 @@ const Banner = () => {
     dispatch(metaDataActions.resetMetadata());
     navigate(ENDPOINTS.authentication);
   }
-
+  
   return (
     <>
       <div className="w-full flex justify-between bg-parchment/70 text-black font-yatra text-xl pt-0 pb-0 shadow-md border-b-4 border-t-4">

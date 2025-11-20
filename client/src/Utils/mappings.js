@@ -1,7 +1,14 @@
 import { THEME_NAMES, MUSIC_SOURCES } from "./constants";
 
-/// - music is organized into themes and tracks
-/// -> each theme has one or more tracks and the below object defines the mapping between a theme and its tracks
+/// FILE INFO
+// - this file contains all data mappings used in the app
+// - these mappings are used by various functions to determine the relationship between one piece of data and another - for example the road id that is between node 1 
+//   and node 2, or the node ids that are associated with a particular resource tile, etc.
+
+/// MUSIC TRACKS
+// - music is organized into themes and tracks - where each theme can have one or more tracks
+// - every single track is stored within the MUSIC_SOURCES object and named according to the theme it belongs to
+// - this object maps a theme name to its associated tracks
 export const MUSIC_TRACKS = {};
 MUSIC_TRACKS[THEME_NAMES.homeTheme] = 
 [
@@ -12,6 +19,7 @@ MUSIC_TRACKS[THEME_NAMES.homeTheme] =
   MUSIC_SOURCES.homeTheme5,
 ]
 
+// indicates the amount of each kind of development card
 export const devCardCounts = 
 {
   'knight': 14,
@@ -21,6 +29,7 @@ export const devCardCounts =
   'monopoly': 2
 };
 
+// indicates the amount of each kind of resource tile
 export const tileCounts =
 {
   'hay': 4,
@@ -30,6 +39,7 @@ export const tileCounts =
   'stone': 3
 };
 
+// indicates how many resource tiles each row contains
 export const rowTileCount = 
 {
   1: 3,
@@ -39,20 +49,22 @@ export const rowTileCount =
   5: 3
 };
 
-export const diceIdToFrequencyMap = 
-{
-  2: 1,
-  3: 2,
-  4: 3,
-  5: 4,
-  6: 5,
-  8: 5,
-  9: 4,
-  10: 3,
-  11: 2,
-  12: 1
-};
+/// removing because using scanned dice ids which already contain a frequency marking
+// export const diceIdToFrequencyMap = 
+// {
+//   2: 1,
+//   3: 2,
+//   4: 3,
+//   5: 4,
+//   6: 5,
+//   8: 5,
+//   9: 4,
+//   10: 3,
+//   11: 2,
+//   12: 1
+// };
 
+// indicates the number of each dice id
 export const diceIdCount = 
 {
   2: 1,
@@ -65,6 +77,27 @@ export const diceIdCount =
   10: 2,
   11: 2,
   12: 1
+};
+
+/// removing for now because not randomizing ports
+// export const portCount =
+// {
+//   'all': 4,
+//   'stone': 1,
+//   'hay': 1,
+//   'sheep': 1,
+//   'brick': 1,
+//   'wood': 1
+// };
+
+// - indicates the amount of cards that have to be supplied by the user during a trade
+//   with a port
+// - all represents the wildcard port, while other represents any port that is not a 
+//   wildcard port
+export const portRestrictions =
+{
+  'all': 3,
+  'other': 2
 };
 
 /// - used in conjunction with generated port placements called "ports"
@@ -83,22 +116,13 @@ export const portToNodeMap =
   8: [46, 47]
 };
 
-export const portCount =
-{
-  'all': 4,
-  'stone': 1,
-  'hay': 1,
-  'sheep': 1,
-  'brick': 1,
-  'wood': 1
-};
-
-export const portRestrictions =
-{
-  'all': 3,
-  'other': 2
-};
-
+// - indicates which nodes are associated with each resource tile
+// - tiles are ordered from left to right, top to bottom with the number of tiles per 
+//   row being 3, 4, 5, 4, 3
+// - used in conjunction with the tile data object which maps a resource tile 
+//   to an index in this array in addtion to the dice id that is on it - that 
+//   object together with this array say when X number is rolled, 
+//   nodes at index Y get resource Z
 export const nodeToTileMap = 
 [
   [2,3,11,10,9,1],
@@ -122,6 +146,8 @@ export const nodeToTileMap =
   [45,46,54,53,52,44],
 ];
 
+// indicates which road is in between two given nodes
+// ex. road 7 connects node 1 and node 9
 export const nodeToRoadMap = {
   1: {
     2: 1,
@@ -300,4 +326,62 @@ export const nodeToRoadMap = {
     54: 72
   },
   // NOTE: node 54 doesn't connect to any higher numbered node so it is skipped
+};
+
+// maps a given node to the nodes that are adjacent to it
+export const nodeToNeighborsMap = {
+  1: [2, 9],
+  2: [1, 3],
+  3: [2, 11, 4],
+  4: [3, 5],
+  5: [4, 6, 13],
+  6: [5, 7],
+  7: [6, 15],
+  8: [9, 18],
+  9: [1, 8, 10],
+  10: [9, 11, 20],
+  11: [3, 10, 12],
+  12: [11, 13, 22],
+  13: [5, 12, 14],
+  14: [13, 15, 24],
+  15: [7, 14, 16],
+  16: [15, 26],
+  17: [18, 28],
+  18: [8, 17, 19],
+  19: [18, 20, 30],
+  20: [10, 19, 21],
+  21: [20, 22, 32],
+  22: [12, 21, 23],
+  23: [22, 24, 34],
+  24: [14, 23, 25],
+  25: [24, 26, 36],
+  26: [16, 25, 27],
+  27: [26, 38],
+  28: [17, 29],
+  29: [28, 30, 39],
+  30: [19, 29, 31],
+  31: [30, 32, 41],
+  32: [21, 31, 33],
+  33: [32, 34, 43],
+  34: [23, 33, 35],
+  35: [34, 36, 45],
+  36: [25, 35, 37],
+  37: [36, 38, 47],
+  38: [27, 37],
+  39: [28, 40],
+  40: [39, 41, 48],
+  41: [31, 40, 42],
+  42: [41, 43, 50],
+  43: [33, 42, 44],
+  44: [43, 45, 52],
+  45: [35, 44, 46],
+  46: [45, 47, 54],
+  47: [37, 47],
+  48: [39, 49],
+  49: [48, 50],
+  50: [42, 49, 51],
+  51: [50, 52],
+  52: [44, 51, 53],
+  53: [52, 54],
+  54: [46, 53],
 };

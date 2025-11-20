@@ -1,8 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import applicationAlertSlice from "./Slices/ApplicationAlertSlice";
-import metaDataSlice from "./Slices/MetaDataSlice";
-import userSlice from "./Slices/UserSlice";
 import gameSlice from "./Slices/GameSlice";
+import metaDataSlice from "./Slices/MetaDataSlice";
+import PlayerSlice from "./Slices/PlayerSlice";
+import userSlice from "./Slices/UserSlice";
 
 const Store = configureStore(
   {
@@ -11,6 +12,7 @@ const Store = configureStore(
       gameData: gameSlice.reducer,
       metaData: metaDataSlice.reducer,
       applicationAlert: applicationAlertSlice.reducer,
+      playerData: PlayerSlice.reducer,
     }
   }
 );

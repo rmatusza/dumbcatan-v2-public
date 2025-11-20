@@ -1,15 +1,16 @@
 package com.dumbcatanv2.dumb_catan_v2_server.service;
 
-import com.dumbcatanv2.dumb_catan_v2_server.exceptions.InvalidUsernameException;
-import com.dumbcatanv2.dumb_catan_v2_server.dto.AuthRequest;
-import com.dumbcatanv2.dumb_catan_v2_server.dto.UserDataResponse;
+import com.dumbcatanv2.dumb_catan_v2_server.dto.request.AuthRequest;
+import com.dumbcatanv2.dumb_catan_v2_server.dto.response.UserResponse;
 import com.dumbcatanv2.dumb_catan_v2_server.entity.User;
+import com.dumbcatanv2.dumb_catan_v2_server.exceptions.NonUniqueUsernameException;
 import com.dumbcatanv2.dumb_catan_v2_server.repo.UserRepository;
 import com.dumbcatanv2.dumb_catan_v2_server.security.CustomUserDetails;
 import com.dumbcatanv2.dumb_catan_v2_server.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,19 +28,23 @@ public class AuthService {
 
     /*NOTE: JwtAuthFilter handles the event in which jwt is either invalid or expired, so we don't have to handle
     * exceptions here */
-    public UserDataResponse authenticate(Authentication authentication){
+    public UserResponse authenticate(){
+        Authentication authentication = SecurityContextHolder
+                .getContext()
+                .getAuthentication();
+
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 
-        return new UserDataResponse(
-                userDetails.getUserID(),
-                userDetails.getUsername(),
-                userDetails.getRole(),
-                userDetails.getAvatarURL(),
-                userDetails.getActiveGames()
+        return new UserResponse(
+                    userDetails.getUserId(),
+                    userDetails.getUsername(),
+                    userDetails.getRole(),
+                    userDetails.getAvatarURL(),
+                    userDetails.getActiveGames()
         );
     }
 
-    public UserDataResponse signin(AuthRequest req) {
+    public UserResponse signin(AuthRequest req) {
 
         /*Spring Security will throw a variety of potential exceptions that are caught below if authenticate() fails*/
         Authentication authentication = authenticationManager.authenticate(
@@ -51,8 +56,8 @@ public class AuthService {
 
 
 
-        return new UserDataResponse(
-                userDetails.getUserID(),
+        return new UserResponse(
+                userDetails.getUserId(),
                 userDetails.getUsername(),
                 userDetails.getRole(),
                 userDetails.getAvatarURL(),
@@ -61,10 +66,10 @@ public class AuthService {
         );
     }
 
-    public UserDataResponse signup(AuthRequest req) {
+    public UserResponse signup(AuthRequest req) {
 
         if(userRepo.existsByUsername(req.getUsername())) {
-            throw new InvalidUsernameException("Username already exists");
+            throw new NonUniqueUsernameException("Username already exists");
         }
 
         User user = new User(req.getUsername(), passwordEncoder.encode(req.getPassword()));
@@ -72,8 +77,8 @@ public class AuthService {
         User newUser = userRepo.save(user);
         String jwt = jwtUtil.generateToken(newUser.getUsername());
 
-        return new UserDataResponse(
-                newUser.getUserID(),
+        return new UserResponse(
+                newUser.getUserId(),
                 newUser.getUsername(),
                 newUser.getRole(),
                 newUser.getAvatarURL(),

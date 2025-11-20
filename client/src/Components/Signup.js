@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { signupUser } from '../Redux/ActionCreators/UserActions';
-import { APP_CONTEXT, CUSTOM_STYLES } from '../Utils/constants';
+import { APP_CONTEXT, CUSTOM_STYLES as S} from '../Utils/constants';
 import Form from '../UI/Form';
 
 const Signup = () => {
@@ -9,7 +9,7 @@ const Signup = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
-    // react hook form automatically prevents form submission if errors exist
+    // react hook form automatically prevents form submission if validation errors exist, so no need to add any checks in the submit handler
     dispatch(signupUser(
       {
         username: data.username,
@@ -68,24 +68,23 @@ const Signup = () => {
           })
         },
       ]}
-      formSubmitHandler={onSubmit}
+      buttons={
+        [
+          {
+            type: 'submit',
+            name: 'Sign Up',
+            namedStyles: [S.button.classicCatanButtonSingle],
+          }
+        ]
+      }
       styles={{
         form: "flex flex-col space-y-4",
         input: "w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400",
         fieldHeading: 'font-yatra text-2xl text-center',
         validationError: "text-red-500 text-center font-bold"
       }}
-      buttons={
-        [
-          {
-            type: 'submit',
-            name: 'Sign Up',
-            namedStyles: [CUSTOM_STYLES.button.classicCatanButtonSingle],
-            namedStyleAsAddOn: true,
-          }
-        ]
-      }
       currentContext={APP_CONTEXT.signup}
+      formSubmitHandler={onSubmit}
     />
   )
 }

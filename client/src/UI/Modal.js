@@ -1,7 +1,9 @@
 import ReactDOM from "react-dom";
+import { buildClassName } from "../Functions/utility";
 
-const Modal = ({ children, background, styles, dimensions }) => {
-  const customStyles = styles || '';
+const Modal = ({ children, background, dimensions, tailwindStyles = "", namedStyles = [], overwriteBaseStyle = false }) => {
+  const baseStyle = "flex flex-col p-8";
+  const customStyle = tailwindStyles;
   const style = {
     backgroundImage: background ? `url(${background})` : '',
     backgroundSize: '800px 500px',
@@ -12,7 +14,7 @@ const Modal = ({ children, background, styles, dimensions }) => {
 
   return ReactDOM.createPortal(
     <div className="fixed inset-0 bg-[rgba(43,26,9,0.7)] flex items-center justify-center z-50">
-      <div className={`flex flex-col p-8 ${customStyles}`} style={style} onClick={(e) => e.stopPropagation()}>
+      <div className={buildClassName(baseStyle, customStyle, namedStyles, overwriteBaseStyle)} style={style} onClick={(e) => e.stopPropagation()}>
         {children}
       </div>
     </div>,

@@ -8,7 +8,7 @@ const initialState =
   soundEffectsEnabled: false,
   playedTracks: [],
   music: {},
-  background: BACKGROUND_PATHS.authentication,
+  background: BACKGROUND_PATHS.none,
   gameInstancePageMessageAlreadyDisplayed: false
 }
 
@@ -27,7 +27,6 @@ const metaDataSlice = createSlice(
         state.soundEffectsEnabled = !state.soundEffectsEnabled;
       },
       setBackground(state, action) {
-        // console.log(action.payload.background)
         state.background = action.payload.background;
       },
       updatePlayedTracks(state, action) {

@@ -1,12 +1,12 @@
 import { PLAYER_COLORS } from "../Utils/constants";
 
-const ColorPicker = ({ selectedColor, setSelectedColor }) => {
-
+const ColorPicker = ({ selectedColor, setSelectedColor, customColors }) => {
+  const colors = customColors || PLAYER_COLORS;
   const svgWidth = 400;
   const svgHeight = 100;
-  const spacing = svgWidth / (PLAYER_COLORS.length + 1);
+  const spacing = svgWidth / (colors.length + 1);
 
-  const colorData = PLAYER_COLORS.map((color, i) => ({
+  const colorData = colors.map((color, i) => ({
     color,
     cx: spacing * (i + 1),
   }));
@@ -19,28 +19,29 @@ const ColorPicker = ({ selectedColor, setSelectedColor }) => {
         preserveAspectRatio="xMidYMid meet"
       >
         {colorData.map(({ color, cx }) => (
-          <circle
-            key={`ring-${color}`}
-            cx={cx}
-            cy={svgHeight / 2}
-            r={28}
-            fill="none"
-            stroke="yellow"
-            strokeWidth={6}
-            visibility={selectedColor === color ? 'visible' : 'hidden'}
-          />
-        ))}
-
-        {colorData.map(({ color, cx }) => (
-          <circle
-            key={color}
-            cx={cx}
-            cy={svgHeight / 2}
-            r={20}
-            fill={color}
-            style={{ cursor: 'pointer' }}
-            onClick={() => setSelectedColor(color)}
-          />
+          <>
+            {/* outter circle that highlights user selection */}
+            <circle
+              key={`ring-${color}`}
+              cx={cx}
+              cy={svgHeight / 2}
+              r={28}
+              fill="none"
+              stroke="yellow"
+              strokeWidth={6}
+              visibility={selectedColor === color ? 'visible' : 'hidden'}
+            />
+            {/* color icon that has to be clicked to make selection */}
+            <circle
+              key={color}
+              cx={cx}
+              cy={svgHeight / 2}
+              r={20}
+              fill={color}
+              style={{ cursor: 'pointer' }}
+              onClick={() => setSelectedColor(color)}
+            />
+          </>
         ))}
       </svg>
     </div>

@@ -1,70 +1,205 @@
 // GENERATED THEN STATIC - SAVED IN DB
-export const tileOrder = 
-[
-  [ 'hay', 'desert', 'hay' ],
-  [ 'brick', 'hay', 'sheep', 'brick' ],
-  [ 'wood', 'stone', 'wood', 'sheep', 'brick' ],
-  [ 'wood', 'sheep', 'hay', 'stone' ],
-  [ 'sheep', 'wood', 'stone' ]
-];
+export const tileOrder =
+  [
+    ['hay', 'desert', 'hay'],
+    ['brick', 'hay', 'sheep', 'brick'],
+    ['wood', 'stone', 'wood', 'sheep', 'brick'],
+    ['wood', 'sheep', 'hay', 'stone'],
+    ['sheep', 'wood', 'stone']
+  ];
 
 // GENERATED THEN STATIC - SAVED IN DB
 export const diceIdOrder =
-[
-  [ 11, null, 5 ],
-  [ 9, 10, 3, 6 ],
-  [ 5, 4, 10, 9, 11 ],
-  [ 8, 4, 8, 3 ],
-  [ 12, 6, 2 ]
-];
+  [
+    [11, null, 5],
+    [9, 10, 3, 6],
+    [5, 4, 10, 9, 11],
+    [8, 4, 8, 3],
+    [12, 6, 2]
+  ];
 
-// GENERATED THEN DYNAMIC (robber state can change) - SAVED IN DB
-export const tileData = 
+// GENERATED ON THE FLY WHEN NEW GAME IS CREATED OR EXISTING GAME OPENED
+// -> ONLY SAVED LOCALLY
+export const tileData =
 {
-  '2': { resource: 'stone', robber: false, nodeIndex: 18 },
-  '12': { resource: 'sheep', robber: false, nodeIndex: 16 },
-  '11-a': { resource: 'hay', robber: false, nodeIndex: 0 },
-  '5-a': { resource: 'hay', robber: false, nodeIndex: 2 },
-  '9-a': { resource: 'brick', robber: false, nodeIndex: 3 },
-  '10-a': { resource: 'hay', robber: false, nodeIndex: 4 },
-  '3-a': { resource: 'sheep', robber: false, nodeIndex: 5 },
-  '6-a': { resource: 'brick', robber: false, nodeIndex: 6 },
-  '5-b': { resource: 'wood', robber: false, nodeIndex: 7 },
-  '4-a': { resource: 'stone', robber: false, nodeIndex: 8 },
-  '10-b': { resource: 'wood', robber: false, nodeIndex: 9 },
-  '9-b': { resource: 'sheep', robber: false, nodeIndex: 10 },
-  '11-b': { resource: 'brick', robber: false, nodeIndex: 11 },
-  '8-a': { resource: 'wood', robber: false, nodeIndex: 12 },
-  '4-b': { resource: 'sheep', robber: false, nodeIndex: 13 },
-  '8-b': { resource: 'hay', robber: false, nodeIndex: 14 },
-  '3-b': { resource: 'stone', robber: false, nodeIndex: 15 },
-  '6-b': { resource: 'wood', robber: false, nodeIndex: 17 }
+  '2': { resource: 'stone', nodeIndex: 18 },
+  '12': { resource: 'sheep', nodeIndex: 16 },
+  '11-a': { resource: 'hay', nodeIndex: 0 },
+  '5-a': { resource: 'hay', nodeIndex: 2 },
+  '9-a': { resource: 'brick', nodeIndex: 3 },
+  '10-a': { resource: 'hay', nodeIndex: 4 },
+  '3-a': { resource: 'sheep', nodeIndex: 5 },
+  '6-a': { resource: 'brick', nodeIndex: 6 },
+  '5-b': { resource: 'wood', nodeIndex: 7 },
+  '4-a': { resource: 'stone', nodeIndex: 8 },
+  '10-b': { resource: 'wood', nodeIndex: 9 },
+  '9-b': { resource: 'sheep', nodeIndex: 10 },
+  '11-b': { resource: 'brick', nodeIndex: 11 },
+  '8-a': { resource: 'wood', nodeIndex: 12 },
+  '4-b': { resource: 'sheep', nodeIndex: 13 },
+  '8-b': { resource: 'hay', nodeIndex: 14 },
+  '3-b': { resource: 'stone', nodeIndex: 15 },
+  '6-b': { resource: 'wood', nodeIndex: 17 }
 };
 
 // GENERATED THEN DYNAMIC (cards will be deleted as they are pulled by users) - SAVED IN DB
-export const devCards = 
-[
-  'knight',       'victoryPoint',
-  'knight',       'knight',
-  'knight',       'knight',
-  'knight',       'roadBuilding',
-  'victoryPoint', 'yearOfPlenty',
-  'knight',       'roadBuilding',
-  'knight',       'knight',
-  'yearOfPlenty', 'knight',
-  'knight',       'victoryPoint',
-  'knight',       'knight',
-  'victoryPoint', 'monopoly',
-  'victoryPoint', 'knight',
-  'knight'
-];
+export const devCards =
+  [
+    'knight', 'victoryPoint',
+    'knight', 'knight',
+    'knight', 'knight',
+    'knight', 'roadBuilding',
+    'victoryPoint', 'yearOfPlenty',
+    'knight', 'roadBuilding',
+    'knight', 'knight',
+    'yearOfPlenty', 'knight',
+    'knight', 'victoryPoint',
+    'knight', 'knight',
+    'victoryPoint', 'monopoly',
+    'victoryPoint', 'knight',
+    'knight'
+  ];
 
 // GENERATED THEN STATIC - SAVED IN DB
-export const portOrder = 
-[
-  'hay',   'all',
-  'stone', 'all',
-  'sheep', 'all',
-  'all',   'wood',
-  'brick'
-];
+export const portOrder =
+  [
+    'hay', 'all',
+    'stone', 'all',
+    'sheep', 'all',
+    'all', 'wood',
+    'brick'
+  ];
+
+// COPY SAVED IN DB - MODIFIED AS GAME PROGRESSES
+export const nodeData = {
+  '1': { structure: null, color: null },
+  '2': { structure: null, color: null },
+  '3': { structure: null, color: null },
+  '4': { structure: null, color: null },
+  '5': { structure: null, color: null },
+  '6': { structure: null, color: null },
+  '7': { structure: null, color: null },
+  '8': { structure: null, color: null },
+  '9': { structure: null, color: null },
+  '10': { structure: null, color: null },
+  '11': { structure: null, color: null },
+  '12': { structure: null, color: null },
+  '13': { structure: null, color: null },
+  '14': { structure: null, color: null },
+  '15': { structure: null, color: null },
+  '16': { structure: null, color: null },
+  '17': { structure: null, color: null },
+  '18': { structure: null, color: null },
+  '19': { structure: null, color: null },
+  '20': { structure: null, color: null },
+  '21': { structure: null, color: null },
+  '22': { structure: null, color: null },
+  '23': { structure: null, color: null },
+  '24': { structure: null, color: null },
+  '25': { structure: null, color: null },
+  '26': { structure: null, color: null },
+  '27': { structure: null, color: null },
+  '28': { structure: null, color: null },
+  '29': { structure: null, color: null },
+  '30': { structure: null, color: null },
+  '31': { structure: null, color: null },
+  '32': { structure: null, color: null },
+  '33': { structure: null, color: null },
+  '34': { structure: null, color: null },
+  '35': { structure: null, color: null },
+  '36': { structure: null, color: null },
+  '37': { structure: null, color: null },
+  '38': { structure: null, color: null },
+  '39': { structure: null, color: null },
+  '40': { structure: null, color: null },
+  '41': { structure: null, color: null },
+  '42': { structure: null, color: null },
+  '43': { structure: null, color: null },
+  '44': { structure: null, color: null },
+  '45': { structure: null, color: null },
+  '46': { structure: null, color: null },
+  '47': { structure: null, color: null },
+  '48': { structure: null, color: null },
+  '49': { structure: null, color: null },
+  '50': { structure: null, color: null },
+  '51': { structure: null, color: null },
+  '52': { structure: null, color: null },
+  '53': { structure: null, color: null },
+  '54': { structure: null, color: null },
+};
+
+// COPY SAVED IN DB - MODIFIED AS GAME PROGRESSES
+export const roadData = {
+  '1': null,
+  '2': null,
+  '3': null,
+  '4': null,
+  '5': null,
+  '6': null,
+  '7': null,
+  '8': null,
+  '9': null,
+  '10': null,
+  '11': null,
+  '12': null,
+  '13': null,
+  '14': null,
+  '15': null,
+  '16': null,
+  '17': null,
+  '18': null,
+  '19': null,
+  '20': null,
+  '21': null,
+  '22': null,
+  '23': null,
+  '24': null,
+  '25': null,
+  '26': null,
+  '27': null,
+  '28': null,
+  '29': null,
+  '30': null,
+  '31': null,
+  '32': null,
+  '33': null,
+  '34': null,
+  '35': null,
+  '36': null,
+  '37': null,
+  '38': null,
+  '39': null,
+  '40': null,
+  '41': null,
+  '42': null,
+  '43': null,
+  '44': null,
+  '45': null,
+  '46': null,
+  '47': null,
+  '48': null,
+  '49': null,
+  '50': null,
+  '51': null,
+  '52': null,
+  '53': null,
+  '54': null,
+  '55': null,
+  '56': null,
+  '57': null,
+  '58': null,
+  '59': null,
+  '60': null,
+  '61': null,
+  '62': null,
+  '63': null,
+  '64': null,
+  '65': null,
+  '66': null,
+  '67': null,
+  '68': null,
+  '69': null,
+  '70': null,
+  '71': null,
+  '72': null
+}

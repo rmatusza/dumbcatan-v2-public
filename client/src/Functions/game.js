@@ -1,34 +1,31 @@
-import 
-{ 
-  spliceArray, 
-  getElementIdx,
-  generateBoolean,
-  generateRandomNumber  
-} from "./utility";
-import 
-{ 
-  tileIdentities,
+import { cloneDeep } from "lodash";
+import {
   devCardIdentities,
   ports,
+  REQUEST_TYPES,
+  TILE_IDENTITIES,
 } from "../Utils/constants";
-import 
-{ 
-  tileCounts, 
+import {
   devCardCounts,
-  rowTileCount,
   diceIdCount,
-  portToNodeMap,
-  portCount,
+  // portCount,
   nodeToRoadMap,
+  rowTileCount,
+  tileCounts
 } from "../Utils/mappings";
-import { nodeData, roadData } from "../Utils/templates";
-
+import {
+  generateBoolean,
+  generateRandomNumber,
+  getElementIdx,
+  sendHttpRequest,
+  spliceArray
+} from "./utility";
 
 export const shuffleTiles = () => {
   const DESERT_TILE_ODDS = 1 / 12;
 
   let tileCountsCpy = { ...tileCounts };
-  let tileTypesCpy = [...tileIdentities];
+  let tileTypesCpy = [...TILE_IDENTITIES];
 
   let shuffledTiles = [];
   let rowArr = [];
@@ -100,7 +97,7 @@ export const shuffleDiceIds = (desertTileCoordinates) => {
   while (diceRollIdentities.length > 0 || !desertTileHandled) {
 
     if (!desertTileHandled && ((currRow - 1) === desertTileCoordinates[0] && (rowArr.length) === desertTileCoordinates[1])) {
-      rowArr.push(null);
+      rowArr.push(-1);
       if (rowArr.length === rowTileCount[currRow]) {
         shuffledDiceIds.push(rowArr);
         rowArr = [];
@@ -154,7 +151,7 @@ export const createTileData = (shuffledTiles, shuffledDiceIds) => {
             tileData[tileKey] =
             {
               'resource': shuffledTiles[rowIdx][columnIdx],
-              'robber': false,
+
               'nodeIndex': nodeIdx
             }
           }
@@ -166,17 +163,13 @@ export const createTileData = (shuffledTiles, shuffledDiceIds) => {
           tileData[tileKey] =
           {
             'resource': shuffledTiles[rowIdx][columnIdx],
-            'robber': false,
             'nodeIndex': nodeIdx
           }
         }
         nodeIdx++;
       }
-
     });
-
   });
-
   return tileData;
 };
 
@@ -219,6 +212,7 @@ export const shuffleDevCards = () => {
   return shuffledDevCards;
 };
 
+let portCount = [];
 export const shufflePorts = () => {
   let portsCpy = [...ports];
   const portCountCpy = { ...portCount };
@@ -259,6 +253,22 @@ export const shufflePorts = () => {
   return shuffledPorts;
 };
 
+const createNodeData = () => {
+  const nodeData = {};
+  for (let i = 1; i <= 54; i++) {
+    nodeData[i] = { structure: null, color: null };
+  };
+  return nodeData;
+}
+
+const createRoadData = () => {
+  const roadData = {};
+  for (let i = 1; i <= 72; i++) {
+    roadData[i] = null;
+  };
+  return roadData;
+};
+
 export const constructRoad = (nodes) => {
   console.log('NODES: ' + nodes);
   const start = nodes[0];
@@ -266,36 +276,53 @@ export const constructRoad = (nodes) => {
 
   console.log('PLACED ROAD #: ')
   console.log(nodeToRoadMap[start][end]);
-}
+};
 
 export const constructBuilding = (node) => {
   console.log('CONSTRUCTING A BUILDING AT NODE: ' + node);
-}
+};
 
 export const createNewGameData = () => {
   const [tileOrder, desertTileCoordinates] = shuffleTiles();
   const diceIdOrder = shuffleDiceIds(desertTileCoordinates);
   const devCards = shuffleDevCards();
+  const portOrder = shufflePorts();
   const tileData = createTileData(tileOrder, diceIdOrder);
   return {
     tileOrder,
     diceIdOrder,
+    portOrder,
     tileData,
     devCards,
-    nodeData,
-    roadData
   };
 };
 
-// export const initializeNodeToPortMap = (initializedPorts) => {
+export const prepareGameInstance = (dispatch, initializeGameData, initializePlayerData, gameData, playerData) => {
+  const gameDataCpy = cloneDeep(gameData);
+  const tileData = createTileData(gameData.tileOrder, gameData.diceIdOrder);
+  gameDataCpy.tileData = tileData;
 
-//   for (let i = 1; i < 10; i++) {
-//     let linkedNodesArr = portToNodeMap[i];
-//     let port = initializedPorts[i-1];
-    
-//     nodeToPortMap[linkedNodesArr[0]] = port;
-//     nodeToPortMap[linkedNodesArr[1]] = port;
+  dispatch(initializeGameData(gameDataCpy));
+  dispatch(initializePlayerData(playerData));
+};
 
-//   }
-//   return nodeToPortMap;
-// };
+export const createGame = async (gameData, token) => {
+  return await sendHttpRequest(REQUEST_TYPES.post, '/game', token, gameData);
+};
+
+export const fetchActiveGames = async (token) => {
+  // if(!userId) return; /// prevents error on refresh on games page
+  return await sendHttpRequest(REQUEST_TYPES.get, `/game`, token);
+};
+
+export const deleteGame = async (gameId, token) => {
+  return await sendHttpRequest(REQUEST_TYPES.delete, `/game/${gameId}`, token);
+};
+
+export const createGameInvite = async(recipientUsername, gameId, token) => {
+  const inviteData = {
+    gameId,
+    recipientUsername
+  };
+  return await sendHttpRequest(REQUEST_TYPES.post, `/invite`, token, inviteData);
+}

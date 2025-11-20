@@ -1,42 +1,26 @@
-const Button = ({ type, replacementStyle = "", styleAddOns = "", customCSS = null, namedStyles = [], namedStyleAsAddOn = false, name, callBack, args = [] }) => {
+import { buildClassName } from "../Functions/utility";
+
+const Button = ({ type, name, callBack, args = [], tailwindStyles = "", CssStyles = {}, namedStyles = [], overwriteBaseStyle = false, passEventObject = false }) => {
 
   const baseStyle = "px-4 py-2 rounded transition-colors duration-300 w-full";
+  const customStyle = tailwindStyles;
 
-  const handleClick = () => {
+  const handleClick = (e) => {
     if (callBack) {
-      callBack(...args);
+      if(passEventObject) {
+        callBack(e, ...args);
+      }
+      else{
+        callBack(...args);
+      }
     }
-  }
-
-  const buildStyles = () => {
-    let customStyle = styleAddOns;
-
-    if (replacementStyle.trim().length > 0) {
-      return replacementStyle;
-    }
-
-    if (namedStyles.length > 0) {
-      namedStyles.forEach(style => {
-        customStyle += " "+style;
-      })
-    }    
-
-    if(namedStyleAsAddOn) {
-      customStyle += " " + baseStyle;
-    }
-
-    if(customStyle.trim().length === 0) {
-      return baseStyle;
-    }
-
-    return customStyle;
-  }
+  };
 
   return (
-    <button key={name} type={type} onClick={handleClick} className={buildStyles()} style={customCSS}>
+    <button key={name} type={type} onClick={handleClick} className={buildClassName(baseStyle, customStyle, namedStyles, overwriteBaseStyle)} style={CssStyles}>
       {name}
     </button>
   )
-}
+};
 
 export default Button;

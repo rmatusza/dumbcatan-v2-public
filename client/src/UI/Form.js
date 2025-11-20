@@ -32,7 +32,7 @@ const Form = ({
   //   }, {})
   // );
 
-  const onSubmit = async (data) => {
+  const submitForm = async (data) => {
     setTopLevelFormError(false);
     formSubmitHandler(data);
     // reset();
@@ -57,14 +57,14 @@ const Form = ({
         </div>
       }
       {
-        !topLevelFormError && (!appAlert.message || appAlert.context !== currentContext) && formInstructions
+        formInstructions && !topLevelFormError && (!appAlert.message || appAlert.context !== currentContext)
         &&
         <p className={`${S.text.modalTextYellow} text-center underline mb-5 text-3xl`}>
           {formInstructions}
         </p>
       }
 
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form || "flex flex-col space-y-4"}>
+      <form onSubmit={handleSubmit(submitForm)} className={styles.form || "flex flex-col space-y-4"}>
         {fields.map((field) => (
           <label key={field.labelKey} className={styles.label || "block"}>
             <h3 className={styles.fieldHeading || "mb-1 font-medium"}>{field.headingName}</h3>
@@ -78,12 +78,12 @@ const Form = ({
               errors[field.inputName] 
               && 
               <div className='flex justify-center'>
-                <span className={styles.validationError || "text-red-500 text-sm"}>{errors[field.inputName]?.message}</span>
+                <p className={styles.validationError || "text-red-500 text-sm"}>{errors[field.inputName]?.message}</p>
               </div>
             }
           </label>
         ))}
-        <div className="flex-1 flex flex-col justify-end">
+        <div className={`flex-1 flex flex-col justify-end`}>
           <div className={`flex flex-row justify-between gap-4 ${styles.buttonContainer}`}>
             {
               buttons.map(button => {
@@ -91,13 +91,12 @@ const Form = ({
                   <Button
                     type={button.type}
                     name={button.name}
-                    replacementStyle={button.replacementStyle}
-                    styleAddOns={button.styleAddOns}
-                    customCSS={button.customCSS}
-                    namedStyles={button.namedStyles}
-                    namedStyleAsAddOn={button.namedStyleAsAddOn}
                     callBack={button.callBack}
                     args={button.args}
+                    tailwindStyles={button.tailwindStyles}
+                    CssStyles={button.CssStyles}
+                    namedStyles={button.namedStyles}
+                    overwriteBaseStyle={button.overwriteBaseStyle}
                   />
                 )
               })

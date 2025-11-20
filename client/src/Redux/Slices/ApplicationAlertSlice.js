@@ -6,6 +6,7 @@ const initialState =
   status: null,
   type: null,
   context: null,
+  alertAsPopup: false
 }
 
 const applicationAlertSlice = createSlice(
@@ -14,10 +15,7 @@ const applicationAlertSlice = createSlice(
     initialState: initialState,
     reducers: {
       setApplicationAlert(state, action) {
-        state.message = action.payload.message
-        state.status = action.payload.status
-        state.type = action.payload.type
-        state.context = action.payload.context
+        return { ...state, ...action.payload };
       },
       clearApplicationAlert(state) {
         return initialState;
