@@ -1,5 +1,4 @@
 package com.dumbcatanv2.dumb_catan_v2_server.security;
-import com.dumbcatanv2.dumb_catan_v2_server.util.JwtAuthenticator;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
