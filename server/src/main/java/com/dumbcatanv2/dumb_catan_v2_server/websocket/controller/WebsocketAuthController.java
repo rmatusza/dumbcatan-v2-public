@@ -1,7 +1,7 @@
 package com.dumbcatanv2.dumb_catan_v2_server.websocket.controller;
 
 import com.dumbcatanv2.dumb_catan_v2_server.util.AuthMessageParser;
-import com.dumbcatanv2.dumb_catan_v2_server.util.JwtAuthenticator;
+import com.dumbcatanv2.dumb_catan_v2_server.security.JwtAuthenticator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessagingException;
