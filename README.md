@@ -3,11 +3,12 @@
 ### This application is a browser-based, real-time, multiplayer clone of the "Settlers of Catan" board game built with React.js, Spring Boot, and MySQL
 <br></br>
 
-🚧 This project is a work in progress. It is intended to be an improved version of my completed original app which can be found on my Github page: [Front end](https://github.com/rmatusza/DumbCatanClient-Public) ----- [Back end](https://github.com/rmatusza/DumbCatanServer-Public)  
-The features mentioned in this README therefore apply to the future completed application and may not have all been implemented at the time of reading this. A list of the currently implemented features as well as in progress features can be viewed [at the bottom of this file](#feature-progress-log)
+🚧 This project is a work in progress. It is intended to be an improved version of my completed original app which can also be found on my Github page. Therefore, The features mentioned in this README may not have all been implemented at the time of reading this, in which case they serve to describe what the application should do when the implementation is completed.
+
+A list of the currently implemented features as well as in progress features can be viewed [at the bottom of this file](#feature-progress-log)
 <br></br>
 
-🚀 You can run a demo version of this project locally to see and experiment with the features that have currently been implemented by following the instructions outlined in the README file within the [Demo Application Repository](https://github.com/rmatusza/dumbcatan-v2-demo)
+🚀 You can run a demo version of this project locally by following the instructions outlined in the README file within the [Demo Application Repository](https://github.com/rmatusza/dumbcatan-v2-demo)
 <br></br>
 
 # CLIENT APPLICATION:
@@ -41,9 +42,7 @@ The features mentioned in this README therefore apply to the future completed ap
 - React Router
 - React Hook Form
 - Tailwind CSS
-- WebSocket (STOMP + SockJS)
-- Docker (for containerization)
-- AWS (for deployment)
+- WebSockets (STOMP + SockJS)
 
 <br></br>
 
@@ -55,7 +54,6 @@ The features mentioned in this README therefore apply to the future completed ap
 - Exposes a RESTful API that enables the client application to perform database operations
 
 ### Persistence
-- MySQL database 
 - Spring Data JPA with Hibernate ORM
 
 ### WebSocket Communication
@@ -68,11 +66,18 @@ The features mentioned in this README therefore apply to the future completed ap
 
 ## 🛠️ Tech Stack
 
-- Java 17+
+- Java 17
 - Spring Boot
-- WebSocket (STOMP + SockJS)
+- WebSockets (STOMP + SockJS)
 - Spring Security (JWT Auth)
 - Spring Data JPA + Hibernate
+
+<br></br>
+
+# PERSISTENCE AND DEPLOYMENT: 
+
+## 🛠️ Tech Stack
+
 - MySQL
 - Docker (for containerization)
 - AWS (for deployment)
