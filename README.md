@@ -4,7 +4,7 @@
 <br></br>
 
 🚧 This project is a work in progress. It is intended to be an improved version of my completed original app which can also be found on my Github page.\
-The features mentioned in this README therefore apply to the future completed application and may not have all been implemented at the time of reading this. A list of the currently implemented features as well as in progress features can be viewed [at the bottom of this file](#feature-progress-log)
+Therefore, The features mentioned in this README may not have all been implemented at the time of reading this, in which case they serve to describe what the application should do when the implementation is completed. A list of the currently implemented features as well as in progress features can be viewed [at the bottom of this file](#feature-progress-log)
 <br></br>
 
 🚀 You can run a demo version of this project locally to see and experiment with the features that have currently been implemented by following the instructions outlined in the README file within the [Demo Application Repository](https://github.com/rmatusza/dumbcatan-v2-demo)
