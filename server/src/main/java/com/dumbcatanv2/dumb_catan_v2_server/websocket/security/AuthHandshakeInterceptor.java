@@ -1,6 +1,6 @@
 package com.dumbcatanv2.dumb_catan_v2_server.websocket.security;
 
-import com.dumbcatanv2.dumb_catan_v2_server.util.JwtAuthenticator;
+import com.dumbcatanv2.dumb_catan_v2_server.security.JwtAuthenticator;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.ServerHttpRequest;

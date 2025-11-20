@@ -1,9 +1,6 @@
-package com.dumbcatanv2.dumb_catan_v2_server.util;
+package com.dumbcatanv2.dumb_catan_v2_server.security;
 
-import com.dumbcatanv2.dumb_catan_v2_server.security.JwtUtil;
-import com.dumbcatanv2.dumb_catan_v2_server.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.JwtException;
-import jdk.swing.interop.SwingInterOpUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;

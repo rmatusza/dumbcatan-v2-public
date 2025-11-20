@@ -1,4 +1,4 @@
-package com.dumbcatanv2.dumb_catan_v2_server.util;
+package com.dumbcatanv2.dumb_catan_v2_server.mapper;
 
 import com.dumbcatanv2.dumb_catan_v2_server.websocket.dto.request.WebsocketAuthRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
