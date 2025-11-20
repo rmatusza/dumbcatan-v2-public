@@ -54,7 +54,6 @@ A list of the currently implemented features as well as in progress features can
 - Exposes a RESTful API that enables the client application to perform database operations
 
 ### Persistence
-- MySQL database 
 - Spring Data JPA with Hibernate ORM
 
 ### WebSocket Communication
