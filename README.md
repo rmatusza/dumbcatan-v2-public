@@ -42,9 +42,7 @@ A list of the currently implemented features as well as in progress features can
 - React Router
 - React Hook Form
 - Tailwind CSS
-- WebSocket (STOMP + SockJS)
-- Docker (for containerization)
-- AWS (for deployment)
+- WebSockets (STOMP + SockJS)
 
 <br></br>
 
