@@ -69,7 +69,7 @@ A list of the currently implemented features as well as in progress features can
 
 ## 🛠️ Tech Stack
 
-- Java 17+
+- Java 17
 - Spring Boot
 - WebSocket (STOMP + SockJS)
 - Spring Security (JWT Auth)
