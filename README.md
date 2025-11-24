@@ -96,14 +96,19 @@ A list of the currently implemented features as well as in progress features can
 - Main Menu: drawer component that provides the user with a variety of options, including creating a game, checking invites, accessing the official rules, etc.
 - User profile: allows user to view and edit their avatar, username, and password
 - Background / Ambient music
+- Game page: this is where the game board is displayed and where the gameplay occurs
 - Creating games
 - Deleting games
 - Viewing all active games
 - Resuming an exited game
+- Websocket configuration
+- Sending and receiving game invites in real time
+- Accepting and declining game invites
 
 ## In Progress
-- Configuring Websockets
-- Adding user interaction sound effects
+- Controller: this is the component that the player will use to perform all of the game actions
+- Starting a game: kicks off the inital game phase where players get to place 2 settlements and 2 roads for free and also collect the associated resource cards
+- Main game phase + Dice roll turn phase: the main game phase is where the game actually beings. each player has a turn which consists of 3 phases: dice roll, trade, build
 
 <br></br>
 
