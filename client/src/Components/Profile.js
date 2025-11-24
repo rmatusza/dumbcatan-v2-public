@@ -22,7 +22,7 @@ const Profile = ({ setProfileModalActive }) => {
       username: profileData?.username || REQUEST_FIELDS.none,
       password: profileData?.password || REQUEST_FIELDS.none,
     }
-    dispatch(updateUserProfile(userData.userId, updatedProfileData, context));
+    dispatch(updateUserProfile(updatedProfileData, context));
   };
 
   return (

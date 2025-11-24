@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { createGameInvite } from "../Functions/game"
 import { APP_ALERT_TYPE, APP_CONTEXT, CUSTOM_STYLES as S } from "../Utils/constants"
 import { getToken } from "../Functions/utility"
@@ -8,11 +8,12 @@ import Form from "../UI/Form"
 
 
 export const SendInvite = ({ closeModal, gameId }) => {
+  const userData = useSelector(state => state.userData);
   const dispatch = useDispatch();
-  const { connected, send, subscribe, client } = useWebsocket();
+  const ws = useWebsocket();
 
   const sendInviteHandler = (recipientUsername) => {
-    send(`/invite/${recipientUsername}/to/game/${gameId}`);
+    ws.send(`/invite/${recipientUsername}/to/game/${gameId}`);
   }
 
   const createInviteHandler = async (data) => {
@@ -47,7 +48,18 @@ export const SendInvite = ({ closeModal, gameId }) => {
             labelKey: 'recipientUsername',
             type: 'text',
             inputName: 'recipientUsername',
-            validation: { required: "Recipient's username is required" }
+            getValidation: (getValues, setTopLevelFormError) => ({
+              validate: (recipientUsername) => {
+                if(recipientUsername.toLowerCase() == userData.username.toLowerCase()){
+                  setTopLevelFormError("You cannot send an invite to yourself");
+                  return false;
+                }
+                else if(!recipientUsername){
+                  setTopLevelFormError("Recipient's username is required");
+                  return false;
+                }
+              }
+            })
           },
         ]}
         buttons={
@@ -70,7 +82,7 @@ export const SendInvite = ({ closeModal, gameId }) => {
             form: "flex flex-col space-y-4 h-full",
             input: "w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400",
             fieldHeading: `font-yatra text-2xl text-center ${S.text.modalTextYellow}`,
-            validationError: "text-red-500 text-center font-bold",
+            validationError: "text-red-500 text-center text-lg font-bold",
             buttonArea: "h-full",
             buttonContainer: "mt-auto"
 

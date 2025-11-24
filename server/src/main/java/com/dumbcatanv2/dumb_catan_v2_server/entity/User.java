@@ -1,12 +1,16 @@
 package com.dumbcatanv2.dumb_catan_v2_server.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name="users")
+@Data
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -34,56 +38,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Invite> invites;
 
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {this.userId = userId;}
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getAvatarURL() {
-        return avatarURL;
-    }
-
-    public void setAvatarURL(String avatarURL) {
-        this.avatarURL = avatarURL;
-    }
-
-    public int getActiveGames() {
-        return activeGames;
-    }
-
-    public void setActiveGames(int activeGames) {
-        this.activeGames = activeGames;
-    }
-
-    public String getRole() {return role;}
-
-    public void setRole(String role) {this.role = role;}
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(List<Player> playerData) {
-        this.players = players;
-    }
-
     public void addPlayer(Player player) {
         player.setUser(this);
         if (this.players == null) this.players = new ArrayList<>();
@@ -94,6 +48,10 @@ public class User {
         invite.setUser(this);
         if (this.invites == null) this.invites = new ArrayList<>();
         this.invites.add(invite);
+    }
+
+    public void removeInvite(Invite invite) {
+        this.invites.remove(invite);
     }
 
     public User(int userId, String username, String password, String avatarURL, int activeGames, String role, List<Player> players) {
@@ -125,6 +83,4 @@ public class User {
         this.username = username;
         this.password = password;
     }
-
-    public User(){}
 }

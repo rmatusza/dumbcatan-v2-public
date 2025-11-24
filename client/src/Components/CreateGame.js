@@ -10,7 +10,7 @@ import ColorPicker from "../UI/ColorPicker";
 import Button from "../UI/Button";
 import PopupMessage from "../UI/PopupMessage";
 
-const CreateGame = ({ setCreateGameModalActive }) => {
+const CreateGame = ({ setCreateGameModalActive, background }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -30,17 +30,25 @@ const CreateGame = ({ setCreateGameModalActive }) => {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      <p className={`${S.text.modalTextYellow} text-center ${noColorSelected ? 'animate-shake' : ''}`}>Select Your Color</p>
-
-      <ColorPicker selectedColor={selectedColor} setSelectedColor={setSelectedColor}/>
-
-      <div className="flex flex-row justify-between gap-4 mt-auto pb-5">
-        <Button name={"Close"} callBack={setCreateGameModalActive} args={[false]} namedStyles={[S.button.redAndYellowButtonSingle, S.border.goldYellowBorder]} />
-        <Button name={"Create Game"} callBack={createGameHandler} namedStyles={[S.button.classicCatanButtonSingle, S.border.lightRedBorder]} />
-      </div>
-
-    </div>
+    <ColorPicker
+      selectedColor={selectedColor}
+      setSelectedColor={setSelectedColor}
+      noColorSelected={noColorSelected}
+      background={background}
+      buttons={{
+        a: {
+          name: 'Close',
+          callback: setCreateGameModalActive,
+          args: [false],
+          styles: [S.button.redAndYellowButtonSingle, S.border.goldYellowBorder]
+        },
+        b: {
+          name: 'Create Game',
+          callback: createGameHandler,
+          styles: [S.button.classicCatanButtonSingle, S.border.lightRedBorder]
+        },
+      }}
+    />
   )
 }
 

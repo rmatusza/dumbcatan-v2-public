@@ -17,6 +17,6 @@ export const signup = async (credentials) => {
   return await sendHttpRequest(REQUEST_TYPES.post, '/auth/signup', null, credentials);
 };
 
-export const updateProfile = async (userId, profileData, token) => {
-  return await sendHttpRequest(REQUEST_TYPES.put, `/user/${userId}`, token, profileData);
+export const updateProfile = async (profileData, token) => {
+  return await sendHttpRequest(REQUEST_TYPES.put, `/user/profile`, token, profileData);
 };

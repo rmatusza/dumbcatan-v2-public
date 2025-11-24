@@ -124,7 +124,7 @@ function App() {
               <Games />
             }
           />
-
+          
           <Route path={`${ENDPOINTS.gameInstance}/:id`}
             element=
             {

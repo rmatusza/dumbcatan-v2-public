@@ -115,6 +115,22 @@ export const CUSTOM_STYLES =
   },
 };
 
+export const QUICK_STYLES = {
+  yesButton: {
+    namedStyles: [CUSTOM_STYLES.button.classicCatanButtonSingle, CUSTOM_STYLES.border.lightRedBorder],
+    tailwindStyles: "px-4 py-2 rounded w-40 mb-[5px]",
+    overwriteBaseStyle: true,
+    passEventObject: true
+  },
+
+  noButton: {
+    namedStyles: [CUSTOM_STYLES.button.redAndYellowButtonSingle, CUSTOM_STYLES.border.goldYellowBorder],
+    tailwindStyles: "px-4 py-2 rounded w-40",
+    overwriteBaseStyle: true,
+    passEventObject: true
+  }
+}
+
 export const REQUEST_TYPES = {
   get: 'GET',
   put: 'PUT',
@@ -178,7 +194,8 @@ export const APP_CONTEXT =
   credentials: 'credentials',
   createGame: 'createGame',
   games: 'games',
-  sendInvite: 'sendInvite'
+  sendInvite: 'sendInvite',
+  invites: 'invites',
 };
 
 /// RESOURCE TILE NAMES

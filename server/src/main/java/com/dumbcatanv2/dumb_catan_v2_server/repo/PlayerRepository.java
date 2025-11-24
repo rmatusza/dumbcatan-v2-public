@@ -17,4 +17,5 @@ public interface PlayerRepository extends JpaRepository<Player, Integer> {
     @Query("SELECT p FROM Player p WHERE p.user.userId = :userId AND p.game.gameId = :gameId")
     Optional<Player> findByUserIdAndGameId(@Param("userId") int userId, @Param("gameId") int gameId);
 
+    List<Player> findAllByGameGameId(int gameIds);
 }

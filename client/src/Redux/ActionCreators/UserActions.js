@@ -129,7 +129,7 @@ export const signupUser = (credentials, navigate) => {
   }
 }
 
-export const updateUserProfile = (userId, profileData, context) => {
+export const updateUserProfile = (profileData, context) => {
   const MILLISECOND_DELAY = 3000;
   return async (dispatch) => {
     dispatch(
@@ -138,7 +138,7 @@ export const updateUserProfile = (userId, profileData, context) => {
 
     try {
       const token = getToken();
-      const updatedUserProfile = await updateProfile(userId, profileData, token);
+      const updatedUserProfile = await updateProfile(profileData, token);
 
       if (updatedUserProfile.jwt) {
         setToken(updatedUserProfile.jwt);

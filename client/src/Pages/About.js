@@ -8,9 +8,7 @@ const About = () => {
       <br></br>
       <div>
         <p>
-          This application is a work in progress and is an improved version of my completed original implementation found on my Github: <a className="cursor-pointer hover:underline text-blue-600 font-bold" href='https://github.com/rmatusza/DumbCatanClient-Public' target="_blank">{`Front End `}</a> ----- <a className="cursor-pointer hover:underline text-blue-600 font-bold" href='https://github.com/rmatusza/DumbCatanServer-Public' target="_blank">{` Back End`}</a>.
-          While this version is not yet fully complete, I decided to make the app available in its current state to showcase my skills in full-stack development, real-time multiplayer logic, and modern UI design. The goal is to present clean, production-style code and architecture in a more polished package that 
-          can be explored to get a meaningful sense of my technical abilities. As my work on this app continues, this demo will evolve and new features will be made available, so feel free to check back at a later date to see any updates that have been made.
+          This project is a work in progress. It is intended to be an improved version of my completed original app which can also be found on my Github page. Therefore, The features mentioned in this README may not have all been implemented at the time of reading this, in which case they serve to describe what the application should do when the implementation is completed.
         </p>
         <br></br>
         <p>
@@ -28,7 +26,7 @@ const About = () => {
         <p className="text-xl font-bold">Real-Time Multiplayer:</p>
         <ul class="list-disc list-inside">
           <li>Up to 4 players per game</li>
-          <li>Lobby system: create or join a new game</li>
+          <li>Invite system: create/host new games, send/receive/accept/decline game invites</li>
           <li>Real-time board and turn synchronization across all clients</li>
         </ul>
 
@@ -71,6 +69,7 @@ const About = () => {
           <li>Redux for global state management</li>
           <li>React Hook Form for input validation</li>
           <li>React Portals for modal rendering</li>
+          <li>Tailwind for styling</li>
         </ul>
 
         <p className="text-xl font-bold">Back-End Stack:</p>
@@ -106,7 +105,7 @@ const About = () => {
         <br></br>
         <p className={`text-catanRed font-yatra text-4xl underline`}>Future Plans</p>
         <ul class="list-disc list-inside">
-          <li>Migration to TypeScript for improved type safety and maintainability</li>
+          <li>Migration to TypeScript for type checking/safety and maintainability</li>
           <li>Mobile compatibility either through mobile specific styling or through React Native</li>
           <li>AI opponents</li>
         </ul>
@@ -155,14 +154,20 @@ const About = () => {
             <li>Background / Ambient music</li>
             <li>Creating a game</li>
             <li>Viewing all active games</li>
+            <li>Game page: this is where the game board is displayed and where the gameplay occurs</li>
             <li>Deleting a game</li>
-            <li>Resuming a game</li>
+            <li>Opening/resuming a game</li>
+            <li>Websocket configuration</li>
+            <li>Sending and receiving game invites in real time</li>
+            <li>Accepting and declining game invites</li>
           </ul>
 
           <p className="text-xl font-bold">In Progress:</p>
+            <li>Controller: this is the component that the player will use to perform all of the game actions</li>
+            <li>Starting a game: kicks off the inital game phase where players get to place 2 settlements and 2 roads for free and also collect the associated resource cards</li>
+            <li>Main game phase + Dice roll turn phase: the main game phase is where the game actually beings. each player has a turn which consists of 3 phases: dice roll, trade, build</li>
           <ul class="list-disc list-inside">
-            <li>Configuring Websockets</li>
-            <li>Adding user interaction sound effects</li>
+
           </ul>
         </section>
       </div>

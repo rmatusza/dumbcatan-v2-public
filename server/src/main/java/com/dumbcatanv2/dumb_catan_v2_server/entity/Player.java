@@ -3,12 +3,14 @@ package com.dumbcatanv2.dumb_catan_v2_server.entity;
 import com.dumbcatanv2.dumb_catan_v2_server.mapper.IntArrayConverter;
 import com.dumbcatanv2.dumb_catan_v2_server.mapper.StringListConverter;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name="players")
+@Data
 public class Player {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -49,86 +51,6 @@ public class Player {
     @ManyToOne
     @JoinColumn(name = "gameId")
     private Game game;
-
-    public int getArmySize() {
-        return armySize;
-    }
-
-    public void setArmySize(int armySize) {
-        this.armySize = armySize;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void setGame(Game game) {
-        this.game = game;
-    }
-
-    public List<String> getPlayableDevCards() {
-        return playableDevCards;
-    }
-
-    public void setPlayableDevCards(List<String> playableDevCards) {
-        this.playableDevCards = playableDevCards;
-    }
-
-    public int getPlayerId() {
-        return playerId;
-    }
-
-    public void setPlayerId(int playerId) {
-        this.playerId = playerId;
-    }
-
-    public int getPoints() {
-        return points;
-    }
-
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public List<String> getResourceCards() {
-        return resourceCards;
-    }
-
-    public void setResourceCards(List<String> resourceCards) {
-        this.resourceCards = resourceCards;
-    }
-
-    public int[] getStartingNodes() {
-        return startingNodes;
-    }
-
-    public void setStartingNodes(int[] startingNodes) {
-        this.startingNodes = startingNodes;
-    }
-
-    public List<String> getUnplayableDevCards() {
-        return unplayableDevCards;
-    }
-
-    public void setUnplayableDevCards(List<String> unplayableDevCards) {
-        this.unplayableDevCards = unplayableDevCards;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
 
     public static Player createInitial() {
         Player initialPlayerData = new Player();

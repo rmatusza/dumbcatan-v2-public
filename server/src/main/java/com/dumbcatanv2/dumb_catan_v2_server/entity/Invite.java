@@ -10,7 +10,7 @@ public class Invite {
     private int inviteId;
 
     @ManyToOne
-    @JoinColumn(name = "gameId")
+    @JoinColumn(name = "gameId", nullable = false)
     private Game game;
 
     @ManyToOne
